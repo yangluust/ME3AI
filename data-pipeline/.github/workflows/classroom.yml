@@ -1,0 +1,449 @@
+name: Autograding Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  data-cleaning:
+    name: Data Cleaning (30 points)
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.test.outcome }}
+      points: ${{ steps.test.outputs.points }}
+      passed: ${{ steps.test.outputs.passed }}
+      total: ${{ steps.test.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run cleaning tests
+        id: test
+        continue-on-error: true
+        run: |
+          set +e
+          OUTPUT=$(uv run pytest tests/test_cleaning.py --junitxml=pytest-cleaning.xml -v 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+
+          max_points = 30
+
+          tree = ET.parse("pytest-cleaning.xml")
+          root = tree.getroot()
+
+          tests = 0
+          failures = 0
+          errors = 0
+          skipped = 0
+          for ts in root.iter("testsuite"):
+              tests += int(ts.attrib.get("tests", 0))
+              failures += int(ts.attrib.get("failures", 0))
+              errors += int(ts.attrib.get("errors", 0))
+              skipped += int(ts.attrib.get("skipped", 0))
+
+          passed = tests - failures - errors - skipped
+          if tests <= 0:
+              raise ValueError("No tests found in JUnit report.")
+
+          points = (max_points * passed) // tests
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"passed={passed}\n")
+              f.write(f"total={tests}\n")
+              f.write(f"points={points}\n")
+          PY
+          
+          exit $EXIT_CODE
+
+  analysis:
+    name: Analysis (20 points)
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.test.outcome }}
+      points: ${{ steps.test.outputs.points }}
+      passed: ${{ steps.test.outputs.passed }}
+      total: ${{ steps.test.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run analysis tests
+        id: test
+        continue-on-error: true
+        run: |
+          set +e
+          OUTPUT=$(uv run pytest tests/test_analysis.py --junitxml=pytest-analysis.xml -v 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+
+          max_points = 20
+
+          tree = ET.parse("pytest-analysis.xml")
+          root = tree.getroot()
+
+          tests = 0
+          failures = 0
+          errors = 0
+          skipped = 0
+          for ts in root.iter("testsuite"):
+              tests += int(ts.attrib.get("tests", 0))
+              failures += int(ts.attrib.get("failures", 0))
+              errors += int(ts.attrib.get("errors", 0))
+              skipped += int(ts.attrib.get("skipped", 0))
+
+          passed = tests - failures - errors - skipped
+          if tests <= 0:
+              raise ValueError("No tests found in JUnit report.")
+
+          points = (max_points * passed) // tests
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"passed={passed}\n")
+              f.write(f"total={tests}\n")
+              f.write(f"points={points}\n")
+          PY
+          
+          exit $EXIT_CODE
+
+  codebook:
+    name: Codebook (20 points)
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.test.outcome }}
+      points: ${{ steps.test.outputs.points }}
+      passed: ${{ steps.test.outputs.passed }}
+      total: ${{ steps.test.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run codebook tests
+        id: test
+        continue-on-error: true
+        run: |
+          set +e
+          OUTPUT=$(uv run pytest tests/test_codebook.py --junitxml=pytest-codebook.xml -v 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+
+          max_points = 20
+
+          tree = ET.parse("pytest-codebook.xml")
+          root = tree.getroot()
+
+          tests = 0
+          failures = 0
+          errors = 0
+          skipped = 0
+          for ts in root.iter("testsuite"):
+              tests += int(ts.attrib.get("tests", 0))
+              failures += int(ts.attrib.get("failures", 0))
+              errors += int(ts.attrib.get("errors", 0))
+              skipped += int(ts.attrib.get("skipped", 0))
+
+          passed = tests - failures - errors - skipped
+          if tests <= 0:
+              raise ValueError("No tests found in JUnit report.")
+
+          points = (max_points * passed) // tests
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"passed={passed}\n")
+              f.write(f"total={tests}\n")
+              f.write(f"points={points}\n")
+          PY
+          
+          exit $EXIT_CODE
+
+  git-workflow:
+    name: Git Workflow (30 points)
+    runs-on: ubuntu-latest
+    outputs:
+      result: ${{ steps.test.outcome }}
+      points: ${{ steps.test.outputs.points }}
+      passed: ${{ steps.test.outputs.passed }}
+      total: ${{ steps.test.outputs.total }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run workflow tests
+        id: test
+        continue-on-error: true
+        run: |
+          set +e
+          OUTPUT=$(uv run pytest tests/test_workflow.py --junitxml=pytest-workflow.xml -v 2>&1)
+          EXIT_CODE=$?
+          echo "$OUTPUT"
+
+          python - <<'PY'
+          import os
+          import xml.etree.ElementTree as ET
+
+          max_points = 30
+
+          tree = ET.parse("pytest-workflow.xml")
+          root = tree.getroot()
+
+          tests = 0
+          failures = 0
+          errors = 0
+          skipped = 0
+          for ts in root.iter("testsuite"):
+              tests += int(ts.attrib.get("tests", 0))
+              failures += int(ts.attrib.get("failures", 0))
+              errors += int(ts.attrib.get("errors", 0))
+              skipped += int(ts.attrib.get("skipped", 0))
+
+          passed = tests - failures - errors - skipped
+          if tests <= 0:
+              raise ValueError("No tests found in JUnit report.")
+
+          points = (max_points * passed) // tests
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+              f.write(f"passed={passed}\n")
+              f.write(f"total={tests}\n")
+              f.write(f"points={points}\n")
+          PY
+
+          exit $EXIT_CODE
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+
+  feedback:
+    name: Post Feedback
+    runs-on: ubuntu-latest
+    needs: [data-cleaning, analysis, codebook, git-workflow]
+    if: always() && github.event_name == 'pull_request'
+    steps:
+      - name: Generate feedback comment
+        run: |
+          CLEANING_POINTS="${{ needs.data-cleaning.outputs.points }}"
+          CLEANING_PASSED="${{ needs.data-cleaning.outputs.passed }}"
+          CLEANING_TOTAL="${{ needs.data-cleaning.outputs.total }}"
+          ANALYSIS_POINTS="${{ needs.analysis.outputs.points }}"
+          ANALYSIS_PASSED="${{ needs.analysis.outputs.passed }}"
+          ANALYSIS_TOTAL="${{ needs.analysis.outputs.total }}"
+          CODEBOOK_POINTS="${{ needs.codebook.outputs.points }}"
+          CODEBOOK_PASSED="${{ needs.codebook.outputs.passed }}"
+          CODEBOOK_TOTAL="${{ needs.codebook.outputs.total }}"
+          WORKFLOW_POINTS="${{ needs.git-workflow.outputs.points }}"
+          WORKFLOW_PASSED="${{ needs.git-workflow.outputs.passed }}"
+          WORKFLOW_TOTAL="${{ needs.git-workflow.outputs.total }}"
+          
+          if [ "$CLEANING_POINTS" -eq 30 ]; then
+            CLEANING_EMOJI="✅"
+          else
+            CLEANING_EMOJI="❌"
+          fi
+          
+          if [ "$ANALYSIS_POINTS" -eq 20 ]; then
+            ANALYSIS_EMOJI="✅"
+          else
+            ANALYSIS_EMOJI="❌"
+          fi
+          
+          if [ "$CODEBOOK_POINTS" -eq 20 ]; then
+            CODEBOOK_EMOJI="✅"
+          else
+            CODEBOOK_EMOJI="❌"
+          fi
+          
+          if [ "$WORKFLOW_POINTS" -eq 30 ]; then
+            WORKFLOW_EMOJI="✅"
+          else
+            WORKFLOW_EMOJI="❌"
+          fi
+          
+          TOTAL=$((CLEANING_POINTS + ANALYSIS_POINTS + CODEBOOK_POINTS + WORKFLOW_POINTS))
+          
+          # Build comment
+          cat << 'COMMENT_EOF' > comment.md
+          ## 📊 Autograding Results
+          
+          | Component | Status | Points | Tests |
+          |-----------|--------|--------|-------|
+          COMMENT_EOF
+          
+          echo "| Data Cleaning (3NF) | $CLEANING_EMOJI | $CLEANING_POINTS/30 | $CLEANING_PASSED/$CLEANING_TOTAL |" >> comment.md
+          echo "| Analysis | $ANALYSIS_EMOJI | $ANALYSIS_POINTS/20 | $ANALYSIS_PASSED/$ANALYSIS_TOTAL |" >> comment.md
+          echo "| Codebook | $CODEBOOK_EMOJI | $CODEBOOK_POINTS/20 | $CODEBOOK_PASSED/$CODEBOOK_TOTAL |" >> comment.md
+          echo "| Git Workflow | $WORKFLOW_EMOJI | $WORKFLOW_POINTS/30 | $WORKFLOW_PASSED/$WORKFLOW_TOTAL |" >> comment.md
+          echo "| **Total** | | **$TOTAL/100** |" >> comment.md
+          echo "" >> comment.md
+          
+          if [ "$CLEANING_POINTS" -ne 30 ]; then
+            cat << 'FEEDBACK_EOF' >> comment.md
+          ### ❌ Data Cleaning Issues
+          
+          Your cleaning functions need work. Remember:
+          
+          **Stage 1 is ANALYSIS-AGNOSTIC:**
+          - `extract_customers`: Return unique customers (no duplicates by customer_id)
+          - `extract_products`: Return unique products (no duplicates by product_id)
+          - `extract_orders`: Return orders WITHOUT redundant columns (no customer_name, customer_city, product_name, product_price)
+          
+          **3NF means no redundancy:**
+          - Customer info stored ONCE in customers table
+          - Product info stored ONCE in products table
+          - Orders only reference customer_id and product_id
+          
+          FEEDBACK_EOF
+          fi
+          
+          if [ "$ANALYSIS_POINTS" -ne 20 ]; then
+            cat << 'FEEDBACK_EOF' >> comment.md
+          ### ❌ Analysis Issues
+          
+          Your analysis function needs work:
+          
+          **`compute_customer_summary` should:**
+          - Join orders with products to get prices
+          - Calculate total_orders: count of orders per customer
+          - Calculate total_spending: sum of (quantity * price) per customer
+          - Include customer_name from customers table
+          
+          FEEDBACK_EOF
+          fi
+          
+          if [ "$CODEBOOK_POINTS" -ne 20 ]; then
+            cat << 'FEEDBACK_EOF' >> comment.md
+          ### ❌ Codebook Issues
+          
+          Your codebook needs work. In `report/codebook.qmd`:
+          
+          - Add descriptions for each table (replace TODO)
+          - Define foreign keys for the orders table
+          - Define all variables with type, unit, and description
+          - Use actual units for numeric variables (e.g., JPY, units)
+          
+          FEEDBACK_EOF
+          fi
+          
+          if [ "$WORKFLOW_POINTS" -ne 30 ]; then
+            cat << 'FEEDBACK_EOF' >> comment.md
+          ### ❌ Git Workflow Issues
+          
+          Check your git practices:
+          - Commit messages should start with a verb (Add, Implement, Fix)
+          - Reference issues in commits (closes #1)
+          - Make multiple commits, not just one
+          
+          FEEDBACK_EOF
+          fi
+          
+          if [ "$TOTAL" == "100" ]; then
+            cat << 'FEEDBACK_EOF' >> comment.md
+          ### 🎉 Excellent Work!
+          
+          All tests passed. You have successfully:
+          - Implemented data cleaning with proper 3NF normalization
+          - Built analysis that correctly uses cleaned data
+          - Created a complete codebook documenting your data
+          - Followed proper git workflow practices
+          
+          **Key takeaway:** Cleaning (input→cleaned) is analysis-agnostic. Analysis (cleaned→output) answers specific questions. The codebook documents your cleaned data for future users.
+          
+          FEEDBACK_EOF
+          fi
+          
+          echo "" >> comment.md
+          echo "---" >> comment.md
+          echo "*This is an automated review. Check the Actions tab for detailed test output.*" >> comment.md
+
+      - name: Post comment to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const comment = fs.readFileSync('comment.md', 'utf8');
+            
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+            
+            const botComment = comments.find(c => 
+              c.user.type === 'Bot' && c.body.includes('Autograding Results')
+            );
+            
+            if (botComment) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: botComment.id,
+                body: comment
+              });
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: comment
+              });
+            }
