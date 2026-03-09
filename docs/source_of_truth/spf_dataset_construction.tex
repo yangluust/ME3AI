@@ -124,7 +124,10 @@ $\textit{var\_path}$.
 The automation fetches the page, parses the HTML for the desired download
 links (Dispersion, Median Level, Mean Level, Median Growth, Mean Growth,
 Individual), and downloads each file to the input folder under the same
-filename as on the site (e.g., \texttt{Median\_CPI10\_Level.xlsx}).
+filename as on the site (e.g., \texttt{Median\_CPI10\_Level.xlsx}). When
+parsing links, the implementation must match \texttt{<a>} tags where
+\texttt{href} may appear after other attributes (e.g.\ \texttt{class}), since
+the Philadelphia Fed markup may use that order.
 
 \paragraph{Inputs.}
 A list of variable names (e.g., CPI10, RGDP, UNEMP, NGDP) as on the
@@ -196,7 +199,8 @@ filtering in the codebook or a README in the cleaned folder.
 \State \textbf{Require} $\textit{file\_types}$: subset of
 \Statex \quad $\{\texttt{dispersion}, \texttt{median\_level}, \texttt{mean\_level}, \texttt{median\_growth}, \texttt{mean\_growth}, \texttt{individual}\}$, and optionally \texttt{documentation}.
 \State Fetch HTML at $\textit{page\_url}$.
-\State Parse page for download links; match link text or href to each requested type (e.g., ``Median Responses'' $\to$ \texttt{Median\_VAR\_Level.xlsx}, ``Measures of Cross-Sectional Forecast Dispersion'' $\to$ \texttt{Dispersion\_VAR.xlsx}).
+\State Parse page for download links: match \texttt{<a>} tags allowing
+\Statex \quad \texttt{href} to appear after other attributes (e.g.\ \texttt{class}); match link text or href to each requested type (e.g., ``Median Responses'' $\to$ \texttt{Median\_VAR\_Level.xlsx}, ``Measures of Cross-Sectional Forecast Dispersion'' $\to$ \texttt{Dispersion\_VAR.xlsx}).
 \State Build list $L$ of $(\textit{filename}, \textit{download\_url})$ for each matched link; extract $\textit{filename}$ from the URL or link (stable name, e.g., \texttt{Median\_NGDP\_Level.xlsx}).
 \State \Return $L$.
 \end{algorithmic}
