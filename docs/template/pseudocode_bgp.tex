@@ -1,0 +1,225 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Pseudocode for Computing the Balanced-Growth Path (BGP)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Inputs and outputs}
+\paragraph{Inputs.}
+Protocol choice $\texttt{protocol}\in\{\texttt{original},\texttt{modified}\}$, baseline parameters
+$$
+p=(\beta,\zeta,\alpha,\xi,\eta,\sigma,\psi,\phi,G^*),
+$$
+and, for the modified protocol, an issuance parameter $k$.
+Root-finding brackets $[s_L,s_U]\subset(0,1)$ and $[m_L,m_U]\subset(0,\infty)$, a tolerance $\varepsilon>0$, and a maximum iteration count $N_{\max}$.
+
+\paragraph{Outputs.}
+An interior BGP solution $(s^*,m^*)$ when it exists and is pinned down.
+If $\sigma=0$, the gas optimality condition does not depend on $m$, so $m^*$ is not pinned down by the BGP conditions.
+
+\section{Residual functions}
+The BGP is characterized by two residual functions:
+
+\paragraph{Staking indifference.}
+Under the original protocol, $s^*$ solves
+$$
+\Psi^{org}(s;p)=0.
+$$
+Under the modified protocol, given $k$, $s^*$ solves
+$$
+\Psi(s;p,k)=0.
+$$
+
+\paragraph{Gas-service optimality.}
+Given $s$, $m^*$ solves
+$$
+\Gamma(m,s;p,\texttt{protocol},k)=0,
+$$
+where $k$ is required only under the modified protocol.
+
+\section{Modular subroutines for evaluating $\Psi$ and $\Gamma$}
+\begin{algorithm}[H]
+\caption{\textsc{ResidualSubroutines}$(\texttt{protocol},p,k)$}
+\begin{algorithmic}[1]
+\Function{EvalT}{$s,p$}
+    \State $u \gets 1-s$.
+    \If{$\xi=1$}
+        \State \Return $u^{\alpha}(G^*)^{1-\alpha}$.
+    \Else
+        \State $x \gets \alpha^{1/\xi}u^{(\xi-1)/\xi} + (1-\alpha)^{1/\xi}(G^*)^{(\xi-1)/\xi}$.
+        \State \Return $x^{\xi/(\xi-1)}$.
+    \EndIf
+\EndFunction
+
+\Function{OmegaOne}{$p$}
+    \State \Return $\left(\frac{\alpha}{1-\alpha}\right)^{1/\xi}\frac{1}{\phi}(G^*)^{1/\xi-1}$.
+\EndFunction
+
+\Function{OmegaTwo}{$p$}
+    \State \Return $\psi\,\phi\,(G^*)^{1-1/\xi}(1-\alpha)^{1/\xi}\eta^{\,1-\eta(1-\sigma)}(1-\eta)^{-(1-\eta)(1-\sigma)}$.
+\EndFunction
+
+\Function{PriorityFee}{$\texttt{protocol},s,p,k$}
+    \If{$\texttt{protocol}=\texttt{original}$}
+        \State \Return $\phi(\beta^{-1}-1)$.
+    \Else
+        \State \textbf{Require} $k$ is provided.
+        \State \Return $\dfrac{(1-\beta)+(s-\beta)k}{s\left(\frac{1-\phi}{\phi}\right)+\beta}$.
+    \EndIf
+\EndFunction
+
+\Function{EvalPsi}{$\texttt{protocol},s,p,k$}
+    \If{$\texttt{protocol}=\texttt{original}$}
+        \State \Return $\phi\,\textsc{OmegaOne}(p)\,s\,(1-s)^{-1/\xi}-1$.
+    \Else
+        \State $A \gets \textsc{OmegaOne}(p)\,s\,(1-s)^{-1/\xi}-1$.
+        \State $i^p \gets \textsc{PriorityFee}(\texttt{protocol},s,p,k)$.
+        \State \Return $A\,i^p-k$.
+    \EndIf
+\EndFunction
+
+\Function{EvalGamma}{$\texttt{protocol},m,s,p,k$}
+    \State $i^p \gets \textsc{PriorityFee}(\texttt{protocol},s,p,k)$.
+    \State $T \gets \textsc{EvalT}(s,p)$.
+    \State $e_T \gets \frac{1}{\xi}-1+\eta(1-\sigma)$.
+    \State $e_s \gets (1-\eta)(1-\sigma)-1$.
+    \State \Return $\textsc{OmegaTwo}(p)\,T^{e_T}\,m^{-\sigma}\,s^{e_s}-i^p$.
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\section{Algorithms}
+
+\begin{algorithm}[H]
+\caption{\textsc{SolveBGP}$(\texttt{protocol},p,k,[s_L,s_U],[m_L,m_U],\varepsilon,N_{\max})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\texttt{protocol}\in\{\texttt{original},\texttt{modified}\}$.
+\State \textbf{Require} $0<s_L<s_U<1$ and $0<m_L<m_U$.
+\If{$\texttt{protocol}=\texttt{modified}$}
+    \State \textbf{Require} $k$ is provided.
+\EndIf
+\State Define $\Psi(\cdot)$:
+\State $\Psi(s)\gets \textsc{EvalPsi}(\texttt{protocol},s,p,k)$.
+\State $s^* \gets \textsc{BisectionRoot}(\Psi,s_L,s_U,\varepsilon,N_{\max})$.
+\If{$\sigma=0$}
+    \State \Return $(s^*,\texttt{not pinned})$.
+\EndIf
+\State Define $\Gamma(\cdot)$ at $s=s^*$:
+\State $\Gamma(m)\gets \textsc{EvalGamma}(\texttt{protocol},m,s^*,p,k)$.
+\State $m^* \gets \textsc{BisectionRoot}(\Gamma,m_L,m_U,\varepsilon,N_{\max})$.
+\State \Return $(s^*,m^*)$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{BisectionRoot}$(f,a,b,\varepsilon,N_{\max})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $a<b$.
+\State $f_a \gets f(a)$, $f_b \gets f(b)$.
+\If{$f_a=0$} \State \Return $a$. \EndIf
+\If{$f_b=0$} \State \Return $b$. \EndIf
+\State \textbf{Require} $f_a\cdot f_b < 0$ (a sign change on $[a,b]$).
+\For{$n=1,2,\dots,N_{\max}$}
+    \State $c \gets \tfrac{1}{2}(a+b)$, $f_c \gets f(c)$.
+    \If{$f_c=0$} \State \Return $c$. \EndIf
+    \If{$|b-a|\le \varepsilon$} \State \Return $c$. \EndIf
+    \If{$f_a\cdot f_c < 0$}
+        \State $b \gets c$, $f_b \gets f_c$.
+    \Else
+        \State $a \gets c$, $f_a \gets f_c$.
+    \EndIf
+\EndFor
+\State \textbf{Error} \textsc{BisectionRoot} did not converge within $N_{\max}$ iterations.
+\end{algorithmic}
+\end{algorithm}
+
+\section{Policy-objective evaluation and optimal policy (modified protocol)}
+These routines evaluate the policy objectives and compute the optimal issuance policy under the modified protocol by treating the staked share $s$ as an intermediate target.
+
+\begin{algorithm}[H]
+\caption{\textsc{PolicySubroutines}$(p)$}
+\begin{algorithmic}[1]
+\Function{EvalPi}{$s,p$}
+    \State \textbf{Require} $0<s<1$.
+    \State \textbf{Require} $0<\alpha<1$, $\xi>0$, and $G^*>0$.
+    \State $u \gets 1-s$.
+    \State $A \gets \left(\frac{\alpha}{1-\alpha}\right)^{-1/\xi}u^{1/\xi}(G^*)^{1-1/\xi} + u$.
+    \State \textbf{Require} $A>0$.
+    \State \Return $\beta^{-1}(1+\zeta)\left[1-\frac{1-\beta}{A}\right]$.
+\EndFunction
+
+\Function{EvalObjective}{$\texttt{objective},s,p$}
+    \State \textbf{Require} $\texttt{objective}\in\{\texttt{welfare},\texttt{market\_value}\}$.
+    \State \textbf{Require} $0<s<1$.
+    \State $\Pi \gets \textsc{EvalPi}(s,p)$.
+    \State $T \gets \textsc{EvalT}(s,p)$.
+    \If{$\texttt{objective}=\texttt{welfare}$}
+        \State \Return $\Pi\,s^{1-\eta}\,T^{\eta}$.
+    \Else
+        \State \Return $\Pi\,s^{(1-\eta)(1-\sigma)}\,T^{\eta(1-\sigma)}$.
+    \EndIf
+\EndFunction
+
+\Function{KFromStakedShare}{$s,p$}
+    \State \textbf{Require} $0<s<1$.
+    \State $A \gets \textsc{OmegaOne}(p)\,s\,(1-s)^{-1/\xi}-1$.
+    \State $D \gets s\left(\frac{1-\phi}{\phi}\right)+\beta$.
+    \State \textbf{Require} $D-A(s-\beta)\neq 0$.
+    \State $k \gets \dfrac{A(1-\beta)}{D-A(s-\beta)}$.
+    \State \textbf{Require} $k\ge 0$.
+    \State \Return $k$.
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{GoldenSectionMax}$(f,a,b,\varepsilon,N_{\max})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $a<b$.
+\State \textbf{Require} $f$ is unimodal on $[a,b]$.
+\State $\varphi \gets \tfrac{1}{2}(1+\sqrt{5})$.
+\State $c \gets b-\tfrac{b-a}{\varphi}$, $d \gets a+\tfrac{b-a}{\varphi}$.
+\State $f_c \gets f(c)$, $f_d \gets f(d)$.
+\For{$n=1,2,\dots,N_{\max}$}
+    \If{$|b-a|\le \varepsilon$}
+        \State \Return $\tfrac{1}{2}(a+b)$.
+    \EndIf
+    \If{$f_c \ge f_d$}
+        \State $b \gets d$, $d \gets c$, $f_d \gets f_c$.
+        \State $c \gets b-\tfrac{b-a}{\varphi}$, $f_c \gets f(c)$.
+    \Else
+        \State $a \gets c$, $c \gets d$, $f_c \gets f_d$.
+        \State $d \gets a+\tfrac{b-a}{\varphi}$, $f_d \gets f(d)$.
+    \EndIf
+\EndFor
+\State \textbf{Error} \textsc{GoldenSectionMax} did not converge within $N_{\max}$ iterations.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{SolveOptimalPolicy}$(\texttt{objective},p,[s_L,s_U],\varepsilon,N_{\max})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\texttt{objective}\in\{\texttt{welfare},\texttt{market\_value}\}$.
+\State \textbf{Require} $0<s_L<s_U<1$.
+\State Define $F(\cdot)$:
+\State $F(s)\gets \textsc{EvalObjective}(\texttt{objective},s,p)$.
+\State $s^* \gets \textsc{GoldenSectionMax}(F,s_L,s_U,\varepsilon,N_{\max})$.
+\State $k^* \gets \textsc{KFromStakedShare}(s^*,p)$.
+\State \Return $(s^*,k^*)$.
+\end{algorithmic}
+\end{algorithm}
+
+\section{Comparative statics (optional)}
+To compute comparative statics such as $s=s(k)$ or $s=s(G^*)$, loop over a grid of parameter values and call \textsc{SolveBGP} for each grid point, holding the remaining components of $p$ fixed.
+If any grid point fails the bracketing requirement for $s$ or $m$, the routine should stop and report the offending parameter value and bracket.
+
+\end{document}
+

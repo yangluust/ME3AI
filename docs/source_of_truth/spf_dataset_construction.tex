@@ -1,0 +1,281 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{algorithm}
+\usepackage[noend]{algpseudocode}
+\usepackage{geometry}
+\usepackage{xurl}
+\usepackage{booktabs}
+\geometry{margin=1in}
+
+\title{Construction of SPF Datasets for the ME3AI Project}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document specifies the procedure for constructing Survey of Professional
+Forecasters (SPF) datasets used in this project. The SPF is a quarterly survey
+of macroeconomic forecasts conducted by the Federal Reserve Bank of
+Philadelphia; data are provided as Excel workbooks (median and mean levels and
+growth rates, probabilities, dispersion, and microdata). We describe how to
+obtain the official releases, which variables and vintages to use, how to
+validate and normalize the data into the project's cleaned third normal form
+(3NF) structure, and how to link them to the pipeline input and output folders.
+This document serves as the single source of truth for SPF dataset construction
+and reproducibility.
+\end{abstract}
+
+\begin{table}[h]
+\centering
+\caption{Notation and terms used in this document.}
+\label{tab:notation}
+\begin{tabular}{@{}ll@{}}
+\toprule
+Symbol or term & Definition \\
+\midrule
+SPF & Survey of Professional Forecasters \\
+3NF & Third normal form (database normalization) \\
+BEA & Bureau of Economic Analysis \\
+NIPA & National income and product accounts \\
+     & (BEA advance report) \\
+\texttt{var\_path} & URL path segment for a variable (lowercase; \\
+     & e.g., \texttt{ngdp}, \texttt{cpi10}) \\
+VAR & Placeholder for variable code in filenames (e.g., NGDP, CPI10) \\
+\texttt{overwrite} & Policy: \texttt{overwrite} or \texttt{skip-if-exists} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Data source and scope}
+
+The Survey of Professional Forecasters (SPF) is a quarterly survey of
+professional forecasters, formerly run by the American Statistical Association
+and the National Bureau of Economic Research (from 1968:Q4) and taken over by
+the Federal Reserve Bank of Philadelphia in 1990:Q2. The Philadelphia Fed
+publishes documentation and data files; the canonical reference for variable
+definitions, file layout, and timing is the \emph{SPF Documentation}
+(Philadelphia Fed, latest update March 2024), held in this project as
+\texttt{reference/spf-documentation.pdf}.
+
+The survey is timed to the release of the Bureau of Economic Analysis (BEA)
+advance report of the national income and product accounts (NIPA):
+questionnaires are sent after that report; deadlines fall in the second to
+third week of the middle month of each quarter; results are released before
+the BEA second report. For the construction of our datasets, we use the
+survey date (year and quarter) as the primary time index. The first survey
+fully conducted in real time by the Philadelphia Fed is 1990:Q3. Earlier
+vintages (1968:Q4 to 1990:Q2) may be used with the caveats noted in the
+official documentation.
+
+\section{Published files and variables}
+
+The Philadelphia Fed provides SPF data \emph{by variable}: each variable has a
+dedicated data page from which Excel (and other) files can be downloaded. The
+variable index is at \url{https://www.philadelphiafed.org/surveys-and-data/data-files};
+clicking a variable (e.g., NGDP, CPI10, RGDP, UNEMP) leads to a page at
+\[
+\texttt{https://www.philadelphiafed.org/surveys-and-data/}\textit{var\_path},
+\]
+where $\textit{var\_path}$ is the variable identifier in lowercase (e.g.,
+\texttt{ngdp}, \texttt{cpi10}, \texttt{rgdp}). The sole exception is CPI
+inflation, which uses \texttt{cpi-spf}. Variable names and paths are listed on
+the data-files index (e.g., ``10-Year CPI Inflation Rate (CPI10)'' maps to
+\texttt{/cpi10}).
+
+On each variable page, the following file types are typically offered
+(availability may vary by variable):
+
+\begin{itemize}
+  \item \textbf{Documentation}: \\
+    Link to the SPF documentation PDF (same for all variables).
+  \item \textbf{Measures of Cross-Sectional Forecast Dispersion}: \\
+    \texttt{Dispersion\_}\textit{VAR}\texttt{.xlsx} (e.g.,
+    \texttt{Dispersion\_CPI10.xlsx}, \texttt{Dispersion\_NGDP.xlsx}).
+  \item \textbf{Median Responses}: \\
+    \texttt{Median\_}\textit{VAR}\texttt{\_Level.xlsx} (e.g.,
+    \texttt{Median\_NGDP\_Level.xlsx}, \texttt{Median\_CPI10\_Level.xlsx}).
+  \item \textbf{Mean Responses}: \\
+    \texttt{Mean\_}\textit{VAR}\texttt{\_Level.xlsx}.
+  \item \textbf{Annualized Percent Change of Median/Mean Responses}: \\
+    \texttt{Median\_}\textit{VAR}\texttt{\_Growth.xlsx} and
+    \texttt{Mean\_}\textit{VAR}\texttt{\_Growth.xlsx}. For variables that have
+    growth rates (e.g., NGDP, RGDP); not all variables such as CPI10 offer
+    growth files.
+  \item \textbf{Individual Responses}: \\
+    \texttt{Individual\_}\textit{VAR}\texttt{.xlsx}.
+\end{itemize}
+
+Filenames use the variable code as on the website (e.g., NGDP, CPI10). The
+automation must fetch the variable page, extract the download links for the
+desired file types, and save each file to \texttt{data-pipeline/input/} under
+that same filename (no timestamps). Variable names, horizons, and caveats are
+defined in the SPF documentation; we record the exact variable names and
+definitions in a project codebook.
+
+\section{Download automation: inputs and outputs}
+
+We automate retrieval of SPF files from the Philadelphia Fed website so that
+raw files are saved to \texttt{data-pipeline/input/} without manual download.
+Given a variable name (e.g., CPI10, NGDP), the data are hosted on that
+variable's page at \url{https://www.philadelphiafed.org/surveys-and-data/}%
+$\textit{var\_path}$.
+The automation fetches the page, parses the HTML for the desired download
+links (Dispersion, Median Level, Mean Level, Median Growth, Mean Growth,
+Individual), and downloads each file to the input folder under the same
+filename as on the site (e.g., \texttt{Median\_CPI10\_Level.xlsx}).
+
+\paragraph{Inputs.}
+A list of variable names (e.g., CPI10, RGDP, UNEMP, NGDP) as on the
+Philadelphia Fed data-files index. Optional inputs: which file types to
+download (e.g., median level, mean level, dispersion, individual); overwrite
+policy $\texttt{overwrite} \in \{\texttt{overwrite}, \texttt{skip-if-exists}\}$
+(whether to overwrite an existing file or skip); output directory (default
+\texttt{data-pipeline/input/}).
+
+\paragraph{Outputs.}
+Each selected file is saved under \texttt{data-pipeline/input/} with the same
+filename as on the website (no timestamps or version suffixes). Each file is
+downloaded at most once per variable; if multiple variables were to share the
+same filename, the implementation should deduplicate so that the file is
+written once.
+
+Three logical functions suffice: (1) given a variable name, return the variable
+page URL (lowercase path, with exception CPI $\to$ \texttt{cpi-spf}); (2) given
+a variable page URL and requested file types, fetch the page and return a list
+of (filename, download URL) pairs; (3) given a download URL and local path,
+download the file subject to the overwrite policy. The top-level procedure
+loops over the requested variables, obtains the link list for each, and
+downloads each file to \texttt{data-pipeline/input/}.
+
+\section{Pipeline and 3NF}
+
+Our data pipeline (see \texttt{docs/workflow/data\_pipeline.md}) has three
+stages: \textbf{input} (raw data), \textbf{cleaned} (third normal form, 3NF),
+and \textbf{output} (analysis results). SPF data enter as raw files in the
+input folder and are transformed into cleaned tables that satisfy 3NF.
+
+\paragraph{Input.}
+Place the official Excel workbooks in the pipeline input folder. Do not
+modify the original files; preserve them as the source of truth.
+
+\paragraph{Cleaned.}
+Build one or more normalized tables (e.g., survey metadata, level forecasts,
+growth forecasts, probabilities, or microdata). Each row is uniquely
+identified (e.g., by survey year, quarter, variable, and horizon). Use
+consistent naming and units as in the codebook.
+
+\paragraph{Output.}
+Analyses read from the cleaned folder and write results to the output
+folder, organized by analysis type.
+
+Before treating a constructed SPF dataset as final: verify that raw files match
+the expected Philadelphia Fed release; confirm variable names and column
+layouts align with the SPF documentation; after transformation, check row
+counts and primary keys; record data source, retrieval date, and any
+filtering in the codebook or a README in the cleaned folder.
+
+\section{Algorithms: download automation}
+
+\begin{algorithm}[H]
+\caption{\textsc{VariablePageURL}$(\textit{var})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{var}$: variable name as on Philadelphia Fed data-files index (e.g., NGDP, CPI10).
+\State $\textit{path} \gets \text{lowercase}(\textit{var})$.
+\If{$\textit{var} = \texttt{CPI}$}
+    \State $\textit{path} \gets \texttt{cpi-spf}$. \Comment{exception per Philadelphia Fed URL}
+\EndIf
+\State \Return \texttt{https://www.philadelphiafed.org/surveys-and-data/} $\oplus$ $\textit{path}$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{GetDownloadLinks}$(\textit{page\_url}, \textit{file\_types})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{file\_types}$: subset of
+\Statex \quad $\{\texttt{dispersion}, \texttt{median\_level}, \texttt{mean\_level}, \texttt{median\_growth}, \texttt{mean\_growth}, \texttt{individual}\}$, and optionally \texttt{documentation}.
+\State Fetch HTML at $\textit{page\_url}$.
+\State Parse page for download links; match link text or href to each requested type (e.g., ``Median Responses'' $\to$ \texttt{Median\_VAR\_Level.xlsx}, ``Measures of Cross-Sectional Forecast Dispersion'' $\to$ \texttt{Dispersion\_VAR.xlsx}).
+\State Build list $L$ of $(\textit{filename}, \textit{download\_url})$ for each matched link; extract $\textit{filename}$ from the URL or link (stable name, e.g., \texttt{Median\_NGDP\_Level.xlsx}).
+\State \Return $L$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{DownloadOneFile}$(\textit{download\_url}, \textit{outpath}, \texttt{overwrite})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\texttt{overwrite} \in \{\texttt{overwrite}, \texttt{skip-if-exists}\}$.
+\If{$\texttt{overwrite} = \texttt{skip-if-exists}$ and file exists at $\textit{outpath}$}
+    \State \Return (skip).
+\EndIf
+\State Download from $\textit{download\_url}$ to $\textit{outpath}$ (overwrite if file exists when $\texttt{overwrite} = \texttt{overwrite}$).
+\State \Return $\textit{outpath}$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{DownloadByVariableNames}$(\textit{variable\_names}, \textit{file\_types}, \textit{out\_dir}, \texttt{overwrite})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{out\_dir} = \texttt{data-pipeline/input/}$ (fixed by project layout).
+\State \textbf{Require} $\textit{file\_types}$: which file types to download per variable (e.g., median level, mean level, dispersion, individual).
+\State $\textit{written} \gets \emptyset$. \Comment{optional: track filenames already written to avoid duplicate writes}
+\For{each $v$ in $\textit{variable\_names}$}
+    \State $\textit{page\_url} \gets \textsc{VariablePageURL}(v)$.
+    \State $L \gets \textsc{GetDownloadLinks}(\textit{page\_url}, \textit{file\_types})$.
+    \For{each $(\textit{filename}, \textit{url})$ in $L$}
+        \State $\textit{outpath} \gets \textit{out\_dir}$ joined with $\textit{filename}$.
+        \State \textsc{DownloadOneFile}$(\textit{url}, \textit{outpath}, \texttt{overwrite})$.
+        \State Add $\textit{outpath}$ to $\textit{written}$ (if not already present).
+    \EndFor
+\EndFor
+\State \Return $\textit{written}$ (list of paths in \texttt{data-pipeline/input/}).
+\end{algorithmic}
+\end{algorithm}
+
+\section{Algorithm: construct cleaned datasets}
+
+The following procedure summarizes the construction of SPF datasets from
+acquisition to cleaned, project-ready form. Raw files are assumed present in
+\texttt{data-pipeline/input/} (e.g., produced by \textsc{DownloadByVariableNames}).
+
+\begin{algorithm}[H]
+\caption{\textsc{ConstructSPFDatasets}$(\textit{docs}, \textit{config}, \textit{variables}, \textit{horizons})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{docs}$: SPF documentation; $\textit{config}$: pipeline input/cleaned paths; $\textit{variables}$, $\textit{horizons}$: required variables and horizons.
+\State Identify required per-variable workbooks (e.g., \texttt{Median\_VAR\_Level.xlsx}, \texttt{Mean\_VAR\_Level.xlsx}, \texttt{Median\_VAR\_Growth.xlsx}, \texttt{Mean\_VAR\_Growth.xlsx}, or probability/dispersion files as applicable) from $\textit{variables}$ and $\textit{horizons}$, where VAR is the variable code.
+\For{each required workbook}
+    \State Obtain Excel file from Philadelphia Fed or from \texttt{data-pipeline/input/} if already downloaded.
+    \State Load workbook; for each relevant worksheet, read year, quarter, and forecast columns per documentation.
+    \State Validate column names and types against documentation; flag missing or renamed variables.
+\EndFor
+\State Build survey-level metadata table: primary key $(\textit{survey\_year}, \textit{survey\_quarter})$; add attributes (e.g., release date) if available.
+\For{each variable and horizon in $\textit{variables}$, $\textit{horizons}$}
+    \State Extract series from the appropriate workbook/worksheet.
+    \State Reshape to long form: one row per $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{variable}, \textit{horizon})$.
+    \State Normalize units and names to project codebook (e.g., annualized percent for growth rates).
+    \State Insert into cleaned level/growth/probability table with that primary key.
+\EndFor
+\State Check referential integrity: every $(\textit{survey\_year}, \textit{survey\_quarter})$ in forecast tables exists in metadata.
+\State Check for duplicate primary keys and missing required variables; fix or document exceptions.
+\State Write codebook and source description (files used, retrieval date, variable list) to cleaned folder or \texttt{report/}.
+\State \Return path to cleaned tables and codebook.
+\end{algorithmic}
+\end{algorithm}
+
+\section{Notes}
+
+Obtaining official Excel files (line 3 in \textsc{ConstructSPFDatasets}) may be
+implemented by \textsc{DownloadByVariableNames}: given variable names (e.g.,
+CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each
+variable's data page URL (e.g.,
+\url{https://www.philadelphiafed.org/surveys-and-data/cpi10}),
+\textsc{GetDownloadLinks} to parse the page for Dispersion, Median/Mean Level,
+Median/Mean Growth, and Individual links, and \textsc{DownloadOneFile} to save
+each file to \texttt{data-pipeline/input/} under the same filename as on the
+site. The cleaned schema (e.g., separate tables for levels, growth, and
+probabilities) is defined in the project; table names and keys should match the
+pipeline and codebook. If individual (microdata) files are used, extend the
+primary key to include forecaster ID where applicable.
+
+\end{document}

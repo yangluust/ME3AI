@@ -1,5 +1,5 @@
 ---
-description: Review and improve academic draft text (notation, flow, tone, math consistency)
+description: Review and improve academic draft text (notation, flow, tone, math consistency, line length)
 globs:
   - "docs/**/*.tex"
   - "docs/**/*.md"
@@ -45,6 +45,15 @@ When invoked on draft text, perform these checks:
 ### 7. Proof consistency and validity
 - For each theorem/lemma/proposition proof, verify logical validity, completeness, assumption tracking, case coverage, and correct application of definitions/results.
 - Flag circular reasoning, missing cases, unjustified steps, direction/quantifier errors, ambiguity.
+
+### 8. Line length and text width (source and typeset)
+- **Source:** Keep lines in the source file within a reasonable length (e.g., 80 to 100 characters) so that the compiled PDF has proper line breaking.
+- **Typeset:** Ensure the compiled output does not have text stretching to the margin (no overfull hbox or single long lines to the margin).
+- **LaTeX prose:** Break long paragraphs into shorter lines in the source; rephrase if needed so that no paragraph or caption produces overfull/underfull hbox or stretched lines.
+- **LaTeX itemize/enumerate:** When an item’s label plus content would form one long line to the margin, insert `\\` after the label (e.g., after the colon following a bold heading) so the description starts on the next line and wraps within the margin.
+- **LaTeX tables:** Break long table cells into two rows (e.g., definition on first row, continuation or examples on the next) or rephrase so that cell content fits.
+- **LaTeX URLs:** Use a package that allows URL line breaks (e.g., `\usepackage{xurl}`) when the document contains long URLs. In prose, use `\url{...}` (not `\texttt{...}`) for URLs so they can break; `\texttt` does not allow breaks and causes overfull lines.
+- **LaTeX algorithms:** When a `\State` line (e.g., a long \textbf{Require} or a long statement) would extend to the margin, split it: put the first part in `\State` and the continuation on the next line with `\Statex \quad ...` so the content spans two lines without adding an extra line number.
 
 ## Output format
 
