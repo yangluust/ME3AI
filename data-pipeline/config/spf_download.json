@@ -1,0 +1,11 @@
+{
+    "variable_names": ["CPI10", "CPI"],
+    "file_types": [
+        "median_level",
+        "mean_level",
+        "dispersion",
+        "individual"
+    ],
+    "out_dir": "input",
+    "overwrite": "skip-if-exists"
+}
