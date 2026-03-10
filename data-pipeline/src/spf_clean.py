@@ -1,8 +1,8 @@
-"""Clean SPF individual forecast files into 3NF CSV tables.
+"""Clean SPF individual forecast files into CSV tables.
 
-Reads Individual_*.xlsx from input dir, reshapes to long form (one row per
-survey_year, survey_quarter, variable, forecaster_id, horizon, value), and
-writes forecast_individual.csv and forecaster_survey.csv. All horizons are kept.
+Reads Individual_*.xlsx from input dir. Writes forecast_individual.csv in wide
+form: one row per (survey_year, survey_quarter, variable, forecaster_id) with
+one column per horizon. Also writes forecaster_survey.csv. All horizons are kept.
 """
 
 from __future__ import annotations
@@ -60,10 +60,26 @@ def load_individual_sheet(path: Path) -> pd.DataFrame:
     return long
 
 
+def _horizon_sort_key(col: str) -> tuple[bool, str]:
+    """Order horizon columns so 10-year (name ending with '10') is last."""
+    return (col.endswith("10"), col)
+
+
 def build_forecast_individual(df_long: pd.DataFrame) -> pd.DataFrame:
-    """Build 3NF forecast_individual table: (survey_year, survey_quarter, variable, forecaster_id, horizon, value)."""
-    cols = ["survey_year", "survey_quarter", "variable", "forecaster_id", "horizon", "value"]
-    out = df_long[cols].copy()
+    """Build forecast_individual table: one row per (survey_year, survey_quarter, variable, forecaster_id), one column per horizon."""
+    index_cols = ["survey_year", "survey_quarter", "variable", "forecaster_id"]
+    out = df_long.pivot_table(
+        index=index_cols,
+        columns="horizon",
+        values="value",
+        aggfunc="first",
+    ).reset_index()
+    out.columns.name = None
+    # Reorder horizon columns so 10-year horizon (e.g. CPI10) is last
+    id_cols = [c for c in out.columns if c in index_cols]
+    horizon_cols = [c for c in out.columns if c not in index_cols]
+    horizon_cols_sorted = sorted(horizon_cols, key=_horizon_sort_key)
+    out = out[id_cols + horizon_cols_sorted]
     out["survey_year"] = out["survey_year"].astype("Int64")
     out["survey_quarter"] = out["survey_quarter"].astype("Int64")
     out["forecaster_id"] = out["forecaster_id"].astype("Int64")

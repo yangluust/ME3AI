@@ -164,10 +164,14 @@ Place the official Excel workbooks in the pipeline input folder. Do not
 modify the original files; preserve them as the source of truth.
 
 \paragraph{Cleaned.}
-Build one or more normalized tables (e.g., survey metadata, level forecasts,
-growth forecasts, probabilities, or microdata). Each row is uniquely
-identified (e.g., by survey year, quarter, variable, and horizon). Use
-consistent naming and units as in the codebook.
+The current implementation focuses on \textbf{individual (microdata)} forecasts
+only. Cleaned output is CSV: \texttt{forecast\_individual.csv} in \textbf{wide}
+form (primary key: survey\_year, survey\_quarter, variable, forecaster\_id; one
+column per horizon, all horizons in the same row) and \texttt{forecaster\_survey.csv}
+(primary key: survey\_year, survey\_quarter, forecaster\_id; \texttt{industry}).
+No separate survey table is used; the set of (survey\_year, survey\_quarter) is
+derivable from \texttt{forecast\_individual}. Level/mean/median and probability
+tables may be added in a later stage.
 
 \paragraph{Output.}
 Analyses read from the cleaned folder and write results to the output
@@ -237,49 +241,89 @@ filtering in the codebook or a README in the cleaned folder.
 \end{algorithmic}
 \end{algorithm}
 
-\section{Algorithm: construct cleaned datasets}
+\section{Algorithm: construct cleaned datasets (individual only)}
 
-The following procedure summarizes the construction of SPF datasets from
-acquisition to cleaned, project-ready form. Raw files are assumed present in
-\texttt{data-pipeline/input/} (e.g., produced by \textsc{DownloadByVariableNames}).
+The following procedure summarizes the construction of SPF \emph{individual}
+forecast datasets from raw Excel files to cleaned CSV. Raw files
+\texttt{Individual\_VAR.xlsx} are assumed present in \texttt{data-pipeline/input/}
+(e.g., produced by \textsc{DownloadByVariableNames} with \texttt{individual} in
+\texttt{file\_types}). Output is CSV; \texttt{forecast\_individual} is written in
+wide form (one row per survey/variable/forecaster, one column per horizon).
+Helper functions used by the main procedure are specified below.
 
 \begin{algorithm}[H]
-\caption{\textsc{ConstructSPFDatasets}$(\textit{docs}, \textit{config}, \textit{variables}, \textit{horizons})$}
+\caption{\textsc{VariableFromFilename}$(\textit{path})$}
 \begin{algorithmic}[1]
-\State \textbf{Require} $\textit{docs}$: SPF documentation; $\textit{config}$: pipeline input/cleaned paths; $\textit{variables}$, $\textit{horizons}$: required variables and horizons.
-\State Identify required per-variable workbooks (e.g., \texttt{Median\_VAR\_Level.xlsx}, \texttt{Mean\_VAR\_Level.xlsx}, \texttt{Median\_VAR\_Growth.xlsx}, \texttt{Mean\_VAR\_Growth.xlsx}, or probability/dispersion files as applicable) from $\textit{variables}$ and $\textit{horizons}$, where VAR is the variable code.
-\For{each required workbook}
-    \State Obtain Excel file from Philadelphia Fed or from \texttt{data-pipeline/input/} if already downloaded.
-    \State Load workbook; for each relevant worksheet, read year, quarter, and forecast columns per documentation.
-    \State Validate column names and types against documentation; flag missing or renamed variables.
+\State \textbf{Require} $\textit{path}$: filename or path of form \texttt{Individual\_VAR.xlsx}.
+\State $\textit{stem} \gets \text{filename without extension of }\textit{path}$.
+\If{$\textit{stem}$ starts with \texttt{Individual\_}}
+    \State \Return $\textit{stem}$ with prefix \texttt{Individual\_} removed (e.g., VAR).
+\EndIf
+\State \Return $\textit{stem}$.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{LoadIndividualSheet}$(\textit{path})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{path}$: path to one \texttt{Individual\_VAR.xlsx} file.
+\State Load first sheet: row 1 = header; first four columns YEAR, QUARTER, ID, INDUSTRY; remaining columns = horizon names.
+\State Validate: at least YEAR, QUARTER, ID present; at least one horizon column.
+\State Melt to long form: id\_vars = (YEAR, QUARTER, ID, INDUSTRY), value\_vars = horizon columns; create columns \texttt{horizon}, \texttt{value}.
+\State Rename YEAR $\to$ survey\_year, QUARTER $\to$ survey\_quarter, ID $\to$ forecaster\_id.
+\State $\textit{variable} \gets \textsc{VariableFromFilename}(\textit{path})$; add column \texttt{variable}.
+\State \Return long-form table (survey\_year, survey\_quarter, forecaster\_id, industry if present, horizon, value, variable).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{HorizonSortKey}$(\textit{col})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{col}$: horizon column name (e.g., CPI1, CPI10).
+\State \textbf{Ensure} 10-year horizon (name ending with \texttt{10}) is ordered last.
+\State \Return pair $(\textit{col}\,\text{ends with}\,\texttt{10}, \textit{col})$ for sorting (False before True, then by name).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{BuildForecastIndividual}$(\textit{df\_long})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{df\_long}$: concatenated long-form table from \textsc{LoadIndividualSheet}.
+\State Pivot: index = (survey\_year, survey\_quarter, variable, forecaster\_id); columns = horizon; values = value; aggfunc = first.
+\State Order horizon columns: sort by \textsc{HorizonSortKey} so 10-year column is last.
+\State Final columns: (survey\_year, survey\_quarter, variable, forecaster\_id, horizon\_1, horizon\_2, \ldots, horizon\_10).
+\State \Return wide table (key columns as integers where applicable).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{BuildForecasterSurvey}$(\textit{df\_long})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{df\_long}$: concatenated long-form table (must contain survey\_year, survey\_quarter, forecaster\_id, INDUSTRY or industry).
+\State Select distinct (survey\_year, survey\_quarter, forecaster\_id, industry); sort by (survey\_year, survey\_quarter, forecaster\_id).
+\State \Return forecaster\_survey table; primary key (survey\_year, survey\_quarter, forecaster\_id).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{CleanIndividualTo3NF}$(\textit{input\_dir}, \textit{cleaned\_dir})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{input\_dir}$: path to input folder; $\textit{cleaned\_dir}$: path to cleaned output folder.
+\State Find all \texttt{Individual\_*.xlsx} in $\textit{input\_dir}$.
+\For{each file $\textit{path}$ in that list}
+    \State $\textit{df} \gets \textsc{LoadIndividualSheet}(\textit{path})$.
+    \State Append $\textit{df}$ to collection of long-form tables.
 \EndFor
-\State Build survey-level metadata table: primary key $(\textit{survey\_year}, \textit{survey\_quarter})$; add attributes (e.g., release date) if available.
-\For{each variable and horizon in $\textit{variables}$, $\textit{horizons}$}
-    \State Extract series from the appropriate workbook/worksheet.
-    \State Reshape to long form: one row per $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{variable}, \textit{horizon})$.
-    \State Normalize units and names to project codebook (e.g., annualized percent for growth rates).
-    \State Insert into cleaned level/growth/probability table with that primary key.
-\EndFor
-\State Check referential integrity: every $(\textit{survey\_year}, \textit{survey\_quarter})$ in forecast tables exists in metadata.
-\State Check for duplicate primary keys and missing required variables; fix or document exceptions.
-\State Write codebook and source description (files used, retrieval date, variable list) to cleaned folder or \texttt{report/}.
-\State \Return path to cleaned tables and codebook.
+\State $\textit{df\_long} \gets$ concatenate all long-form tables.
+\State $\textit{forecast\_individual} \gets \textsc{BuildForecastIndividual}(\textit{df\_long})$.
+\State $\textit{forecaster\_survey} \gets \textsc{BuildForecasterSurvey}(\textit{df\_long})$.
+\State Write $\textit{forecast\_individual}$ to $\textit{cleaned\_dir}$/\texttt{forecast\_individual.csv}, $\textit{forecaster\_survey}$ to $\textit{cleaned\_dir}$/\texttt{forecaster\_survey.csv}.
+\State \Return paths to cleaned CSV files.
 \end{algorithmic}
 \end{algorithm}
 
 \section{Notes}
 
-Obtaining official Excel files (line 3 in \textsc{ConstructSPFDatasets}) may be
-implemented by \textsc{DownloadByVariableNames}: given variable names (e.g.,
-CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each
-variable's data page URL (e.g.,
-\url{https://www.philadelphiafed.org/surveys-and-data/cpi10}),
-\textsc{GetDownloadLinks} to parse the page for Dispersion, Median/Mean Level,
-Median/Mean Growth, and Individual links, and \textsc{DownloadOneFile} to save
-each file to \texttt{data-pipeline/input/} under the same filename as on the
-site. The cleaned schema (e.g., separate tables for levels, growth, and
-probabilities) is defined in the project; table names and keys should match the
-pipeline and codebook. If individual (microdata) files are used, extend the
-primary key to include forecaster ID where applicable.
+Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The \textbf{current} cleaned schema is \texttt{forecast\_individual} and \texttt{forecaster\_survey} for individual (microdata) only; output format is CSV. Level/mean/median and probability tables are not yet in scope; table names and keys should match the pipeline and codebook when added.
 
 \end{document}
