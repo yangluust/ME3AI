@@ -2,8 +2,7 @@
 
 Reads Individual_*.xlsx from input dir, reshapes to long form (one row per
 survey_year, survey_quarter, variable, forecaster_id, horizon, value), and
-writes forecast_individual.csv plus survey.csv and forecaster_survey.csv
-for referential integrity. All horizons are kept.
+writes forecast_individual.csv and forecaster_survey.csv. All horizons are kept.
 """
 
 from __future__ import annotations
@@ -71,15 +70,6 @@ def build_forecast_individual(df_long: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def build_survey(df_long: pd.DataFrame) -> pd.DataFrame:
-    """Build survey table: (survey_year, survey_quarter)."""
-    out = df_long[["survey_year", "survey_quarter"]].drop_duplicates()
-    out = out.sort_values(["survey_year", "survey_quarter"])
-    out["survey_year"] = out["survey_year"].astype("Int64")
-    out["survey_quarter"] = out["survey_quarter"].astype("Int64")
-    return out
-
-
 def build_forecaster_survey(df_long: pd.DataFrame) -> pd.DataFrame:
     """Build forecaster_survey table: (survey_year, survey_quarter, forecaster_id, industry)."""
     if "INDUSTRY" not in df_long.columns:
@@ -99,8 +89,8 @@ def build_forecaster_survey(df_long: pd.DataFrame) -> pd.DataFrame:
 def clean_individual_to_3nf(
     input_dir: Path,
     cleaned_dir: Path,
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """Read all Individual_*.xlsx from input_dir; build 3NF tables; return (forecast_individual, survey, forecaster_survey)."""
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Read all Individual_*.xlsx from input_dir; build 3NF tables; return (forecast_individual, forecaster_survey)."""
     paths = sorted(input_dir.glob("Individual_*.xlsx"))
     if not paths:
         raise FileNotFoundError(f"No Individual_*.xlsx files in {input_dir}")
@@ -112,12 +102,10 @@ def clean_individual_to_3nf(
     df_long = pd.concat(frames, ignore_index=True)
 
     forecast_individual = build_forecast_individual(df_long=df_long)
-    survey = build_survey(df_long=df_long)
     forecaster_survey = build_forecaster_survey(df_long=df_long)
 
     cleaned_dir.mkdir(parents=True, exist_ok=True)
     forecast_individual.to_csv(cleaned_dir / "forecast_individual.csv", index=False)
-    survey.to_csv(cleaned_dir / "survey.csv", index=False)
     forecaster_survey.to_csv(cleaned_dir / "forecaster_survey.csv", index=False)
 
-    return forecast_individual, survey, forecaster_survey
+    return forecast_individual, forecaster_survey

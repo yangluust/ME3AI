@@ -1,8 +1,8 @@
 """Clean SPF individual forecasts to 3NF CSV.
 
 Reads config/spf_clean.json (input_dir, cleaned_dir), loads all
-Individual_*.xlsx from input_dir, and writes forecast_individual.csv,
-survey.csv, and forecaster_survey.csv to cleaned_dir.
+Individual_*.xlsx from input_dir, and writes forecast_individual.csv
+and forecaster_survey.csv to cleaned_dir.
 """
 
 from __future__ import annotations
@@ -34,13 +34,12 @@ def main(config_path: str | None = None) -> None:
     print(f"  Input:  {input_dir}")
     print(f"  Output: {cleaned_dir}")
 
-    forecast_individual, survey, forecaster_survey = clean_individual_to_3nf(
+    forecast_individual, forecaster_survey = clean_individual_to_3nf(
         input_dir=input_dir,
         cleaned_dir=cleaned_dir,
     )
 
     print(f"  forecast_individual: {len(forecast_individual)} rows -> cleaned/forecast_individual.csv")
-    print(f"  survey:              {len(survey)} rows -> cleaned/survey.csv")
     print(f"  forecaster_survey:   {len(forecaster_survey)} rows -> cleaned/forecaster_survey.csv")
     print("Done.")
 
