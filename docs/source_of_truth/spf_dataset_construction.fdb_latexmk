@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1773116734.62923 "d:/ME3AI/docs/source_of_truth/spf_dataset_construction.tex" "spf_dataset_construction.pdf" "spf_dataset_construction" 1773116735.7966 0
+["pdflatex"] 1773377455.9628 "d:/ME3AI/docs/source_of_truth/spf_dataset_construction.tex" "spf_dataset_construction.pdf" "spf_dataset_construction" 1773377457.01576 0
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.enc" 1747027985 2900 1537cc8184ad1792082cd229ecc269f4 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1747029124 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "c:/texlive/2025/texmf-dist/fonts/tfm/jknappen/ec/tcrm1095.tfm" 1747028643 1536 02c06700a42be0f5a28664c7273f82e7 ""
@@ -34,11 +34,15 @@
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1747027094 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1747027094 32080 340ef9bf63678554ee606688e7b5339d ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb" 1747027094 32001 6aeea3afe875097b1eb0da29acd61e28 ""
+  "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1747027094 30251 6afa5cb1d0204815a708a080681d4674 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1747027094 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
+  "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1747027094 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1747027094 35752 024fb6c41858982481f6968b5fc26508 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1747027094 32362 bc3f3eec7ab7d65fe700963d4017d32c ""
+  "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb" 1747027094 32726 39f0f9e62e84beb801509898a605dbd5 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb" 1747027094 33993 9b89b85fd2d9df0482bd47194d1d3bf3 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb" 1747027094 32569 5e5ddc8df908dea60932f3c484a54c0d ""
+  "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb" 1747027094 32626 5abc8bb2f28aa647d4c70f8ea38cc0d3 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb" 1747027094 37944 359e864bd06cde3b1cf57bb20757fb06 ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb" 1747027094 31099 342ef5a582aacbd3346f3cf4579679fa ""
   "c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb" 1747027986 145929 5c9aebea9ba6e33fc93158c04a3bdcd8 ""
@@ -70,9 +74,9 @@
   "c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1747033816 5569470 f263a82cf6bb394f5bc87b63f38b78df ""
   "c:/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1747034022 3567314 bc901764aad9d4959646998e2f92ab95 ""
   "c:/texlive/2025/texmf.cnf" 1747033790 713 e69b156964470283e0530f5060668171 ""
-  "d:/ME3AI/docs/source_of_truth/spf_dataset_construction.tex" 1773116730 18218 afd7bf70c51b59997f89777f9c0a7a54 ""
-  "spf_dataset_construction.aux" 1773116735 3185 aad36da67bee940bf44adb3ea66efce9 "pdflatex"
-  "spf_dataset_construction.tex" 1773116730 18218 afd7bf70c51b59997f89777f9c0a7a54 ""
+  "d:/ME3AI/docs/source_of_truth/spf_dataset_construction.tex" 1773377453 23789 4bad861fcc0938d12c0df31ca0a04c2c ""
+  "spf_dataset_construction.aux" 1773377456 3660 b9be3058acc0704683b82b091a90167e "pdflatex"
+  "spf_dataset_construction.tex" 1773377453 23789 4bad861fcc0938d12c0df31ca0a04c2c ""
   (generated)
   "spf_dataset_construction.aux"
   "spf_dataset_construction.log"

@@ -183,6 +183,52 @@ layouts align with the SPF documentation; after transformation, check row
 counts and primary keys; record data source, retrieval date, and any
 filtering in the codebook or a README in the cleaned folder.
 
+\section{CPI10 and realized inflation (CPI1)}
+
+Following Appendix A.1.3 in Aruoba, let $\pi_{a \to b}$ denote annualized
+quarterly inflation between quarters $a$ and $b$, and use the same
+continuous-compounding approximation. The SPF 10-year CPI forecast is a
+\emph{fixed-event} forecast: in each survey quarter it refers to inflation over
+10 years starting from the previous year's Q4. Hence part of the reported
+object is already realized by the survey date and must be removed before using
+it as a forward-looking measurement equation.
+
+With quarterly inflation, the raw 10-year object is the average of 40 quarterly
+inflation rates. For the first-quarter survey, there is no realized quarter
+inside the 10-year window, so
+\begin{equation}
+\text{SPF-10YR-Q1}_t
+\approx \frac{1}{40}
+\sum_{j=0}^{39} \pi_{t-1+j \to t+j}.
+\end{equation}
+Define adjusted 10-year forecasts by survey quarter as
+\begin{align}
+x_{17,t} &\equiv \text{CPI10-Q1}_t, \\
+x_{18,t} &\equiv \text{CPI10-Q2}_t
+ - \frac{1}{40}\text{CPI1-Q2}_t, \\
+x_{19,t} &\equiv \text{CPI10-Q3}_t
+ - \frac{1}{40}\left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t\right), \\
+x_{20,t} &\equiv \text{CPI10-Q4}_t
+ - \frac{1}{40}\left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t
+ + \text{CPI1-Q4}_t\right).
+\end{align}
+The corresponding forward-looking measurement equations are
+\begin{align}
+x_{17,t} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
+ + \varepsilon_{17,t}, \\
+x_{18,t} &= \frac{1}{40}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
+ + \varepsilon_{18,t}, \\
+x_{19,t} &= \frac{1}{40}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
+ + \varepsilon_{19,t}, \\
+x_{20,t} &= \frac{1}{40}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
+ + \varepsilon_{20,t}.
+\end{align}
+Under this quarterly representation, CPI1 enters the raw 10-year forecast with
+weight $1/40$ once it is realized. In Q2, the correction is exactly
+$\text{CPI1}/40$; in Q3 and Q4, CPI1 remains one term in a larger realized block.
+Thus the raw CPI10 measure mechanically contains more realized inflation in Q4
+than in Q1.
+
 \section{Algorithms: download automation}
 
 \begin{algorithm}[H]
@@ -318,7 +364,57 @@ Helper functions used by the main procedure are specified below.
 \State $\textit{forecast\_individual} \gets \textsc{BuildForecastIndividual}(\textit{df\_long})$.
 \State $\textit{forecaster\_survey} \gets \textsc{BuildForecasterSurvey}(\textit{df\_long})$.
 \State Write $\textit{forecast\_individual}$ to $\textit{cleaned\_dir}$/\texttt{forecast\_individual.csv}, $\textit{forecaster\_survey}$ to $\textit{cleaned\_dir}$/\texttt{forecaster\_survey.csv}.
-\State \Return paths to cleaned CSV files.
+\State \Return the two tables (forecast\_individual, forecaster\_survey).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{GetQuarterSpecificValue}$(\textit{key}, \textit{horizon})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{key}$:
+\Statex \quad $(\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$.
+\State \textbf{Require} $\textit{forecast\_individual}$: cleaned wide table.
+\State Filter to rows with $\textit{variable}=\texttt{CPI}$.
+\State Find row with key
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$.
+\State \Return value in column $\textit{horizon}$ (e.g., \texttt{CPI1} or \texttt{CPI10}).
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{AdjustCPI10Forecasts}$(\textit{forecast\_individual})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{forecast\_individual}$: cleaned wide table
+\Statex \quad containing columns \texttt{CPI1} and \texttt{CPI10}.
+\State Initialize output table for adjusted 10-year CPI forecasts.
+\For{each row key $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$}
+    \Statex \quad in rows with $\textit{variable}=\texttt{CPI}$
+    \State $\textit{key} \gets (\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$
+    \State $\textit{cpi10} \gets \textsc{GetQuarterSpecificValue}(\textit{key}, \texttt{CPI10})$
+    \If{$\textit{survey\_quarter} = 1$}
+        \State $\textit{adjusted} \gets \textit{cpi10}$
+    \ElsIf{$\textit{survey\_quarter} = 2$}
+        \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
+        \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
+        \State $\textit{adjusted} \gets \textit{cpi10} - \textit{cpi1\_q2}/40$
+    \ElsIf{$\textit{survey\_quarter} = 3$}
+        \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
+        \State $\textit{key\_q3} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 3, \textit{forecaster\_id})$
+        \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
+        \State $\textit{cpi1\_q3} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q3}, \texttt{CPI1})$
+        \State $\textit{adjusted} \gets \textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3})/40$
+    \Else
+        \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
+        \State $\textit{key\_q3} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 3, \textit{forecaster\_id})$
+        \State $\textit{key\_q4} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 4, \textit{forecaster\_id})$
+        \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
+        \State $\textit{cpi1\_q3} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q3}, \texttt{CPI1})$
+        \State $\textit{cpi1\_q4} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q4}, \texttt{CPI1})$
+        \State $\textit{adjusted} \gets \textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3} + \textit{cpi1\_q4})/40$
+    \EndIf
+    \State Write $\textit{adjusted}$ to the output table for that row key.
+\EndFor
+\State \Return table of adjusted 10-year CPI forecasts.
 \end{algorithmic}
 \end{algorithm}
 

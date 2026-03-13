@@ -10,45 +10,30 @@ from pathlib import Path
 
 CLEANED_DIR = Path("../cleaned")
 
-# TODO: Define the TABLES configuration
-# Each table should have:
-# - file: filename in cleaned/
-# - description: what the table contains
-# - primary_key: list of primary key columns
-# - foreign_keys: dict mapping column -> referenced table
-# - variables: dict of variable definitions with type, unit, desc
-
+# SPF cleaned tables: forecast_individual (wide), forecaster_survey
 TABLES = {
-    "customers": {
-        "file": "customers.csv",
-        "description": "TODO: Add description",
-        "primary_key": ["customer_id"],
+    "forecast_individual": {
+        "file": "forecast_individual.csv",
+        "description": "Individual (microdata) forecasts in wide form: one row per (survey_year, survey_quarter, variable, forecaster_id) with one column per horizon. Horizon columns vary by variable.",
+        "primary_key": ["survey_year", "survey_quarter", "variable", "forecaster_id"],
         "foreign_keys": {},
         "variables": {
-            # TODO: Define each variable
-            # "column_name": {"type": "string|integer|float|date", "unit": "JPY|-|units", "desc": "Description"}
+            "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year (BEA/NIPA definition)."},
+            "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
+            "variable": {"type": "string", "unit": "-", "desc": "Variable code (e.g. CPI, NGDP)."},
+            "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
         }
     },
-    "products": {
-        "file": "products.csv",
-        "description": "TODO: Add description",
-        "primary_key": ["product_id"],
+    "forecaster_survey": {
+        "file": "forecaster_survey.csv",
+        "description": "One row per (survey_year, survey_quarter, forecaster_id) with industry.",
+        "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
         "foreign_keys": {},
         "variables": {
-            # TODO: Define each variable
-        }
-    },
-    "orders": {
-        "file": "orders.csv",
-        "description": "TODO: Add description",
-        "primary_key": ["order_id"],
-        "foreign_keys": {
-            # TODO: Define foreign keys
-            # "customer_id": "customers",
-            # "product_id": "products",
-        },
-        "variables": {
-            # TODO: Define each variable
+            "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
+            "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
+            "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
+            "industry": {"type": "string", "unit": "-", "desc": "Forecaster industry code."},
         }
     },
 }
@@ -145,4 +130,82 @@ for name, config in TABLES.items():
         print("*Run the cleaning pipeline first to generate this table*")
     
     print("\n---\n")
+```
+
+## By variable: available horizons and forecaster counts
+
+For each variable, this section reports **(E)** which horizons have at least one
+non-missing forecast in the data, and **(B)** the number of distinct forecasters
+per survey (survey_year, survey_quarter).
+
+```{python}
+#| echo: false
+#| output: asis
+
+fi_path = CLEANED_DIR / "forecast_individual.csv"
+if not fi_path.exists():
+    print("*Run the cleaning pipeline to generate `forecast_individual.csv`.*")
+else:
+    fi = pd.read_csv(fi_path)
+    id_cols = ["survey_year", "survey_quarter", "variable", "forecaster_id"]
+    horizon_cols = [c for c in fi.columns if c not in id_cols]
+
+    def is_missing(x):
+        if pd.isna(x):
+            return True
+        if isinstance(x, str):
+            s = x.strip().upper()
+            return s == "#N/A" or s == "" or s == "NAN"
+        return False
+
+    # (E) Available horizons per variable: only horizons with at least one non-missing value
+    available_horizons = {}
+    for v in fi["variable"].unique():
+        sub = fi.loc[fi["variable"] == v, horizon_cols]
+        available_horizons[v] = [h for h in horizon_cols if (~sub[h].apply(is_missing)).any()]
+
+    # (B) Distinct forecasters per variable per survey
+    forecasters_by_survey = (
+        fi.groupby(["variable", "survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
+        .nunique()
+        .rename(columns={"forecaster_id": "n_forecasters"})
+    )
+
+    # Summary table: variable | available horizons | n_surveys | min/mean/max forecasters
+    summary_rows = []
+    for v in sorted(available_horizons.keys()):
+        hlist = available_horizons[v]
+        sv = forecasters_by_survey[forecasters_by_survey["variable"] == v]
+        n_surveys = len(sv)
+        if n_surveys > 0:
+            mn, mx = sv["n_forecasters"].min(), sv["n_forecasters"].max()
+            mean_f = sv["n_forecasters"].mean()
+            summary_rows.append({
+                "variable": v,
+                "available_horizons": ", ".join(hlist) if hlist else "—",
+                "n_surveys": n_surveys,
+                "min_forecasters": mn,
+                "mean_forecasters": f"{mean_f:.1f}",
+                "max_forecasters": mx,
+            })
+        else:
+            summary_rows.append({
+                "variable": v,
+                "available_horizons": ", ".join(hlist) if hlist else "—",
+                "n_surveys": 0,
+                "min_forecasters": "—",
+                "mean_forecasters": "—",
+                "max_forecasters": "—",
+            })
+    summary_df = pd.DataFrame(summary_rows)
+    print("\n### Summary by variable\n")
+    print(summary_df.to_markdown(index=False))
+
+    print("\n### Forecaster counts by variable and survey\n")
+    for v in sorted(forecasters_by_survey["variable"].unique()):
+        sv = forecasters_by_survey[forecasters_by_survey["variable"] == v].copy()
+        sv = sv.sort_values(["survey_year", "survey_quarter"])
+        print(f"\n#### Variable: {v}\n")
+        print(sv.to_markdown(index=False))
+        print()
 ```
