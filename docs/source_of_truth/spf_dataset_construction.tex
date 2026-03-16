@@ -212,30 +212,32 @@ inside the 10-year window, so
 Define adjusted 10-year forecasts by survey quarter as
 \begin{align}
 x_{17,t} &\equiv \text{CPI10-Q1}_t, \\
-x_{18,t} &\equiv \text{CPI10-Q2}_t
- - \frac{1}{40}\text{CPI1-Q2}_t, \\
-x_{19,t} &\equiv \text{CPI10-Q3}_t
- - \frac{1}{40}\left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t\right), \\
-x_{20,t} &\equiv \text{CPI10-Q4}_t
- - \frac{1}{40}\left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t
- + \text{CPI1-Q4}_t\right).
+x_{18,t} &\equiv
+ \frac{40\cdot\text{CPI10-Q2}_t - \text{CPI1-Q2}_t}{39}, \\
+x_{19,t} &\equiv
+ \frac{40\cdot\text{CPI10-Q3}_t
+ - \left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t\right)}{38}, \\
+x_{20,t} &\equiv
+ \frac{40\cdot\text{CPI10-Q4}_t
+ - \left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t
+ + \text{CPI1-Q4}_t\right)}{37}.
 \end{align}
 The corresponding forward-looking measurement equations are
 \begin{align}
 x_{17,t} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
  + \varepsilon_{17,t}, \\
-x_{18,t} &= \frac{1}{40}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
+x_{18,t} &= \frac{1}{39}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
  + \varepsilon_{18,t}, \\
-x_{19,t} &= \frac{1}{40}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
+x_{19,t} &= \frac{1}{38}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
  + \varepsilon_{19,t}, \\
-x_{20,t} &= \frac{1}{40}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
+x_{20,t} &= \frac{1}{37}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
  + \varepsilon_{20,t}.
 \end{align}
 Under this quarterly representation, CPI1 enters the raw 10-year forecast with
-weight $1/40$ once it is realized. In Q2, the correction is exactly
-$\text{CPI1}/40$; in Q3 and Q4, CPI1 remains one term in a larger realized
-block. Thus the raw CPI10 measure mechanically contains more realized inflation
-in Q4 than in Q1.
+weight $1/40$ once it is realized, but the adjusted object re-averages only over
+the remaining forward-looking quarters. Thus Q2 rescales by $39$, Q3 rescales by
+$38$, and Q4 rescales by $37$. The raw CPI10 measure therefore mechanically
+contains more realized inflation in Q4 than in Q1.
 
 \section{Algorithms: download automation}
 
@@ -390,13 +392,13 @@ Helper functions used by the main procedure are specified below.
     \ElsIf{$\textit{survey\_quarter} = 2$}
         \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
         \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
-        \State $\textit{adjusted} \gets \textit{cpi10} - \textit{cpi1\_q2}/40$
+        \State $\textit{adjusted} \gets (40\cdot\textit{cpi10} - \textit{cpi1\_q2})/39$
     \ElsIf{$\textit{survey\_quarter} = 3$}
         \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
         \State $\textit{key\_q3} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 3, \textit{forecaster\_id})$
         \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
         \State $\textit{cpi1\_q3} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q3}, \texttt{CPI1})$
-        \State $\textit{adjusted} \gets \textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3})/40$
+        \State $\textit{adjusted} \gets (40\cdot\textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3}))/38$
     \Else
         \State $\textit{key\_q2} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 2, \textit{forecaster\_id})$
         \State $\textit{key\_q3} \gets (\textit{forecast\_individual}, \textit{survey\_year}, 3, \textit{forecaster\_id})$
@@ -404,7 +406,7 @@ Helper functions used by the main procedure are specified below.
         \State $\textit{cpi1\_q2} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q2}, \texttt{CPI1})$
         \State $\textit{cpi1\_q3} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q3}, \texttt{CPI1})$
         \State $\textit{cpi1\_q4} \gets \textsc{GetQuarterSpecificValue}(\textit{key\_q4}, \texttt{CPI1})$
-        \State $\textit{adjusted} \gets \textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3} + \textit{cpi1\_q4})/40$
+        \State $\textit{adjusted} \gets (40\cdot\textit{cpi10} - (\textit{cpi1\_q2} + \textit{cpi1\_q3} + \textit{cpi1\_q4}))/37$
     \EndIf
     \State Write $\textit{adjusted}$ to the output table for that row key.
 \EndFor

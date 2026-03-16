@@ -11,6 +11,8 @@ from src.spf_adjust import (
     adjust_cpi10_forecasts,
     adjusted_cpi10_availability_summary,
     adjusted_cpi10_forecaster_counts_by_survey,
+    adjusted_cpi10_plot_summary_all,
+    adjusted_cpi10_plot_summary_revision_ready,
     adjusted_cpi10_revision_ready_counts_by_survey,
     get_quarter_specific_value,
 )
@@ -92,9 +94,9 @@ def test_adjust_cpi10_forecasts_applies_quarter_rules():
     }
 
     assert by_quarter[1] == 2.50
-    assert by_quarter[2] == 2.60 - 1.20 / 40
-    assert by_quarter[3] == 2.70 - (1.20 + 0.80) / 40
-    assert by_quarter[4] == 2.80 - (1.20 + 0.80 + 0.40) / 40
+    assert by_quarter[2] == (2.60 * 40 - 1.20) / 39
+    assert by_quarter[3] == (2.70 * 40 - (1.20 + 0.80)) / 38
+    assert by_quarter[4] == (2.80 * 40 - (1.20 + 0.80 + 0.40)) / 37
 
 
 def test_adjusted_cpi10_availability_summary_uses_non_missing_rows():
@@ -166,3 +168,83 @@ def test_adjusted_cpi10_revision_ready_counts_by_survey_uses_previous_quarter():
         },
     ]
     assert counts.to_dict("records") == expected
+
+
+def test_adjusted_cpi10_plot_summary_all_computes_survey_statistics():
+    """All-forecaster plot summary should compute mean/median by survey."""
+    forecast_individual = pd.DataFrame(
+        [
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "CPI10": 2.0},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 2, "CPI10": 4.0},
+            {"survey_year": 2000, "survey_quarter": 2, "forecaster_id": 1, "CPI10": 3.0},
+        ]
+    )
+    adjusted = pd.DataFrame(
+        [
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 1.0},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 2, "adjusted_cpi10": 5.0},
+            {"survey_year": 2000, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.0},
+        ]
+    )
+
+    summary = adjusted_cpi10_plot_summary_all(
+        forecast_individual=forecast_individual,
+        adjusted_cpi10=adjusted,
+    )
+
+    expected = [
+        {
+            "survey_year": 2000,
+            "survey_quarter": 1,
+            "mean_cpi10": 3.0,
+            "median_cpi10": 3.0,
+            "mean_adjusted_cpi10": 3.0,
+            "median_adjusted_cpi10": 3.0,
+        },
+        {
+            "survey_year": 2000,
+            "survey_quarter": 2,
+            "mean_cpi10": 3.0,
+            "median_cpi10": 3.0,
+            "mean_adjusted_cpi10": 2.0,
+            "median_adjusted_cpi10": 2.0,
+        },
+    ]
+    assert summary.to_dict("records") == expected
+
+
+def test_adjusted_cpi10_plot_summary_revision_ready_filters_to_previous_quarter_panel():
+    """Revision-ready plot summary should keep only forecasters present in the previous survey."""
+    forecast_individual = pd.DataFrame(
+        [
+            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 1, "CPI10": 2.0},
+            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 2, "CPI10": 3.0},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "CPI10": 4.0},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 3, "CPI10": 6.0},
+        ]
+    )
+    adjusted = pd.DataFrame(
+        [
+            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": 1.5},
+            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 2, "adjusted_cpi10": 2.5},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 3.5},
+            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 3, "adjusted_cpi10": 5.5},
+        ]
+    )
+
+    summary = adjusted_cpi10_plot_summary_revision_ready(
+        forecast_individual=forecast_individual,
+        adjusted_cpi10=adjusted,
+    )
+
+    expected = [
+        {
+            "survey_year": 2000,
+            "survey_quarter": 1,
+            "mean_cpi10": 4.0,
+            "median_cpi10": 4.0,
+            "mean_adjusted_cpi10": 3.5,
+            "median_adjusted_cpi10": 3.5,
+        }
+    ]
+    assert summary.to_dict("records") == expected

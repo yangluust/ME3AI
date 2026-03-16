@@ -2,7 +2,8 @@
 
 Reads config/spf_clean.json to locate the cleaned folder, loads
 forecast_individual.csv, computes adjusted 10-year CPI expectations, and writes
-adjusted_cpi10.csv to the cleaned folder.
+adjusted_cpi10.csv to the cleaned folder. For Q2-Q4 surveys, the script removes
+realized CPI1 terms and re-averages over the remaining forward-looking quarters.
 """
 
 from __future__ import annotations

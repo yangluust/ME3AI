@@ -1,6 +1,7 @@
 ---
 title: "Codebook: Cleaned Data"
 format: html
+jupyter: data-pipeline-venv
 ---
 
 ```{python}
@@ -15,6 +16,8 @@ sys.path.insert(0, str(Path("..").resolve()))
 from src.spf_adjust import (
     adjusted_cpi10_availability_summary,
     adjusted_cpi10_forecaster_counts_by_survey,
+    adjusted_cpi10_plot_summary_all,
+    adjusted_cpi10_plot_summary_revision_ready,
     adjusted_cpi10_revision_ready_counts_by_survey,
 )
 
@@ -45,14 +48,14 @@ TABLES = {
     },
     "adjusted_cpi10": {
         "file": "adjusted_cpi10.csv",
-        "description": "Adjusted 10-year CPI expectations: one row per (survey_year, survey_quarter, forecaster_id) with adjusted_cpi10 only.",
+        "description": "Adjusted 10-year CPI expectations: one row per (survey_year, survey_quarter, forecaster_id) with adjusted_cpi10 only, after removing realized CPI1 terms and re-averaging over the remaining quarters.",
         "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
         "foreign_keys": {},
         "variables": {
             "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
             "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
             "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
-            "adjusted_cpi10": {"type": "float", "unit": "annualized percentage points", "desc": "Adjusted 10-year CPI expectation after removing realized CPI1 terms."},
+            "adjusted_cpi10": {"type": "float", "unit": "annualized percentage points", "desc": "Adjusted 10-year CPI expectation after removing realized CPI1 terms and re-averaging over the remaining quarters."},
         }
     },
 }
@@ -222,7 +225,8 @@ else:
 This section reports the survey window where `adjusted_cpi10` is available, the
 number of forecasters with non-missing adjusted CPI10 by survey, and the number
 of forecasters for whom a forecast revision can be computed relative to the
-previous survey quarter.
+previous survey quarter. The adjusted series removes realized `CPI1` terms from
+raw `CPI10` and then re-averages over the remaining forward-looking quarters.
 
 ```{python}
 #| echo: false
@@ -269,4 +273,79 @@ else:
 
     print("\n### Forecasters by survey\n")
     print(merged.to_markdown(index=False))
+```
+
+## CPI10 and adjusted CPI10 plots
+
+These plots summarize, by survey year-quarter, the mean and median across
+`forecaster_id` for raw `CPI10` and `adjusted_cpi10`. The first plot uses all
+available forecasters; the second uses only forecasters with previous-quarter
+adjusted CPI10 available.
+
+```{python}
+#| echo: false
+import matplotlib.pyplot as plt
+
+fi_path = CLEANED_DIR / "forecast_individual.csv"
+adj_path = CLEANED_DIR / "adjusted_cpi10.csv"
+if not fi_path.exists() or not adj_path.exists():
+    print("*Run the cleaning and CPI10 adjustment scripts to generate the required tables.*")
+else:
+    forecast_individual = pd.read_csv(fi_path)
+    adjusted = pd.read_csv(adj_path)
+
+    plot_all = adjusted_cpi10_plot_summary_all(
+        forecast_individual=forecast_individual,
+        adjusted_cpi10=adjusted,
+    )
+    plot_revision_ready = adjusted_cpi10_plot_summary_revision_ready(
+        forecast_individual=forecast_individual,
+        adjusted_cpi10=adjusted,
+    )
+
+    def quarter_labels(df):
+        return [
+            f"{int(y)}:Q{int(q)}"
+            for y, q in zip(df["survey_year"], df["survey_quarter"])
+        ]
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    x = range(len(plot_all))
+    ax.plot(x, plot_all["mean_cpi10"], label="Mean CPI10")
+    ax.plot(x, plot_all["median_cpi10"], label="Median CPI10")
+    ax.plot(x, plot_all["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
+    ax.plot(x, plot_all["median_adjusted_cpi10"], label="Median adjusted CPI10")
+    ax.set_title("CPI10 and adjusted CPI10: all forecasters")
+    ax.set_ylabel("Annualized percentage points")
+    ax.set_xlabel("Survey year-quarter")
+    if len(plot_all) > 0:
+        tick_idx = list(range(0, len(plot_all), max(len(plot_all) // 8, 1)))
+        ax.set_xticks(tick_idx)
+        ax.set_xticklabels([quarter_labels(plot_all)[i] for i in tick_idx], rotation=45, ha="right")
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
+
+    fig, ax = plt.subplots(figsize=(10, 4))
+    x = range(len(plot_revision_ready))
+    ax.plot(x, plot_revision_ready["mean_cpi10"], label="Mean CPI10")
+    ax.plot(x, plot_revision_ready["median_cpi10"], label="Median CPI10")
+    ax.plot(x, plot_revision_ready["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
+    ax.plot(x, plot_revision_ready["median_adjusted_cpi10"], label="Median adjusted CPI10")
+    ax.set_title("CPI10 and adjusted CPI10: revision-ready forecasters")
+    ax.set_ylabel("Annualized percentage points")
+    ax.set_xlabel("Survey year-quarter")
+    if len(plot_revision_ready) > 0:
+        tick_idx = list(range(0, len(plot_revision_ready), max(len(plot_revision_ready) // 8, 1)))
+        ax.set_xticks(tick_idx)
+        ax.set_xticklabels(
+            [quarter_labels(plot_revision_ready)[i] for i in tick_idx],
+            rotation=45,
+            ha="right",
+        )
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    plt.tight_layout()
+    plt.show()
 ```

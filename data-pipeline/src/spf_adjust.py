@@ -2,7 +2,9 @@
 
 The cleaned `forecast_individual` table is the input. This module returns a
 minimal adjusted table with one row per (survey_year, survey_quarter,
-forecaster_id) and one adjusted variable: adjusted_cpi10.
+forecaster_id) and one adjusted variable: adjusted_cpi10. For Q2-Q4 surveys,
+the adjusted value removes realized CPI1 terms from the raw 40-quarter average
+and re-averages over the remaining forward-looking quarters.
 """
 
 from __future__ import annotations
@@ -61,6 +63,18 @@ def _sum_terms(terms: Iterable[float | pd.NA]) -> float | pd.NA:
     return float(sum(float(value) for value in values))
 
 
+def _remaining_average(
+    cpi10: float | pd.NA,
+    realized: float | pd.NA,
+    *,
+    remaining_quarters: int,
+) -> float | pd.NA:
+    """Convert a 40-quarter raw average into a remaining-quarter average."""
+    if pd.isna(cpi10) or pd.isna(realized):
+        return pd.NA
+    return (40.0 * float(cpi10) - float(realized)) / float(remaining_quarters)
+
+
 def _get_value_or_missing(
     forecast_individual: pd.DataFrame,
     *,
@@ -115,7 +129,11 @@ def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
                 forecaster_id=int(row.forecaster_id),
                 horizon="CPI1",
             )
-            adjusted = pd.NA if pd.isna(cpi10) or pd.isna(cpi1_q2) else float(cpi10) - float(cpi1_q2) / 40
+            adjusted = _remaining_average(
+                cpi10,
+                cpi1_q2,
+                remaining_quarters=39,
+            )
         elif row.survey_quarter == 3:
             cpi1_q2 = _get_value_or_missing(
                 forecast_individual=forecast_individual,
@@ -132,7 +150,11 @@ def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
                 horizon="CPI1",
             )
             realized = _sum_terms([cpi1_q2, cpi1_q3])
-            adjusted = pd.NA if pd.isna(cpi10) or pd.isna(realized) else float(cpi10) - float(realized) / 40
+            adjusted = _remaining_average(
+                cpi10,
+                realized,
+                remaining_quarters=38,
+            )
         else:
             cpi1_q2 = _get_value_or_missing(
                 forecast_individual=forecast_individual,
@@ -156,7 +178,11 @@ def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
                 horizon="CPI1",
             )
             realized = _sum_terms([cpi1_q2, cpi1_q3, cpi1_q4])
-            adjusted = pd.NA if pd.isna(cpi10) or pd.isna(realized) else float(cpi10) - float(realized) / 40
+            adjusted = _remaining_average(
+                cpi10,
+                realized,
+                remaining_quarters=37,
+            )
 
         adjusted_rows.append(
             {
@@ -271,3 +297,106 @@ def adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10: pd.DataFrame)
         .sort_values(["survey_year", "survey_quarter"])
     )
     return counts
+
+
+def _summarize_plot_panel(df: pd.DataFrame) -> pd.DataFrame:
+    """Summarize mean/median raw and adjusted CPI10 by survey."""
+    summary = (
+        df.groupby(["survey_year", "survey_quarter"], as_index=False)
+        .agg(
+            mean_cpi10=("CPI10", "mean"),
+            median_cpi10=("CPI10", "median"),
+            mean_adjusted_cpi10=("adjusted_cpi10", "mean"),
+            median_adjusted_cpi10=("adjusted_cpi10", "median"),
+        )
+        .sort_values(["survey_year", "survey_quarter"])
+    )
+    return summary
+
+
+def adjusted_cpi10_plot_summary_all(
+    forecast_individual: pd.DataFrame,
+    adjusted_cpi10: pd.DataFrame,
+) -> pd.DataFrame:
+    """Build survey-level plot summary across all forecasters with data."""
+    required_forecast = {"survey_year", "survey_quarter", "forecaster_id", "CPI10"}
+    missing_forecast = required_forecast.difference(forecast_individual.columns)
+    if missing_forecast:
+        raise KeyError(f"Missing required forecast columns: {sorted(missing_forecast)}")
+
+    required_adjusted = {"survey_year", "survey_quarter", "forecaster_id", "adjusted_cpi10"}
+    missing_adjusted = required_adjusted.difference(adjusted_cpi10.columns)
+    if missing_adjusted:
+        raise KeyError(f"Missing required adjusted columns: {sorted(missing_adjusted)}")
+
+    merged = forecast_individual[
+        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].merge(
+        adjusted_cpi10,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    merged["CPI10"] = pd.to_numeric(merged["CPI10"], errors="coerce")
+    merged["adjusted_cpi10"] = pd.to_numeric(merged["adjusted_cpi10"], errors="coerce")
+    merged = merged.loc[merged["CPI10"].notna() & merged["adjusted_cpi10"].notna()].copy()
+    return _summarize_plot_panel(merged)
+
+
+def adjusted_cpi10_plot_summary_revision_ready(
+    forecast_individual: pd.DataFrame,
+    adjusted_cpi10: pd.DataFrame,
+) -> pd.DataFrame:
+    """Build survey-level plot summary for revision-ready forecasters only."""
+    all_summary_input = forecast_individual[
+        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].merge(
+        adjusted_cpi10,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    all_summary_input["CPI10"] = pd.to_numeric(all_summary_input["CPI10"], errors="coerce")
+    all_summary_input["adjusted_cpi10"] = pd.to_numeric(
+        all_summary_input["adjusted_cpi10"], errors="coerce"
+    )
+    all_summary_input = all_summary_input.loc[
+        all_summary_input["CPI10"].notna() & all_summary_input["adjusted_cpi10"].notna()
+    ].copy()
+    if len(all_summary_input) == 0:
+        return pd.DataFrame(
+            columns=[
+                "survey_year",
+                "survey_quarter",
+                "mean_cpi10",
+                "median_cpi10",
+                "mean_adjusted_cpi10",
+                "median_adjusted_cpi10",
+            ]
+        )
+
+    available = all_summary_input[["survey_year", "survey_quarter", "forecaster_id"]].drop_duplicates().copy()
+    available["prev_survey_year"] = available["survey_year"]
+    available["prev_survey_quarter"] = available["survey_quarter"] - 1
+    q1_mask = available["survey_quarter"] == 1
+    available.loc[q1_mask, "prev_survey_year"] = available.loc[q1_mask, "survey_year"] - 1
+    available.loc[q1_mask, "prev_survey_quarter"] = 4
+
+    prev = available[["survey_year", "survey_quarter", "forecaster_id"]].rename(
+        columns={
+            "survey_year": "prev_survey_year",
+            "survey_quarter": "prev_survey_quarter",
+            "forecaster_id": "forecaster_id",
+        }
+    )
+    revision_ready = available.merge(
+        prev,
+        how="inner",
+        left_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+        right_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+    )[["survey_year", "survey_quarter", "forecaster_id"]]
+
+    revision_ready_panel = all_summary_input.merge(
+        revision_ready,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    return _summarize_plot_panel(revision_ready_panel)
