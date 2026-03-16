@@ -7,7 +7,13 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.spf_adjust import adjust_cpi10_forecasts, get_quarter_specific_value
+from src.spf_adjust import (
+    adjust_cpi10_forecasts,
+    adjusted_cpi10_availability_summary,
+    adjusted_cpi10_forecaster_counts_by_survey,
+    adjusted_cpi10_revision_ready_counts_by_survey,
+    get_quarter_specific_value,
+)
 
 
 def _sample_forecast_individual() -> pd.DataFrame:
@@ -17,7 +23,6 @@ def _sample_forecast_individual() -> pd.DataFrame:
             {
                 "survey_year": 2026,
                 "survey_quarter": 1,
-                "variable": "CPI",
                 "forecaster_id": 1,
                 "CPI1": 1.0,
                 "CPI10": 2.50,
@@ -25,7 +30,6 @@ def _sample_forecast_individual() -> pd.DataFrame:
             {
                 "survey_year": 2026,
                 "survey_quarter": 2,
-                "variable": "CPI",
                 "forecaster_id": 1,
                 "CPI1": 1.20,
                 "CPI10": 2.60,
@@ -33,7 +37,6 @@ def _sample_forecast_individual() -> pd.DataFrame:
             {
                 "survey_year": 2026,
                 "survey_quarter": 3,
-                "variable": "CPI",
                 "forecaster_id": 1,
                 "CPI1": 0.80,
                 "CPI10": 2.70,
@@ -41,25 +44,16 @@ def _sample_forecast_individual() -> pd.DataFrame:
             {
                 "survey_year": 2026,
                 "survey_quarter": 4,
-                "variable": "CPI",
                 "forecaster_id": 1,
                 "CPI1": 0.40,
                 "CPI10": 2.80,
-            },
-            {
-                "survey_year": 2026,
-                "survey_quarter": 2,
-                "variable": "CPI10",
-                "forecaster_id": 1,
-                "CPI1": pd.NA,
-                "CPI10": 9.99,
             },
         ]
     )
 
 
-def test_get_quarter_specific_value_reads_cpi_row_only():
-    """Helper should read from the CPI row, not another variable row."""
+def test_get_quarter_specific_value_reads_requested_horizon():
+    """Helper should read the requested horizon from the keyed row."""
     forecast_individual = _sample_forecast_individual()
 
     value = get_quarter_specific_value(
@@ -101,3 +95,74 @@ def test_adjust_cpi10_forecasts_applies_quarter_rules():
     assert by_quarter[2] == 2.60 - 1.20 / 40
     assert by_quarter[3] == 2.70 - (1.20 + 0.80) / 40
     assert by_quarter[4] == 2.80 - (1.20 + 0.80 + 0.40) / 40
+
+
+def test_adjusted_cpi10_availability_summary_uses_non_missing_rows():
+    """Availability summary should report the non-missing window only."""
+    adjusted = pd.DataFrame(
+        [
+            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": pd.NA},
+            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.0},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.1},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 2, "adjusted_cpi10": 2.2},
+        ]
+    )
+
+    summary = adjusted_cpi10_availability_summary(adjusted_cpi10=adjusted)
+
+    assert summary["first_survey_year"] == 1969
+    assert summary["first_survey_quarter"] == 1
+    assert summary["last_survey_year"] == 1969
+    assert summary["last_survey_quarter"] == 2
+    assert summary["n_surveys_with_data"] == 2
+    assert summary["n_rows_with_data"] == 3
+
+
+def test_adjusted_cpi10_forecaster_counts_by_survey_counts_unique_ids():
+    """Forecaster counts should use unique ids among non-missing rows."""
+    adjusted = pd.DataFrame(
+        [
+            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.0},
+            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 2, "adjusted_cpi10": 2.1},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.2},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 2, "adjusted_cpi10": pd.NA},
+        ]
+    )
+
+    counts = adjusted_cpi10_forecaster_counts_by_survey(adjusted_cpi10=adjusted)
+
+    expected = [
+        {"survey_year": 1969, "survey_quarter": 1, "n_forecasters_with_adjusted_cpi10": 2},
+        {"survey_year": 1969, "survey_quarter": 2, "n_forecasters_with_adjusted_cpi10": 1},
+    ]
+    assert counts.to_dict("records") == expected
+
+
+def test_adjusted_cpi10_revision_ready_counts_by_survey_uses_previous_quarter():
+    """Revision-ready counts should require the same forecaster in consecutive surveys."""
+    adjusted = pd.DataFrame(
+        [
+            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": 1.9},
+            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 2, "adjusted_cpi10": 2.0},
+            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.1},
+            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 3, "adjusted_cpi10": 2.2},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.3},
+            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 3, "adjusted_cpi10": pd.NA},
+        ]
+    )
+
+    counts = adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10=adjusted)
+
+    expected = [
+        {
+            "survey_year": 1969,
+            "survey_quarter": 1,
+            "n_forecasters_with_prev_quarter_adjusted_cpi10": 1,
+        },
+        {
+            "survey_year": 1969,
+            "survey_quarter": 2,
+            "n_forecasters_with_prev_quarter_adjusted_cpi10": 1,
+        },
+    ]
+    assert counts.to_dict("records") == expected

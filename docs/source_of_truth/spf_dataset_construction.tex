@@ -166,8 +166,8 @@ modify the original files; preserve them as the source of truth.
 \paragraph{Cleaned.}
 The current implementation focuses on \textbf{individual (microdata)} forecasts
 only. Cleaned output is CSV: \texttt{forecast\_individual.csv} in \textbf{wide}
-form (primary key: survey\_year, survey\_quarter, variable, forecaster\_id; one
-column per horizon, all horizons in the same row) and \texttt{forecaster\_survey.csv}
+form (primary key: survey\_year, survey\_quarter, forecaster\_id; one
+column per forecast horizon, all horizons in the same row) and \texttt{forecaster\_survey.csv}
 (primary key: survey\_year, survey\_quarter, forecaster\_id; \texttt{industry}).
 No separate survey table is used; the set of (survey\_year, survey\_quarter) is
 derivable from \texttt{forecast\_individual}. Level/mean/median and probability
@@ -192,6 +192,14 @@ continuous-compounding approximation. The SPF 10-year CPI forecast is a
 10 years starting from the previous year's Q4. Hence part of the reported
 object is already realized by the survey date and must be removed before using
 it as a forward-looking measurement equation.
+
+In the cleaned wide table \texttt{forecast\_individual.csv}, both the raw
+10-year expectation and the realized short-horizon inflation term are taken from
+the same survey row: column \texttt{CPI10} gives the raw 10-year expectation
+and column \texttt{CPI1} gives the realized inflation term used in the
+adjustment. The adjusted output is written as a separate minimal table
+\texttt{adjusted\_cpi10.csv} with columns
+\texttt{(survey\_year, survey\_quarter, forecaster\_id, adjusted\_cpi10)}.
 
 With quarterly inflation, the raw 10-year object is the average of 40 quarterly
 inflation rates. For the first-quarter survey, there is no realized quarter
@@ -225,9 +233,9 @@ x_{20,t} &= \frac{1}{40}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
 \end{align}
 Under this quarterly representation, CPI1 enters the raw 10-year forecast with
 weight $1/40$ once it is realized. In Q2, the correction is exactly
-$\text{CPI1}/40$; in Q3 and Q4, CPI1 remains one term in a larger realized block.
-Thus the raw CPI10 measure mechanically contains more realized inflation in Q4
-than in Q1.
+$\text{CPI1}/40$; in Q3 and Q4, CPI1 remains one term in a larger realized
+block. Thus the raw CPI10 measure mechanically contains more realized inflation
+in Q4 than in Q1.
 
 \section{Algorithms: download automation}
 
@@ -294,20 +302,8 @@ forecast datasets from raw Excel files to cleaned CSV. Raw files
 \texttt{Individual\_VAR.xlsx} are assumed present in \texttt{data-pipeline/input/}
 (e.g., produced by \textsc{DownloadByVariableNames} with \texttt{individual} in
 \texttt{file\_types}). Output is CSV; \texttt{forecast\_individual} is written in
-wide form (one row per survey/variable/forecaster, one column per horizon).
+wide form (one row per survey/forecaster, one column per horizon).
 Helper functions used by the main procedure are specified below.
-
-\begin{algorithm}[H]
-\caption{\textsc{VariableFromFilename}$(\textit{path})$}
-\begin{algorithmic}[1]
-\State \textbf{Require} $\textit{path}$: filename or path of form \texttt{Individual\_VAR.xlsx}.
-\State $\textit{stem} \gets \text{filename without extension of }\textit{path}$.
-\If{$\textit{stem}$ starts with \texttt{Individual\_}}
-    \State \Return $\textit{stem}$ with prefix \texttt{Individual\_} removed (e.g., VAR).
-\EndIf
-\State \Return $\textit{stem}$.
-\end{algorithmic}
-\end{algorithm}
 
 \begin{algorithm}[H]
 \caption{\textsc{LoadIndividualSheet}$(\textit{path})$}
@@ -317,8 +313,7 @@ Helper functions used by the main procedure are specified below.
 \State Validate: at least YEAR, QUARTER, ID present; at least one horizon column.
 \State Melt to long form: id\_vars = (YEAR, QUARTER, ID, INDUSTRY), value\_vars = horizon columns; create columns \texttt{horizon}, \texttt{value}.
 \State Rename YEAR $\to$ survey\_year, QUARTER $\to$ survey\_quarter, ID $\to$ forecaster\_id.
-\State $\textit{variable} \gets \textsc{VariableFromFilename}(\textit{path})$; add column \texttt{variable}.
-\State \Return long-form table (survey\_year, survey\_quarter, forecaster\_id, industry if present, horizon, value, variable).
+\State \Return long-form table (survey\_year, survey\_quarter, forecaster\_id, industry if present, horizon, value).
 \end{algorithmic}
 \end{algorithm}
 
@@ -335,9 +330,10 @@ Helper functions used by the main procedure are specified below.
 \caption{\textsc{BuildForecastIndividual}$(\textit{df\_long})$}
 \begin{algorithmic}[1]
 \State \textbf{Require} $\textit{df\_long}$: concatenated long-form table from \textsc{LoadIndividualSheet}.
-\State Pivot: index = (survey\_year, survey\_quarter, variable, forecaster\_id); columns = horizon; values = value; aggfunc = first.
+\State Pivot: index = (survey\_year, survey\_quarter, forecaster\_id); columns = horizon; values = value.
+\State If the same horizon appears in more than one raw file, keep the first non-missing value.
 \State Order horizon columns: sort by \textsc{HorizonSortKey} so 10-year column is last.
-\State Final columns: (survey\_year, survey\_quarter, variable, forecaster\_id, horizon\_1, horizon\_2, \ldots, horizon\_10).
+\State Final columns: (survey\_year, survey\_quarter, forecaster\_id, horizon\_1, horizon\_2, \ldots, horizon\_10).
 \State \Return wide table (key columns as integers where applicable).
 \end{algorithmic}
 \end{algorithm}
@@ -374,7 +370,6 @@ Helper functions used by the main procedure are specified below.
 \State \textbf{Require} $\textit{key}$:
 \Statex \quad $(\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$.
 \State \textbf{Require} $\textit{forecast\_individual}$: cleaned wide table.
-\State Filter to rows with $\textit{variable}=\texttt{CPI}$.
 \State Find row with key
 \Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$.
 \State \Return value in column $\textit{horizon}$ (e.g., \texttt{CPI1} or \texttt{CPI10}).
@@ -388,7 +383,6 @@ Helper functions used by the main procedure are specified below.
 \Statex \quad containing columns \texttt{CPI1} and \texttt{CPI10}.
 \State Initialize output table for adjusted 10-year CPI forecasts.
 \For{each row key $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$}
-    \Statex \quad in rows with $\textit{variable}=\texttt{CPI}$
     \State $\textit{key} \gets (\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$
     \State $\textit{cpi10} \gets \textsc{GetQuarterSpecificValue}(\textit{key}, \texttt{CPI10})$
     \If{$\textit{survey\_quarter} = 1$}
@@ -418,8 +412,24 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
+\begin{algorithm}[H]
+\caption{\textsc{SummarizeAdjustedCPI10}$(\textit{adjusted\_cpi10})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{adjusted\_cpi10}$: table with columns
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id}, \textit{adjusted\_cpi10})$.
+\State Keep rows with non-missing \texttt{adjusted\_cpi10}.
+\State Compute availability window: first survey, last survey, number of
+\Statex \quad survey quarters with data, and number of non-missing rows.
+\State Count distinct forecasters by $(\textit{survey\_year}, \textit{survey\_quarter})$.
+\State For each survey quarter, count distinct forecasters that also have
+\Statex \quad non-missing \texttt{adjusted\_cpi10} in the previous survey quarter.
+\State \Return availability summary, forecaster counts by survey, and
+\Statex \quad revision-ready forecaster counts by survey.
+\end{algorithmic}
+\end{algorithm}
+
 \section{Notes}
 
-Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The \textbf{current} cleaned schema is \texttt{forecast\_individual} and \texttt{forecaster\_survey} for individual (microdata) only; output format is CSV. Level/mean/median and probability tables are not yet in scope; table names and keys should match the pipeline and codebook when added.
+Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The \textbf{current} cleaned schema is \texttt{forecast\_individual}, \texttt{forecaster\_survey}, and \texttt{adjusted\_cpi10} for individual (microdata) only; output format is CSV. Level/mean/median and probability tables are not yet in scope; table names and keys should match the pipeline and codebook when added.
 
 \end{document}

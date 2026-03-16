@@ -1,13 +1,14 @@
 """Clean SPF individual forecast files into CSV tables.
 
 Reads Individual_*.xlsx from input dir. Writes forecast_individual.csv in wide
-form: one row per (survey_year, survey_quarter, variable, forecaster_id) with
-one column per horizon. Also writes forecaster_survey.csv. All horizons are kept.
+form: one row per (survey_year, survey_quarter, forecaster_id) with one column
+per forecast horizon. Also writes forecaster_survey.csv. All horizons are kept.
 """
 
 from __future__ import annotations
 
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 
@@ -15,17 +16,8 @@ import pandas as pd
 # First columns in Individual_*.xlsx per SPF documentation (year, quarter, ID, industry).
 ID_COLUMNS = ["YEAR", "QUARTER", "ID", "INDUSTRY"]
 
-
-def _variable_from_filename(path: Path) -> str:
-    """Extract variable code from Individual_VAR.xlsx filename."""
-    stem = path.stem
-    if stem.startswith("Individual_"):
-        return stem.replace("Individual_", "", 1)
-    return stem
-
-
 def load_individual_sheet(path: Path) -> pd.DataFrame:
-    """Load one Individual_*.xlsx file; return long-form dataframe with variable."""
+    """Load one Individual_*.xlsx file; return long-form dataframe."""
     from openpyxl import load_workbook
 
     wb = load_workbook(path, read_only=True, data_only=True)
@@ -56,7 +48,6 @@ def load_individual_sheet(path: Path) -> pd.DataFrame:
             "ID": "forecaster_id",
         }
     )
-    long["variable"] = _variable_from_filename(path)
     return long
 
 
@@ -65,17 +56,24 @@ def _horizon_sort_key(col: str) -> tuple[bool, str]:
     return (col.endswith("10"), col)
 
 
+def _first_non_missing(values: pd.Series) -> Any:
+    """Return the first non-missing value in a group; otherwise missing."""
+    for value in values:
+        if pd.notna(value) and value != "":
+            return value
+    return pd.NA
+
+
 def build_forecast_individual(df_long: pd.DataFrame) -> pd.DataFrame:
-    """Build forecast_individual table: one row per (survey_year, survey_quarter, variable, forecaster_id), one column per horizon."""
-    index_cols = ["survey_year", "survey_quarter", "variable", "forecaster_id"]
+    """Build forecast_individual table: one row per survey/forecaster, one column per horizon."""
+    index_cols = ["survey_year", "survey_quarter", "forecaster_id"]
     out = df_long.pivot_table(
         index=index_cols,
         columns="horizon",
         values="value",
-        aggfunc="first",
+        aggfunc=_first_non_missing,
     ).reset_index()
     out.columns.name = None
-    # Reorder horizon columns so 10-year horizon (e.g. CPI10) is last
     id_cols = [c for c in out.columns if c in index_cols]
     horizon_cols = [c for c in out.columns if c not in index_cols]
     horizon_cols_sorted = sorted(horizon_cols, key=_horizon_sort_key)
@@ -106,7 +104,7 @@ def clean_individual_to_3nf(
     input_dir: Path,
     cleaned_dir: Path,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Read all Individual_*.xlsx from input_dir; build 3NF tables; return (forecast_individual, forecaster_survey)."""
+    """Read all Individual_*.xlsx from input_dir; build cleaned tables."""
     paths = sorted(input_dir.glob("Individual_*.xlsx"))
     if not paths:
         raise FileNotFoundError(f"No Individual_*.xlsx files in {input_dir}")

@@ -6,21 +6,28 @@ format: html
 ```{python}
 #| echo: false
 import pandas as pd
+import sys
 from pathlib import Path
 
 CLEANED_DIR = Path("../cleaned")
+sys.path.insert(0, str(Path("..").resolve()))
+
+from src.spf_adjust import (
+    adjusted_cpi10_availability_summary,
+    adjusted_cpi10_forecaster_counts_by_survey,
+    adjusted_cpi10_revision_ready_counts_by_survey,
+)
 
 # SPF cleaned tables: forecast_individual (wide), forecaster_survey
 TABLES = {
     "forecast_individual": {
         "file": "forecast_individual.csv",
-        "description": "Individual (microdata) forecasts in wide form: one row per (survey_year, survey_quarter, variable, forecaster_id) with one column per horizon. Horizon columns vary by variable.",
-        "primary_key": ["survey_year", "survey_quarter", "variable", "forecaster_id"],
+        "description": "Individual (microdata) forecasts in wide form: one row per (survey_year, survey_quarter, forecaster_id) with one column per forecast horizon.",
+        "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
         "foreign_keys": {},
         "variables": {
             "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year (BEA/NIPA definition)."},
             "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
-            "variable": {"type": "string", "unit": "-", "desc": "Variable code (e.g. CPI, NGDP)."},
             "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
         }
     },
@@ -34,6 +41,18 @@ TABLES = {
             "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
             "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
             "industry": {"type": "string", "unit": "-", "desc": "Forecaster industry code."},
+        }
+    },
+    "adjusted_cpi10": {
+        "file": "adjusted_cpi10.csv",
+        "description": "Adjusted 10-year CPI expectations: one row per (survey_year, survey_quarter, forecaster_id) with adjusted_cpi10 only.",
+        "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
+        "foreign_keys": {},
+        "variables": {
+            "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
+            "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1–4)."},
+            "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
+            "adjusted_cpi10": {"type": "float", "unit": "annualized percentage points", "desc": "Adjusted 10-year CPI expectation after removing realized CPI1 terms."},
         }
     },
 }
@@ -132,11 +151,11 @@ for name, config in TABLES.items():
     print("\n---\n")
 ```
 
-## By variable: available horizons and forecaster counts
+## Forecast columns and forecaster counts
 
-For each variable, this section reports **(E)** which horizons have at least one
-non-missing forecast in the data, and **(B)** the number of distinct forecasters
-per survey (survey_year, survey_quarter).
+This section reports which forecast columns in `forecast_individual.csv` have at
+least one non-missing value and the number of distinct forecasters by survey
+(survey_year, survey_quarter).
 
 ```{python}
 #| echo: false
@@ -147,7 +166,7 @@ if not fi_path.exists():
     print("*Run the cleaning pipeline to generate `forecast_individual.csv`.*")
 else:
     fi = pd.read_csv(fi_path)
-    id_cols = ["survey_year", "survey_quarter", "variable", "forecaster_id"]
+    id_cols = ["survey_year", "survey_quarter", "forecaster_id"]
     horizon_cols = [c for c in fi.columns if c not in id_cols]
 
     def is_missing(x):
@@ -158,54 +177,96 @@ else:
             return s == "#N/A" or s == "" or s == "NAN"
         return False
 
-    # (E) Available horizons per variable: only horizons with at least one non-missing value
-    available_horizons = {}
-    for v in fi["variable"].unique():
-        sub = fi.loc[fi["variable"] == v, horizon_cols]
-        available_horizons[v] = [h for h in horizon_cols if (~sub[h].apply(is_missing)).any()]
+    available_horizons = [h for h in horizon_cols if (~fi[h].apply(is_missing)).any()]
 
-    # (B) Distinct forecasters per variable per survey
     forecasters_by_survey = (
-        fi.groupby(["variable", "survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
+        fi.groupby(["survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
         .nunique()
         .rename(columns={"forecaster_id": "n_forecasters"})
     )
 
-    # Summary table: variable | available horizons | n_surveys | min/mean/max forecasters
-    summary_rows = []
-    for v in sorted(available_horizons.keys()):
-        hlist = available_horizons[v]
-        sv = forecasters_by_survey[forecasters_by_survey["variable"] == v]
-        n_surveys = len(sv)
-        if n_surveys > 0:
-            mn, mx = sv["n_forecasters"].min(), sv["n_forecasters"].max()
-            mean_f = sv["n_forecasters"].mean()
-            summary_rows.append({
-                "variable": v,
-                "available_horizons": ", ".join(hlist) if hlist else "—",
-                "n_surveys": n_surveys,
-                "min_forecasters": mn,
-                "mean_forecasters": f"{mean_f:.1f}",
-                "max_forecasters": mx,
-            })
-        else:
-            summary_rows.append({
-                "variable": v,
-                "available_horizons": ", ".join(hlist) if hlist else "—",
-                "n_surveys": 0,
-                "min_forecasters": "—",
-                "mean_forecasters": "—",
-                "max_forecasters": "—",
-            })
-    summary_df = pd.DataFrame(summary_rows)
-    print("\n### Summary by variable\n")
+    n_surveys = len(forecasters_by_survey)
+    if n_surveys > 0:
+        summary_df = pd.DataFrame(
+            [
+                {
+                    "available_forecast_columns": ", ".join(available_horizons) if available_horizons else "—",
+                    "n_surveys": n_surveys,
+                    "min_forecasters": forecasters_by_survey["n_forecasters"].min(),
+                    "mean_forecasters": f"{forecasters_by_survey['n_forecasters'].mean():.1f}",
+                    "max_forecasters": forecasters_by_survey["n_forecasters"].max(),
+                }
+            ]
+        )
+    else:
+        summary_df = pd.DataFrame(
+            [
+                {
+                    "available_forecast_columns": ", ".join(available_horizons) if available_horizons else "—",
+                    "n_surveys": 0,
+                    "min_forecasters": "—",
+                    "mean_forecasters": "—",
+                    "max_forecasters": "—",
+                }
+            ]
+        )
+    print("\n### Summary\n")
     print(summary_df.to_markdown(index=False))
 
-    print("\n### Forecaster counts by variable and survey\n")
-    for v in sorted(forecasters_by_survey["variable"].unique()):
-        sv = forecasters_by_survey[forecasters_by_survey["variable"] == v].copy()
-        sv = sv.sort_values(["survey_year", "survey_quarter"])
-        print(f"\n#### Variable: {v}\n")
-        print(sv.to_markdown(index=False))
-        print()
+    print("\n### Forecaster counts by survey\n")
+    print(forecasters_by_survey.to_markdown(index=False))
+```
+
+## Adjusted CPI10 availability
+
+This section reports the survey window where `adjusted_cpi10` is available, the
+number of forecasters with non-missing adjusted CPI10 by survey, and the number
+of forecasters for whom a forecast revision can be computed relative to the
+previous survey quarter.
+
+```{python}
+#| echo: false
+#| output: asis
+
+adj_path = CLEANED_DIR / "adjusted_cpi10.csv"
+if not adj_path.exists():
+    print("*Run `scripts/adjust_spf_cpi10.py` to generate `adjusted_cpi10.csv`.*")
+else:
+    adjusted = pd.read_csv(adj_path)
+    availability = adjusted_cpi10_availability_summary(adjusted_cpi10=adjusted)
+    counts = adjusted_cpi10_forecaster_counts_by_survey(adjusted_cpi10=adjusted)
+    revision_ready = adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10=adjusted)
+    merged = counts.merge(
+        revision_ready,
+        how="left",
+        on=["survey_year", "survey_quarter"],
+    )
+    merged["n_forecasters_with_prev_quarter_adjusted_cpi10"] = (
+        merged["n_forecasters_with_prev_quarter_adjusted_cpi10"].fillna(0).astype(int)
+    )
+
+    availability_df = pd.DataFrame(
+        [
+            {
+                "first_survey": (
+                    f"{availability['first_survey_year']}:Q{availability['first_survey_quarter']}"
+                    if pd.notna(availability["first_survey_year"])
+                    else "N/A"
+                ),
+                "last_survey": (
+                    f"{availability['last_survey_year']}:Q{availability['last_survey_quarter']}"
+                    if pd.notna(availability["last_survey_year"])
+                    else "N/A"
+                ),
+                "n_surveys_with_data": availability["n_surveys_with_data"],
+                "n_rows_with_data": availability["n_rows_with_data"],
+            }
+        ]
+    )
+
+    print("\n### Availability Summary\n")
+    print(availability_df.to_markdown(index=False))
+
+    print("\n### Forecasters by survey\n")
+    print(merged.to_markdown(index=False))
 ```
