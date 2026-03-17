@@ -118,8 +118,8 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="table-overview" class="level2">
 <h2 class="anchored" data-anchor-id="table-overview">Table Overview</h2>
-<div id="8486e1eb" class="cell" data-execution_count="2">
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div id="c5263a0d" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
 
@@ -166,7 +166,7 @@ ul.task-list li input[type="checkbox"] {
 <th data-quarto-table-cell-role="th">4</th>
 <td>`reputation_measure.csv`</td>
 <td>Reputation measure rho constructed from long-t...</td>
-<td>`survey_year`, `survey_quarter`</td>
+<td>`survey_year`, `survey_quarter`, `u`</td>
 <td>N/A</td>
 </tr>
 </tbody>
@@ -689,11 +689,11 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="reputation_measure.csv" class="level2">
 <h2 class="anchored" data-anchor-id="reputation_measure.csv">reputation_measure.csv</h2>
-<p>Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters.</p>
+<p>Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters. The unit index is generic and may be a forecaster id or an aggregate identifier such as a summary type.</p>
 <section id="keys-4" class="level3">
 <h3 class="anchored" data-anchor-id="keys-4">Keys</h3>
 <ul>
-<li><strong>Primary Key:</strong> <code>survey_year</code>, <code>survey_quarter</code></li>
+<li><strong>Primary Key:</strong> <code>survey_year</code>, <code>survey_quarter</code>, <code>u</code></li>
 <li><strong>Foreign Keys:</strong> None</li>
 </ul>
 </section>
@@ -728,6 +728,12 @@ ul.task-list li input[type="checkbox"] {
 <td>Survey quarter (1-4).</td>
 </tr>
 <tr class="odd">
+<td><code>u</code></td>
+<td>string or integer</td>
+<td>-</td>
+<td>Generic unit index identifying the forecast unit, such as forecaster_id or summary_type.</td>
+</tr>
+<tr class="even">
 <td><code>rho</code></td>
 <td>float</td>
 <td>-</td>
@@ -2820,7 +2826,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<div id="bf315b1b" class="cell" data-execution_count="6">
+<div id="9df5f86c" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2835,7 +2841,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="inflation-news">Inflation news</h3>
 <p>This section reports the cleaned inflation-news table once it is generated. The table should be keyed by <code>(survey_year, survey_quarter, forecaster_id)</code> and use the timing rule <code>CPI1(y,q) - CPI2(y,q-1)</code> with the Q1 rollover to <code>(y-1,4)</code>.</p>
 <p><em>Run the inflation-news construction step to generate <code>inflation_news.csv</code>.</em></p>
-<div id="4f24dae3" class="cell" data-execution_count="8">
+<div id="ae62901e" class="cell" data-execution_count="8">
 <div class="cell-output cell-output-stdout">
 <pre><code>*Run the inflation-news construction step to generate `inflation_news.csv`.*</code></pre>
 </div>
@@ -2845,7 +2851,7 @@ ul.task-list li input[type="checkbox"] {
 <h3 class="anchored" data-anchor-id="reputation-measure">Reputation measure</h3>
 <p>This section reports the cleaned reputation-measure table once it is generated. The construction uses the long-term inflation expectation input <code>x</code> together with config-loaded parameter values for <code>q</code>, <code>pi_target</code>, <code>pi_NE</code>, <code>z_a</code>, and <code>z_alpha</code>.</p>
 <p><em>Run the reputation-measure construction step to generate <code>reputation_measure.csv</code>.</em></p>
-<div id="0ccc9849" class="cell" data-execution_count="10">
+<div id="7a32b3dc" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-stdout">
 <pre><code>*Run the reputation-measure construction step to generate `reputation_measure.csv`.*</code></pre>
 </div>

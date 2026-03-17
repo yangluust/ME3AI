@@ -65,12 +65,13 @@ TABLES = {
     },
     "reputation_measure": {
         "file": "reputation_measure.csv",
-        "description": "Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters.",
-        "primary_key": ["survey_year", "survey_quarter"],
+        "description": "Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters. The unit index is generic and may be a forecaster id or an aggregate identifier such as a summary type.",
+        "primary_key": ["survey_year", "survey_quarter", "u"],
         "foreign_keys": {},
         "variables": {
             "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
             "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1-4)."},
+            "u": {"type": "string or integer", "unit": "-", "desc": "Generic unit index identifying the forecast unit, such as forecaster_id or summary_type."},
             "rho": {"type": "float", "unit": "-", "desc": "Reputation measure backed out from long-term inflation expectation x and config-loaded parameters."},
         }
     },
