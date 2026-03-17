@@ -580,6 +580,84 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Construct regression dataset}
+
+\begin{algorithm}[H]
+\caption{\textsc{ConstructRegressionDataset}$(\textit{x\_table}, \textit{inflation\_news}, \textit{reputation\_measure})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{x\_table}$: table containing long-term inflation expectation \texttt{x}.
+\State \textbf{Require} $\textit{inflation\_news}$: table containing \texttt{inflation\_news}.
+\State \textbf{Require} $\textit{reputation\_measure}$: table containing \texttt{rho}.
+\State \textbf{Require} each table is indexed by
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, u)$ with a common unit index $u$.
+\State Initialize output table for the regression dataset.
+\For{each survey date $s=(y,q)$ in sorted survey order}
+    \State Determine previous survey date $s^{-}$.
+    \State Build matched sample $\mathcal{U}_s$ of units $u$ such that
+    \Statex \quad $x_{u,s}$, $x_{u,s^{-}}$, $n_{u,s}$, and $\rho_{u,s^{-}}$ are all observed.
+    \If{$|\mathcal{U}_s| = 0$}
+        \State Continue to next survey date.
+    \EndIf
+    \For{each $u \in \mathcal{U}_s$}
+        \State $r_{u,s} \gets x_{u,s} - x_{u,s^{-}}$.
+    \EndFor
+    \State $\bar{r}_s \gets \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} r_{u,s}$.
+    \State $\bar{n}_s \gets \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} n_{u,s}$.
+    \State $\bar{\rho}_{s^{-}} \gets \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} \rho_{u,s^{-}}$.
+    \State $z_{2,s} \gets \bar{n}_s \bar{\rho}_{s^{-}}\left(1-\bar{\rho}_{s^{-}}\right)$.
+    \State $z_{3,s} \gets \bar{n}_s \bar{\rho}_{s^{-}}\left(1-\bar{\rho}_{s^{-}}\right)^2$.
+    \State Write $(s, \bar{r}_s, \bar{n}_s, \bar{\rho}_{s^{-}}, z_{2,s}, z_{3,s}, |\mathcal{U}_s|)$
+    \Statex \quad to the regression dataset.
+\EndFor
+\State \Return survey-level regression dataset.
+\end{algorithmic}
+\end{algorithm}
+
+\section{Algorithms: OLS regressions for forecast revision}
+
+\subsection{Reported regression statistics}
+
+\begin{algorithm}[H]
+\caption{\textsc{RunForecastRevisionRegressions}$(\textit{regression\_dataset})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{regression\_dataset}$: survey-level table containing
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \bar{r}_s, \bar{n}_s, z_{2,s}, z_{3,s})$.
+\State Initialize output table for regression statistics.
+\State Estimate Model 1 by OLS without a constant:
+\Statex \quad $\bar{r}_s = \beta_1 \bar{n}_s + \varepsilon_{1,s}$.
+\State Estimate Model 2 by OLS without a constant:
+\Statex \quad $\bar{r}_s = \beta_2 z_{2,s} + \varepsilon_{2,s}$.
+\State Estimate Model 3 by OLS without a constant:
+\Statex \quad $\bar{r}_s = \beta_3 z_{3,s} + \varepsilon_{3,s}$.
+\For{each estimated model $m \in \{1,2,3\}$}
+    \State Extract coefficient estimate, p value, adjusted $R^2$, RMSE, and sample size.
+    \State Write one row of statistics for model $m$ to the output table.
+\EndFor
+\State \Return regression-statistics table and fitted values from the three models.
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Comparison figure}
+
+\begin{algorithm}[H]
+\caption{\textsc{PlotCumulativeForecastRevisionComparison}$(\textit{regression\_dataset}, \textit{fitted\_values})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} fitted values from Models 1, 2, and 3 for each survey date in
+\Statex \quad $\textit{regression\_dataset}$.
+\State Keep survey dates from 1991:Q4 onward; sort by survey date.
+\State Compute cumulative data series as the running sum of $\bar{r}_s$.
+\State Compute cumulative fitted series for each model as the running sum of its fitted values.
+\State Construct figure with four lines:
+\Statex \quad Data = black dashed line.
+\Statex \quad Model 1 fitted counterpart = magenta solid line.
+\Statex \quad Model 2 fitted counterpart = blue solid line.
+\Statex \quad Model 3 fitted counterpart = red solid line.
+\State Label horizontal axis with survey date and vertical axis with cumulative change
+\Statex \quad in long-term inflation forecast since 1991:Q4.
+\State \Return comparison figure.
+\end{algorithmic}
+\end{algorithm}
+
 \section{Notes}
 
 Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, and \texttt{adjusted\_cpi10}, all written as CSV. Under the forecast revision regression design, the intended constructed outputs are the long-term inflation expectation $x_{u,s}$, inflation news $n_{u,s}$, and the reputation measure $\rho_{u,s}$. At present, scripts that write \texttt{inflation\_news.csv} and \texttt{reputation\_measure.csv} have not yet been added; these objects are specified here as part of the source-of-truth narrative and pseudocode, and the codebook is organized to accommodate them once implemented. Level/mean/median and probability tables remain out of scope unless added explicitly later.
