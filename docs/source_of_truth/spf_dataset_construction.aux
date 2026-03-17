@@ -10,22 +10,25 @@
 \@writefile{toc}{\contentsline {paragraph}{Input.}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Cleaned.}{3}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {paragraph}{Output.}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {5}CPI10 and realized inflation (CPI1)}{3}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {6}Inflation news}{4}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Algorithms: download automation}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5}Prepare dataset for forecast revision regression}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Construct long-term inflation expectation}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Construct inflation news}{4}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Construct reputation measure}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}Algorithms: download automation}{5}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces \textsc  {VariablePageURL}$(\textit  {var})$}}{5}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces \textsc  {GetDownloadLinks}$(\textit  {page\_url}, \textit  {file\_types})$}}{5}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces \textsc  {DownloadOneFile}$(\textit  {download\_url}, \textit  {outpath}, \texttt  {overwrite})$}}{5}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces \textsc  {GetDownloadLinks}$(\textit  {page\_url}, \textit  {file\_types})$}}{6}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces \textsc  {DownloadOneFile}$(\textit  {download\_url}, \textit  {outpath}, \texttt  {overwrite})$}}{6}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces \textsc  {DownloadByVariableNames}$(\textit  {variable\_names}, \textit  {file\_types}, \textit  {out\_dir}, \texttt  {overwrite})$}}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {8}Algorithm: construct cleaned datasets (individual only)}{6}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces \textsc  {LoadIndividualSheet}$(\textit  {path})$}}{6}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces \textsc  {HorizonSortKey}$(\textit  {col})$}}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Algorithm: construct cleaned datasets (individual only)}{6}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces \textsc  {LoadIndividualSheet}$(\textit  {path})$}}{7}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces \textsc  {HorizonSortKey}$(\textit  {col})$}}{7}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {7}{\ignorespaces \textsc  {BuildForecastIndividual}$(\textit  {df\_long})$}}{7}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {8}{\ignorespaces \textsc  {BuildForecasterSurvey}$(\textit  {df\_long})$}}{7}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {9}{\ignorespaces \textsc  {CleanIndividualTo3NF}$(\textit  {input\_dir}, \textit  {cleaned\_dir})$}}{7}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {10}{\ignorespaces \textsc  {GetQuarterSpecificValue}$(\textit  {key}, \textit  {horizon})$}}{7}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {11}{\ignorespaces \textsc  {AdjustCPI10Forecasts}$(\textit  {forecast\_individual})$}}{8}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {12}{\ignorespaces \textsc  {ConstructInflationNews}$(\textit  {forecast\_individual})$}}{8}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {13}{\ignorespaces \textsc  {SummarizeAdjustedCPI10}$(\textit  {adjusted\_cpi10})$}}{9}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {9}Notes}{9}{}\protected@file@percent }
-\gdef \@abspage@last{9}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {9}{\ignorespaces \textsc  {CleanIndividualTo3NF}$(\textit  {input\_dir}, \textit  {cleaned\_dir})$}}{8}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {10}{\ignorespaces \textsc  {GetQuarterSpecificValue}$(\textit  {key}, \textit  {horizon})$}}{8}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {11}{\ignorespaces \textsc  {AdjustCPI10Forecasts}$(\textit  {forecast\_individual})$}}{9}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {12}{\ignorespaces \textsc  {ConstructInflationNews}$(\textit  {forecast\_individual})$}}{9}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {13}{\ignorespaces \textsc  {ConstructReputationMeasure}$(\textit  {x\_table}, \textit  {config})$}}{10}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {14}{\ignorespaces \textsc  {SummarizeAdjustedCPI10}$(\textit  {adjusted\_cpi10})$}}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {8}Notes}{10}{}\protected@file@percent }
+\gdef \@abspage@last{10}

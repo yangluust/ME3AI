@@ -183,7 +183,9 @@ layouts align with the SPF documentation; after transformation, check row
 counts and primary keys; record data source, retrieval date, and any
 filtering in the codebook or a README in the cleaned folder.
 
-\section{CPI10 and realized inflation (CPI1)}
+\section{Prepare dataset for forecast revision regression}
+
+\subsection{Construct long-term inflation expectation}
 
 Following Appendix A.1.3 in Aruoba, let $\pi_{a \to b}$ denote annualized
 quarterly inflation between quarters $a$ and $b$, and use the same
@@ -239,7 +241,7 @@ the remaining forward-looking quarters. Thus Q2 rescales by $39$, Q3 rescales by
 $38$, and Q4 rescales by $37$. The raw CPI10 measure therefore mechanically
 contains more realized inflation in Q4 than in Q1.
 
-\section{Inflation news}
+\subsection{Construct inflation news}
 
 For each forecaster and survey quarter, inflation news is defined as the
 realized inflation for the current quarter minus the nowcast of that same
@@ -259,6 +261,30 @@ $(y-1,4,i)$ when $q=1$. This construction respects SPF timing: \texttt{CPI2} in
 survey $(y,q-1)$ is the nowcast for inflation realized in quarter $(y,q)$, so
 the difference isolates the surprise in the realized current-quarter inflation
 relative to the forecast available one survey earlier.
+
+\subsection{Construct reputation measure}
+
+Let $x$ denote the long-term inflation expectation used in the forecast
+revision regression. The construction of $x$ is intentionally flexible: it may
+be an adjusted individual CPI10 forecast, or an adjusted mean or median CPI10
+forecast, provided it is organized as a table indexed by survey date and any
+optional forecast-identity key. Define the reputation measure $\rho$ from
+\begin{equation}
+x = \rho\left((1-q)\pi_{\text{target}} + q z_a\right)
+ + (1-\rho)\left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right).
+\end{equation}
+Given values for $q$, $\pi_{\text{target}}$, $\pi_{\text{NE}}$, $z_a$, and
+$z_{\alpha}$, this equation implies
+\begin{equation}
+\rho =
+\frac{x - \left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right)}
+{\left((1-q)\pi_{\text{target}} + q z_a\right)
+ - \left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right)}.
+\end{equation}
+The implementation must load the parameter values from a config file rather
+than hardcoding them in the construction procedure. For each observation where
+$x$ is available, compute $\rho$ using the configured parameter values and the
+constructed long-term inflation expectation.
 
 \section{Algorithms: download automation}
 
@@ -454,6 +480,29 @@ Helper functions used by the main procedure are specified below.
     \State Write $\textit{inflation\_news}$ to the output table for that row key.
 \EndFor
 \State \Return table of inflation news.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{ConstructReputationMeasure}$(\textit{x\_table}, \textit{config})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{x\_table}$: table containing long-term inflation expectation \texttt{x}.
+\State \textbf{Require} $\textit{x\_table}$ has columns
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{x})$ and may also contain
+\Statex \quad an optional forecast-identity key such as \texttt{forecaster\_id} or \texttt{summary\_type}.
+\State \textbf{Require} $\textit{config}$: parameter source containing
+\Statex \quad \texttt{q}, \texttt{pi\_target}, \texttt{pi\_NE}, \texttt{z\_a}, \texttt{z\_alpha}.
+\State Load parameter values from $\textit{config}$.
+\State $\textit{target\_term} \gets (1-\texttt{q})\cdot\texttt{pi\_target} + \texttt{q}\cdot\texttt{z\_a}$.
+\State $\textit{ne\_term} \gets (1-\texttt{q})\cdot\texttt{pi\_NE} + \texttt{q}\cdot\texttt{z\_alpha}$.
+\State $\textit{denominator} \gets \textit{target\_term} - \textit{ne\_term}$.
+\State Initialize output table for reputation measure.
+\For{each row in $\textit{x\_table}$}
+    \State $\textit{x} \gets$ value in column \texttt{x}.
+    \State $\rho \gets (\textit{x} - \textit{ne\_term}) / \textit{denominator}$.
+    \State Write $\rho$ to the output table with the same keys as the input row.
+\EndFor
+\State \Return table containing the input keys and \texttt{rho}.
 \end{algorithmic}
 \end{algorithm}
 
