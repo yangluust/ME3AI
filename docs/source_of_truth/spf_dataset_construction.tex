@@ -239,6 +239,27 @@ the remaining forward-looking quarters. Thus Q2 rescales by $39$, Q3 rescales by
 $38$, and Q4 rescales by $37$. The raw CPI10 measure therefore mechanically
 contains more realized inflation in Q4 than in Q1.
 
+\section{Inflation news}
+
+For each forecaster and survey quarter, inflation news is defined as the
+realized inflation for the current quarter minus the nowcast of that same
+quarter made in the previous survey. In the cleaned wide table
+\texttt{forecast\_individual.csv}, the realized term is \texttt{CPI1} from the
+current survey quarter, while the nowcast term is \texttt{CPI2} from the
+previous survey quarter for the same \texttt{forecaster\_id}. Thus, for
+forecaster $i$ in quarter $(y,q)$,
+\begin{align}
+\text{news}_{i,y,q} &\equiv \text{CPI1}_{i,y,q} - \text{CPI2}_{i,y,q-1},
+&& q \in \{2,3,4\}, \\
+\text{news}_{i,y,1} &\equiv \text{CPI1}_{i,y,1} - \text{CPI2}_{i,y-1,4}.
+\end{align}
+Equivalently, inflation news at $(y,q)$ is formed by matching the current row
+$(y,q,i)$ to the lagged survey row $(y,q-1,i)$ when $q \in \{2,3,4\}$, and to
+$(y-1,4,i)$ when $q=1$. This construction respects SPF timing: \texttt{CPI2} in
+survey $(y,q-1)$ is the nowcast for inflation realized in quarter $(y,q)$, so
+the difference isolates the surprise in the realized current-quarter inflation
+relative to the forecast available one survey earlier.
+
 \section{Algorithms: download automation}
 
 \begin{algorithm}[H]
@@ -411,6 +432,28 @@ Helper functions used by the main procedure are specified below.
     \State Write $\textit{adjusted}$ to the output table for that row key.
 \EndFor
 \State \Return table of adjusted 10-year CPI forecasts.
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[H]
+\caption{\textsc{ConstructInflationNews}$(\textit{forecast\_individual})$}
+\begin{algorithmic}[1]
+\State \textbf{Require} $\textit{forecast\_individual}$: cleaned wide table
+\Statex \quad containing columns \texttt{CPI1} and \texttt{CPI2}.
+\State Initialize output table for inflation news.
+\For{each row key $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$}
+    \State $\textit{current\_key} \gets (\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$
+    \State $\textit{cpi1\_current} \gets \textsc{GetQuarterSpecificValue}(\textit{current\_key}, \texttt{CPI1})$
+    \If{$\textit{survey\_quarter} = 1$}
+        \State $\textit{lagged\_key} \gets (\textit{forecast\_individual}, \textit{survey\_year} - 1, 4, \textit{forecaster\_id})$
+    \Else
+        \State $\textit{lagged\_key} \gets (\textit{forecast\_individual}, \textit{survey\_year}, \textit{survey\_quarter} - 1, \textit{forecaster\_id})$
+    \EndIf
+    \State $\textit{cpi2\_lagged} \gets \textsc{GetQuarterSpecificValue}(\textit{lagged\_key}, \texttt{CPI2})$
+    \State $\textit{inflation\_news} \gets \textit{cpi1\_current} - \textit{cpi2\_lagged}$
+    \State Write $\textit{inflation\_news}$ to the output table for that row key.
+\EndFor
+\State \Return table of inflation news.
 \end{algorithmic}
 \end{algorithm}
 
