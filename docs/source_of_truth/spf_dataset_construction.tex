@@ -297,6 +297,61 @@ $x_{u,s}$ is available, compute $\rho_{u,s}$ using the configured parameter
 values and the constructed long-term inflation expectation dated at the same
 survey $s$.
 
+\subsection{Construct regression dataset}
+
+The regression dataset is indexed at the survey-date level. For each survey
+date $s$, define the individual long-term inflation forecast revision for unit
+$u$ by
+\begin{equation}
+r_{u,s} \equiv x_{u,s} - x_{u,s^{-}}.
+\end{equation}
+The regression dependent variable is the matched-sample mean of these
+individual revisions across units observed in both $s$ and $s^{-}$. Let
+$\mathcal{U}_s$ denote the set of units $u$ such that both $x_{u,s}$ and
+$x_{u,s^{-}}$ are observed. Then the dependent variable is
+\begin{equation}
+\bar{r}_s \equiv \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} r_{u,s}.
+\end{equation}
+The same matched sample $\mathcal{U}_s$ is used to construct the survey-level
+regressors. Define
+\begin{align}
+\bar{n}_s &\equiv \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} n_{u,s}, \\
+\bar{\rho}_{s^{-}} &\equiv \frac{1}{|\mathcal{U}_s|}\sum_{u \in \mathcal{U}_s} \rho_{u,s^{-}}, \\
+z_{2,s} &\equiv \bar{n}_s \bar{\rho}_{s^{-}}\left(1-\bar{\rho}_{s^{-}}\right), \\
+z_{3,s} &\equiv \bar{n}_s \bar{\rho}_{s^{-}}\left(1-\bar{\rho}_{s^{-}}\right)^2.
+\end{align}
+Thus the regression-ready dataset at survey date $s$ contains the dependent
+variable $\bar{r}_s$ and the three survey-level regressors
+$\bar{n}_s$, $z_{2,s}$, and $z_{3,s}$. The reputation term entering the
+nonlinear regressors is the matched-sample mean previous-survey reputation
+$\bar{\rho}_{s^{-}}$, computed using the same set of units $\mathcal{U}_s$.
+
+\section{OLS regressions for forecast revision}
+
+The three OLS regressions are estimated at the survey level without a constant:
+\begin{align}
+\bar{r}_s &= \beta_1 \bar{n}_s + \varepsilon_{1,s}, \\
+\bar{r}_s &= \beta_2 z_{2,s} + \varepsilon_{2,s}, \\
+\bar{r}_s &= \beta_3 z_{3,s} + \varepsilon_{3,s}.
+\end{align}
+
+\subsection{Reported regression statistics}
+
+For each of the three regressions, report a table containing the coefficient
+estimate, p value, adjusted $R^2$, RMSE, and sample size. The table should have
+one row for each model and use the corresponding regression-ready sample used
+to estimate that model.
+
+\subsection{Comparison figure}
+
+Construct a figure showing the cumulative change in long-term inflation
+forecast since 1991:Q4. The figure should plot the cumulative sum of the
+survey-level data series $\bar{r}_s$ against the cumulative sums of the fitted
+counterparts produced by the three regression models, using the same survey
+window in each series. Plot the data using a black dashed line. Plot the fitted
+counterpart from Model 1 using a magenta solid line, Model 2 using a blue solid
+line, and Model 3 using a red solid line.
+
 \section{Algorithms: download automation}
 
 \begin{algorithm}[H]
