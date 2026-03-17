@@ -1,6 +1,8 @@
 ---
 title: "Codebook: Cleaned Data"
-format: html
+format:
+  html:
+    toc: true
 jupyter: data-pipeline-venv
 ---
 
