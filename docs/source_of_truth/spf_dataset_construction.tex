@@ -185,6 +185,15 @@ filtering in the codebook or a README in the cleaned folder.
 
 \section{Prepare dataset for forecast revision regression}
 
+In this section, all constructed objects are indexed by a forecast unit $u$ and
+a survey date $s=(y,q)$. The unit index $u$ may denote an individual
+forecaster, or an aggregate forecast object such as a mean or median series.
+Let $s^{-}$ denote the previous survey date corresponding to $s$: if
+$q \in \{2,3,4\}$ then $s^{-}=(y,q-1)$, while if $q=1$ then
+$s^{-}=(y-1,4)$. With this notation, the three key constructed objects are the
+long-term inflation expectation $x_{u,s}$, inflation news $n_{u,s}$, and the
+reputation measure $\rho_{u,s}$.
+
 \subsection{Construct long-term inflation expectation}
 
 Following Appendix A.1.3 in Aruoba, let $\pi_{a \to b}$ denote annualized
@@ -202,8 +211,10 @@ and column \texttt{CPI1} gives the realized inflation term used in the
 adjustment. The adjusted output is written as a separate minimal table
 \texttt{adjusted\_cpi10.csv} with columns
 \texttt{(survey\_year, survey\_quarter, forecaster\_id, adjusted\_cpi10)}. This
-adjusted object is the individual-level long-term inflation expectation $x$
-used in the forecast revision regression.
+adjusted object is the individual-level long-term inflation expectation
+$x_{u,s}$ used in the forecast revision regression. For individual forecasts,
+$u$ corresponds to \texttt{forecaster\_id}; for later mean or median
+constructions, $u$ can instead denote the corresponding aggregate unit.
 
 With quarterly inflation, the raw 10-year object is the average of 40 quarterly
 inflation rates. For the first-quarter survey, there is no realized quarter
@@ -213,29 +224,29 @@ inside the 10-year window, so
 \approx \frac{1}{40}
 \sum_{j=0}^{39} \pi_{t-1+j \to t+j}.
 \end{equation}
-Define adjusted 10-year forecasts by survey quarter as
+Define the long-term inflation expectation by survey date as
 \begin{align}
-x_{17,t} &\equiv \text{CPI10-Q1}_t, \\
-x_{18,t} &\equiv
- \frac{40\cdot\text{CPI10-Q2}_t - \text{CPI1-Q2}_t}{39}, \\
-x_{19,t} &\equiv
- \frac{40\cdot\text{CPI10-Q3}_t
- - \left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t\right)}{38}, \\
-x_{20,t} &\equiv
- \frac{40\cdot\text{CPI10-Q4}_t
- - \left(\text{CPI1-Q2}_t + \text{CPI1-Q3}_t
- + \text{CPI1-Q4}_t\right)}{37}.
+x_{u,(y,1)} &\equiv \text{CPI10}_{u,(y,1)}, \\
+x_{u,(y,2)} &\equiv
+ \frac{40\cdot\text{CPI10}_{u,(y,2)} - \text{CPI1}_{u,(y,2)}}{39}, \\
+x_{u,(y,3)} &\equiv
+ \frac{40\cdot\text{CPI10}_{u,(y,3)}
+ - \left(\text{CPI1}_{u,(y,2)} + \text{CPI1}_{u,(y,3)}\right)}{38}, \\
+x_{u,(y,4)} &\equiv
+ \frac{40\cdot\text{CPI10}_{u,(y,4)}
+ - \left(\text{CPI1}_{u,(y,2)} + \text{CPI1}_{u,(y,3)}
+ + \text{CPI1}_{u,(y,4)}\right)}{37}.
 \end{align}
 The corresponding forward-looking measurement equations are
 \begin{align}
-x_{17,t} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
- + \varepsilon_{17,t}, \\
-x_{18,t} &= \frac{1}{39}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
- + \varepsilon_{18,t}, \\
-x_{19,t} &= \frac{1}{38}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
- + \varepsilon_{19,t}, \\
-x_{20,t} &= \frac{1}{37}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
- + \varepsilon_{20,t}.
+x_{u,(y,1)} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
+ + \varepsilon_{u,(y,1)}, \\
+x_{u,(y,2)} &= \frac{1}{39}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
+ + \varepsilon_{u,(y,2)}, \\
+x_{u,(y,3)} &= \frac{1}{38}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
+ + \varepsilon_{u,(y,3)}, \\
+x_{u,(y,4)} &= \frac{1}{37}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
+ + \varepsilon_{u,(y,4)}.
 \end{align}
 Under this quarterly representation, CPI1 enters the raw 10-year forecast with
 weight $1/40$ once it is realized, but the adjusted object re-averages only over
@@ -245,48 +256,46 @@ contains more realized inflation in Q4 than in Q1.
 
 \subsection{Construct inflation news}
 
-For each forecaster and survey quarter, inflation news is defined as the
+For each forecast unit and survey date, inflation news is defined as the
 realized inflation for the current quarter minus the nowcast of that same
 quarter made in the previous survey. In the cleaned wide table
 \texttt{forecast\_individual.csv}, the realized term is \texttt{CPI1} from the
-current survey quarter, while the nowcast term is \texttt{CPI2} from the
-previous survey quarter for the same \texttt{forecaster\_id}. Thus, for
-forecaster $i$ in quarter $(y,q)$,
-\begin{align}
-\text{news}_{i,y,q} &\equiv \text{CPI1}_{i,y,q} - \text{CPI2}_{i,y,q-1},
-&& q \in \{2,3,4\}, \\
-\text{news}_{i,y,1} &\equiv \text{CPI1}_{i,y,1} - \text{CPI2}_{i,y-1,4}.
-\end{align}
-Equivalently, inflation news at $(y,q)$ is formed by matching the current row
-$(y,q,i)$ to the lagged survey row $(y,q-1,i)$ when $q \in \{2,3,4\}$, and to
-$(y-1,4,i)$ when $q=1$. This construction respects SPF timing: \texttt{CPI2} in
-survey $(y,q-1)$ is the nowcast for inflation realized in quarter $(y,q)$, so
-the difference isolates the surprise in the realized current-quarter inflation
-relative to the forecast available one survey earlier.
+current survey row, while the nowcast term is \texttt{CPI2} from the previous
+survey row for the same unit. Thus,
+\begin{equation}
+n_{u,s} \equiv \text{CPI1}_{u,s} - \text{CPI2}_{u,s^{-}}.
+\end{equation}
+For individual forecasts, this means matching the current row
+$(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id})$ to
+the lagged survey row for the same \texttt{forecaster\_id}, with the Q1 rollover
+encoded in $s^{-}$. This notation makes the timing explicit: $n_{u,s}$ is always
+dated at the current survey $s$, while the forecast component comes from the
+previous survey $s^{-}$.
 
 \subsection{Construct reputation measure}
 
-Let $x$ denote the long-term inflation expectation used in the forecast
+Let $x_{u,s}$ denote the long-term inflation expectation used in the forecast
 revision regression. The construction of $x$ is intentionally flexible: it may
 be an adjusted individual CPI10 forecast, or an adjusted mean or median CPI10
 forecast, provided it is organized as a table indexed by survey date and any
 optional forecast-identity key. Define the reputation measure $\rho$ from
 \begin{equation}
-x = \rho\left((1-q)\pi_{\text{target}} + q z_a\right)
- + (1-\rho)\left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right).
+x_{u,s} = \rho_{u,s}\left((1-q)\pi_{\text{target}} + q z_a\right)
+ + (1-\rho_{u,s})\left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right).
 \end{equation}
 Given values for $q$, $\pi_{\text{target}}$, $\pi_{\text{NE}}$, $z_a$, and
 $z_{\alpha}$, this equation implies
 \begin{equation}
-\rho =
-\frac{x - \left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right)}
+\rho_{u,s} =
+\frac{x_{u,s} - \left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right)}
 {\left((1-q)\pi_{\text{target}} + q z_a\right)
  - \left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right)}.
 \end{equation}
 The implementation must load the parameter values from a config file rather
 than hardcoding them in the construction procedure. For each observation where
-$x$ is available, compute $\rho$ using the configured parameter values and the
-constructed long-term inflation expectation.
+$x_{u,s}$ is available, compute $\rho_{u,s}$ using the configured parameter
+values and the constructed long-term inflation expectation dated at the same
+survey $s$.
 
 \section{Algorithms: download automation}
 
