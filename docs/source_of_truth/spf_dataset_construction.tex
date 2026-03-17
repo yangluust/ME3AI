@@ -201,7 +201,9 @@ the same survey row: column \texttt{CPI10} gives the raw 10-year expectation
 and column \texttt{CPI1} gives the realized inflation term used in the
 adjustment. The adjusted output is written as a separate minimal table
 \texttt{adjusted\_cpi10.csv} with columns
-\texttt{(survey\_year, survey\_quarter, forecaster\_id, adjusted\_cpi10)}.
+\texttt{(survey\_year, survey\_quarter, forecaster\_id, adjusted\_cpi10)}. This
+adjusted object is the individual-level long-term inflation expectation $x$
+used in the forecast revision regression.
 
 With quarterly inflation, the raw 10-year object is the average of 40 quarterly
 inflation rates. For the first-quarter survey, there is no realized quarter
@@ -425,6 +427,10 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
+\section{Algorithms: prepare dataset for forecast revision regression}
+
+\subsection{Construct long-term inflation expectation}
+
 \begin{algorithm}[H]
 \caption{\textsc{AdjustCPI10Forecasts}$(\textit{forecast\_individual})$}
 \begin{algorithmic}[1]
@@ -461,6 +467,8 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Construct inflation news}
+
 \begin{algorithm}[H]
 \caption{\textsc{ConstructInflationNews}$(\textit{forecast\_individual})$}
 \begin{algorithmic}[1]
@@ -482,6 +490,8 @@ Helper functions used by the main procedure are specified below.
 \State \Return table of inflation news.
 \end{algorithmic}
 \end{algorithm}
+
+\subsection{Construct reputation measure}
 
 \begin{algorithm}[H]
 \caption{\textsc{ConstructReputationMeasure}$(\textit{x\_table}, \textit{config})$}
@@ -506,24 +516,9 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[H]
-\caption{\textsc{SummarizeAdjustedCPI10}$(\textit{adjusted\_cpi10})$}
-\begin{algorithmic}[1]
-\State \textbf{Require} $\textit{adjusted\_cpi10}$: table with columns
-\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id}, \textit{adjusted\_cpi10})$.
-\State Keep rows with non-missing \texttt{adjusted\_cpi10}.
-\State Compute availability window: first survey, last survey, number of
-\Statex \quad survey quarters with data, and number of non-missing rows.
-\State Count distinct forecasters by $(\textit{survey\_year}, \textit{survey\_quarter})$.
-\State For each survey quarter, count distinct forecasters that also have
-\Statex \quad non-missing \texttt{adjusted\_cpi10} in the previous survey quarter.
-\State \Return availability summary, forecaster counts by survey, and
-\Statex \quad revision-ready forecaster counts by survey.
-\end{algorithmic}
-\end{algorithm}
-
 \section{Notes}
 
 Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The \textbf{current} cleaned schema is \texttt{forecast\_individual}, \texttt{forecaster\_survey}, and \texttt{adjusted\_cpi10} for individual (microdata) only; output format is CSV. Level/mean/median and probability tables are not yet in scope; table names and keys should match the pipeline and codebook when added.
+Codebook tables and figures are generated in \texttt{data-pipeline/report/codebook.qmd}; they are not part of the construction pseudocode.
 
 \end{document}

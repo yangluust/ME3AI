@@ -1,4 +1,4 @@
-"""Tests for CPI10 adjustment functions."""
+"""Tests for forecast-revision construction functions."""
 
 import sys
 from pathlib import Path
@@ -9,11 +9,8 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.spf_adjust import (
     adjust_cpi10_forecasts,
-    adjusted_cpi10_availability_summary,
-    adjusted_cpi10_forecaster_counts_by_survey,
-    adjusted_cpi10_plot_summary_all,
-    adjusted_cpi10_plot_summary_revision_ready,
-    adjusted_cpi10_revision_ready_counts_by_survey,
+    construct_inflation_news,
+    construct_reputation_measure,
     get_quarter_specific_value,
 )
 
@@ -27,6 +24,7 @@ def _sample_forecast_individual() -> pd.DataFrame:
                 "survey_quarter": 1,
                 "forecaster_id": 1,
                 "CPI1": 1.0,
+                "CPI2": 1.1,
                 "CPI10": 2.50,
             },
             {
@@ -34,6 +32,7 @@ def _sample_forecast_individual() -> pd.DataFrame:
                 "survey_quarter": 2,
                 "forecaster_id": 1,
                 "CPI1": 1.20,
+                "CPI2": 1.3,
                 "CPI10": 2.60,
             },
             {
@@ -41,6 +40,7 @@ def _sample_forecast_individual() -> pd.DataFrame:
                 "survey_quarter": 3,
                 "forecaster_id": 1,
                 "CPI1": 0.80,
+                "CPI2": 0.9,
                 "CPI10": 2.70,
             },
             {
@@ -48,6 +48,7 @@ def _sample_forecast_individual() -> pd.DataFrame:
                 "survey_quarter": 4,
                 "forecaster_id": 1,
                 "CPI1": 0.40,
+                "CPI2": 0.5,
                 "CPI10": 2.80,
             },
         ]
@@ -99,152 +100,81 @@ def test_adjust_cpi10_forecasts_applies_quarter_rules():
     assert by_quarter[4] == (2.80 * 40 - (1.20 + 0.80 + 0.40)) / 37
 
 
-def test_adjusted_cpi10_availability_summary_uses_non_missing_rows():
-    """Availability summary should report the non-missing window only."""
-    adjusted = pd.DataFrame(
-        [
-            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": pd.NA},
-            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.0},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.1},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 2, "adjusted_cpi10": 2.2},
-        ]
-    )
-
-    summary = adjusted_cpi10_availability_summary(adjusted_cpi10=adjusted)
-
-    assert summary["first_survey_year"] == 1969
-    assert summary["first_survey_quarter"] == 1
-    assert summary["last_survey_year"] == 1969
-    assert summary["last_survey_quarter"] == 2
-    assert summary["n_surveys_with_data"] == 2
-    assert summary["n_rows_with_data"] == 3
-
-
-def test_adjusted_cpi10_forecaster_counts_by_survey_counts_unique_ids():
-    """Forecaster counts should use unique ids among non-missing rows."""
-    adjusted = pd.DataFrame(
-        [
-            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.0},
-            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 2, "adjusted_cpi10": 2.1},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.2},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 2, "adjusted_cpi10": pd.NA},
-        ]
-    )
-
-    counts = adjusted_cpi10_forecaster_counts_by_survey(adjusted_cpi10=adjusted)
-
-    expected = [
-        {"survey_year": 1969, "survey_quarter": 1, "n_forecasters_with_adjusted_cpi10": 2},
-        {"survey_year": 1969, "survey_quarter": 2, "n_forecasters_with_adjusted_cpi10": 1},
-    ]
-    assert counts.to_dict("records") == expected
-
-
-def test_adjusted_cpi10_revision_ready_counts_by_survey_uses_previous_quarter():
-    """Revision-ready counts should require the same forecaster in consecutive surveys."""
-    adjusted = pd.DataFrame(
-        [
-            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": 1.9},
-            {"survey_year": 1968, "survey_quarter": 4, "forecaster_id": 2, "adjusted_cpi10": 2.0},
-            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 2.1},
-            {"survey_year": 1969, "survey_quarter": 1, "forecaster_id": 3, "adjusted_cpi10": 2.2},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.3},
-            {"survey_year": 1969, "survey_quarter": 2, "forecaster_id": 3, "adjusted_cpi10": pd.NA},
-        ]
-    )
-
-    counts = adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10=adjusted)
-
-    expected = [
-        {
-            "survey_year": 1969,
-            "survey_quarter": 1,
-            "n_forecasters_with_prev_quarter_adjusted_cpi10": 1,
-        },
-        {
-            "survey_year": 1969,
-            "survey_quarter": 2,
-            "n_forecasters_with_prev_quarter_adjusted_cpi10": 1,
-        },
-    ]
-    assert counts.to_dict("records") == expected
-
-
-def test_adjusted_cpi10_plot_summary_all_computes_survey_statistics():
-    """All-forecaster plot summary should compute mean/median by survey."""
+def test_construct_inflation_news_returns_minimal_table():
+    """Inflation news output should contain keys plus inflation_news only."""
     forecast_individual = pd.DataFrame(
         [
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "CPI10": 2.0},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 2, "CPI10": 4.0},
-            {"survey_year": 2000, "survey_quarter": 2, "forecaster_id": 1, "CPI10": 3.0},
-        ]
-    )
-    adjusted = pd.DataFrame(
-        [
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 1.0},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 2, "adjusted_cpi10": 5.0},
-            {"survey_year": 2000, "survey_quarter": 2, "forecaster_id": 1, "adjusted_cpi10": 2.0},
+            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 1, "CPI1": 0.6, "CPI2": 0.7},
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "CPI1": 1.0, "CPI2": 1.1},
         ]
     )
 
-    summary = adjusted_cpi10_plot_summary_all(
-        forecast_individual=forecast_individual,
-        adjusted_cpi10=adjusted,
-    )
+    inflation_news = construct_inflation_news(forecast_individual=forecast_individual)
 
-    expected = [
-        {
-            "survey_year": 2000,
-            "survey_quarter": 1,
-            "mean_cpi10": 3.0,
-            "median_cpi10": 3.0,
-            "mean_adjusted_cpi10": 3.0,
-            "median_adjusted_cpi10": 3.0,
-        },
-        {
-            "survey_year": 2000,
-            "survey_quarter": 2,
-            "mean_cpi10": 3.0,
-            "median_cpi10": 3.0,
-            "mean_adjusted_cpi10": 2.0,
-            "median_adjusted_cpi10": 2.0,
-        },
+    assert list(inflation_news.columns) == [
+        "survey_year",
+        "survey_quarter",
+        "forecaster_id",
+        "inflation_news",
     ]
-    assert summary.to_dict("records") == expected
 
 
-def test_adjusted_cpi10_plot_summary_revision_ready_filters_to_previous_quarter_panel():
-    """Revision-ready plot summary should keep only forecasters present in the previous survey."""
+def test_construct_inflation_news_uses_previous_survey_timing():
+    """Inflation news should subtract lagged CPI2 from current-quarter CPI1."""
     forecast_individual = pd.DataFrame(
         [
-            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 1, "CPI10": 2.0},
-            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 2, "CPI10": 3.0},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "CPI10": 4.0},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 3, "CPI10": 6.0},
+            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 1, "CPI1": 0.6, "CPI2": 0.7},
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "CPI1": 1.0, "CPI2": 1.1},
+            {"survey_year": 2026, "survey_quarter": 2, "forecaster_id": 1, "CPI1": 1.2, "CPI2": 1.3},
         ]
     )
-    adjusted = pd.DataFrame(
+
+    inflation_news = construct_inflation_news(forecast_individual=forecast_individual)
+    by_quarter = {
+        (int(row.survey_year), int(row.survey_quarter)): float(row.inflation_news)
+        for row in inflation_news.loc[inflation_news["inflation_news"].notna()].itertuples(index=False)
+    }
+
+    assert by_quarter[(2026, 1)] == 1.0 - 0.7
+    assert by_quarter[(2026, 2)] == 1.2 - 1.1
+    assert pd.isna(
+        inflation_news.loc[
+            (inflation_news["survey_year"] == 2025)
+            & (inflation_news["survey_quarter"] == 4)
+            & (inflation_news["forecaster_id"] == 1),
+            "inflation_news",
+        ].iloc[0]
+    )
+
+
+def test_construct_reputation_measure_preserves_input_keys():
+    """Reputation output should preserve keys and append rho."""
+    x_table = pd.DataFrame(
         [
-            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 1, "adjusted_cpi10": 1.5},
-            {"survey_year": 1999, "survey_quarter": 4, "forecaster_id": 2, "adjusted_cpi10": 2.5},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 1, "adjusted_cpi10": 3.5},
-            {"survey_year": 2000, "survey_quarter": 1, "forecaster_id": 3, "adjusted_cpi10": 5.5},
+            {"survey_year": 2026, "survey_quarter": 1, "summary_type": "mean", "x": 2.1},
+            {"survey_year": 2026, "survey_quarter": 2, "summary_type": "median", "x": 2.3},
         ]
     )
+    config = {"q": 0.2, "pi_target": 2.0, "pi_NE": 1.0, "z_a": 3.0, "z_alpha": 0.5}
 
-    summary = adjusted_cpi10_plot_summary_revision_ready(
-        forecast_individual=forecast_individual,
-        adjusted_cpi10=adjusted,
+    rho = construct_reputation_measure(x_table=x_table, config=config)
+
+    assert list(rho.columns) == ["survey_year", "survey_quarter", "summary_type", "rho"]
+
+
+def test_construct_reputation_measure_applies_formula():
+    """Reputation should solve the linear mixture expression row by row."""
+    x_table = pd.DataFrame(
+        [
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "x": 2.1},
+            {"survey_year": 2026, "survey_quarter": 2, "forecaster_id": 1, "x": pd.NA},
+        ]
     )
+    config = {"q": 0.25, "pi_target": 2.0, "pi_NE": 1.0, "z_a": 3.0, "z_alpha": 0.0}
 
-    expected = [
-        {
-            "survey_year": 2000,
-            "survey_quarter": 1,
-            "mean_cpi10": 4.0,
-            "median_cpi10": 4.0,
-            "mean_adjusted_cpi10": 3.5,
-            "median_adjusted_cpi10": 3.5,
-        }
-    ]
-    assert summary.to_dict("records") == expected
+    rho = construct_reputation_measure(x_table=x_table, config=config)
+    target_term = (1.0 - 0.25) * 2.0 + 0.25 * 3.0
+    ne_term = (1.0 - 0.25) * 1.0 + 0.25 * 0.0
+
+    assert float(rho.loc[0, "rho"]) == (2.1 - ne_term) / (target_term - ne_term)
+    assert pd.isna(rho.loc[1, "rho"])

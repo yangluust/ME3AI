@@ -7,19 +7,10 @@ jupyter: data-pipeline-venv
 ```{python}
 #| echo: false
 import pandas as pd
-import sys
+import matplotlib.pyplot as plt
 from pathlib import Path
 
 CLEANED_DIR = Path("../cleaned")
-sys.path.insert(0, str(Path("..").resolve()))
-
-from src.spf_adjust import (
-    adjusted_cpi10_availability_summary,
-    adjusted_cpi10_forecaster_counts_by_survey,
-    adjusted_cpi10_plot_summary_all,
-    adjusted_cpi10_plot_summary_revision_ready,
-    adjusted_cpi10_revision_ready_counts_by_survey,
-)
 
 # SPF cleaned tables: forecast_individual (wide), forecaster_survey
 TABLES = {
@@ -58,6 +49,29 @@ TABLES = {
             "adjusted_cpi10": {"type": "float", "unit": "annualized percentage points", "desc": "Adjusted 10-year CPI expectation after removing realized CPI1 terms and re-averaging over the remaining quarters."},
         }
     },
+    "inflation_news": {
+        "file": "inflation_news.csv",
+        "description": "Inflation news by survey and forecaster: current-quarter realized CPI1 minus the previous survey's CPI2 nowcast for that same realized quarter.",
+        "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
+        "foreign_keys": {},
+        "variables": {
+            "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
+            "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1-4)."},
+            "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
+            "inflation_news": {"type": "float", "unit": "annualized percentage points", "desc": "Current-quarter realized CPI1 minus the previous survey's CPI2 nowcast for that same quarter."},
+        }
+    },
+    "reputation_measure": {
+        "file": "reputation_measure.csv",
+        "description": "Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters.",
+        "primary_key": ["survey_year", "survey_quarter"],
+        "foreign_keys": {},
+        "variables": {
+            "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
+            "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1-4)."},
+            "rho": {"type": "float", "unit": "-", "desc": "Reputation measure backed out from long-term inflation expectation x and config-loaded parameters."},
+        }
+    },
 }
 
 
@@ -88,6 +102,179 @@ def compute_summary(df):
             stats["Max"] = "-"
         summary.append(stats)
     return pd.DataFrame(summary)
+
+
+def available_rows(df, value_col):
+    """Keep rows with non-missing values in the target column."""
+    out = df.copy()
+    out[value_col] = pd.to_numeric(out[value_col], errors="coerce")
+    return out.loc[out[value_col].notna()].copy()
+
+
+def availability_summary(df, value_col):
+    """Summarize the survey window for non-missing values."""
+    available = available_rows(df=df, value_col=value_col)
+    if len(available) == 0:
+        return {
+            "first_survey": "N/A",
+            "last_survey": "N/A",
+            "n_surveys_with_data": 0,
+            "n_rows_with_data": 0,
+        }
+    survey_keys = available[["survey_year", "survey_quarter"]].drop_duplicates()
+    first_row = available.sort_values(["survey_year", "survey_quarter"]).iloc[0]
+    last_row = available.sort_values(["survey_year", "survey_quarter"]).iloc[-1]
+    return {
+        "first_survey": f"{int(first_row['survey_year'])}:Q{int(first_row['survey_quarter'])}",
+        "last_survey": f"{int(last_row['survey_year'])}:Q{int(last_row['survey_quarter'])}",
+        "n_surveys_with_data": int(len(survey_keys)),
+        "n_rows_with_data": int(len(available)),
+    }
+
+
+def counts_by_survey(df, value_col, count_name):
+    """Count forecasters with non-missing values by survey."""
+    available = available_rows(df=df, value_col=value_col)
+    if len(available) == 0:
+        return pd.DataFrame(columns=["survey_year", "survey_quarter", count_name])
+    return (
+        available.groupby(["survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
+        .nunique()
+        .rename(columns={"forecaster_id": count_name})
+        .sort_values(["survey_year", "survey_quarter"])
+    )
+
+
+def previous_survey_keys(df):
+    """Add previous-survey keys using Q1 -> previous year Q4 rollover."""
+    out = df.copy()
+    out["prev_survey_year"] = out["survey_year"]
+    out["prev_survey_quarter"] = out["survey_quarter"] - 1
+    q1_mask = out["survey_quarter"] == 1
+    out.loc[q1_mask, "prev_survey_year"] = out.loc[q1_mask, "survey_year"] - 1
+    out.loc[q1_mask, "prev_survey_quarter"] = 4
+    return out
+
+
+def revision_ready_counts(df, value_col, count_name):
+    """Count forecasters with non-missing values in consecutive surveys."""
+    available = available_rows(df=df, value_col=value_col)
+    if len(available) == 0:
+        return pd.DataFrame(columns=["survey_year", "survey_quarter", count_name])
+    available = previous_survey_keys(
+        available[["survey_year", "survey_quarter", "forecaster_id"]].drop_duplicates()
+    )
+    prev = available[["survey_year", "survey_quarter", "forecaster_id"]].rename(
+        columns={
+            "survey_year": "prev_survey_year",
+            "survey_quarter": "prev_survey_quarter",
+        }
+    )
+    matched = available.merge(
+        prev,
+        how="inner",
+        on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+    )
+    return (
+        matched.groupby(["survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
+        .nunique()
+        .rename(columns={"forecaster_id": count_name})
+        .sort_values(["survey_year", "survey_quarter"])
+    )
+
+
+def quarter_labels(df):
+    """Format survey-year-quarter labels for plots."""
+    return [f"{int(y)}:Q{int(q)}" for y, q in zip(df["survey_year"], df["survey_quarter"])]
+
+
+def plot_summary_all(forecast_individual, adjusted):
+    """Summarize raw and adjusted CPI10 by survey across all forecasters."""
+    merged = forecast_individual[
+        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].merge(
+        adjusted,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    merged["CPI10"] = pd.to_numeric(merged["CPI10"], errors="coerce")
+    merged["adjusted_cpi10"] = pd.to_numeric(merged["adjusted_cpi10"], errors="coerce")
+    merged = merged.loc[merged["CPI10"].notna() & merged["adjusted_cpi10"].notna()].copy()
+    if len(merged) == 0:
+        return pd.DataFrame(
+            columns=[
+                "survey_year",
+                "survey_quarter",
+                "mean_cpi10",
+                "median_cpi10",
+                "mean_adjusted_cpi10",
+                "median_adjusted_cpi10",
+            ]
+        )
+    return (
+        merged.groupby(["survey_year", "survey_quarter"], as_index=False)
+        .agg(
+            mean_cpi10=("CPI10", "mean"),
+            median_cpi10=("CPI10", "median"),
+            mean_adjusted_cpi10=("adjusted_cpi10", "mean"),
+            median_adjusted_cpi10=("adjusted_cpi10", "median"),
+        )
+        .sort_values(["survey_year", "survey_quarter"])
+    )
+
+
+def plot_summary_revision_ready(forecast_individual, adjusted):
+    """Summarize raw and adjusted CPI10 for revision-ready forecasters only."""
+    merged = forecast_individual[
+        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].merge(
+        adjusted,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    merged["CPI10"] = pd.to_numeric(merged["CPI10"], errors="coerce")
+    merged["adjusted_cpi10"] = pd.to_numeric(merged["adjusted_cpi10"], errors="coerce")
+    merged = merged.loc[merged["CPI10"].notna() & merged["adjusted_cpi10"].notna()].copy()
+    if len(merged) == 0:
+        return pd.DataFrame(
+            columns=[
+                "survey_year",
+                "survey_quarter",
+                "mean_cpi10",
+                "median_cpi10",
+                "mean_adjusted_cpi10",
+                "median_adjusted_cpi10",
+            ]
+        )
+    available = previous_survey_keys(
+        merged[["survey_year", "survey_quarter", "forecaster_id"]].drop_duplicates()
+    )
+    prev = available[["survey_year", "survey_quarter", "forecaster_id"]].rename(
+        columns={
+            "survey_year": "prev_survey_year",
+            "survey_quarter": "prev_survey_quarter",
+        }
+    )
+    revision_ready = available.merge(
+        prev,
+        how="inner",
+        on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+    )[["survey_year", "survey_quarter", "forecaster_id"]]
+    panel = merged.merge(
+        revision_ready,
+        how="inner",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    return (
+        panel.groupby(["survey_year", "survey_quarter"], as_index=False)
+        .agg(
+            mean_cpi10=("CPI10", "mean"),
+            median_cpi10=("CPI10", "median"),
+            mean_adjusted_cpi10=("adjusted_cpi10", "mean"),
+            median_adjusted_cpi10=("adjusted_cpi10", "median"),
+        )
+        .sort_values(["survey_year", "survey_quarter"])
+    )
 ```
 
 ## Table Overview
@@ -220,15 +407,16 @@ else:
     print(forecasters_by_survey.to_markdown(index=False))
 ```
 
-## Adjusted CPI10 availability
+## Forecast Revision Regression Inputs
 
-This section reports the survey window where `adjusted_cpi10` is available, the
-number of forecasters with non-missing adjusted CPI10 by survey, and the number
-of forecasters for whom a forecast revision can be computed relative to the
-previous survey quarter. The adjusted series removes realized `CPI1` terms from
-raw `CPI10` and then re-averages over the remaining forward-looking quarters.
+### Long-term inflation expectation
 
-```{python}
+This section reports the individual-level long-term inflation expectation
+constructed in `adjusted_cpi10.csv`. It summarizes the survey window with
+non-missing adjusted CPI10, the number of forecasters by survey, and the
+revision-ready subset with previous-quarter adjusted CPI10 available.
+
+```{python long-term-inflation-codebook-table}
 #| echo: false
 #| output: asis
 
@@ -237,9 +425,17 @@ if not adj_path.exists():
     print("*Run `scripts/adjust_spf_cpi10.py` to generate `adjusted_cpi10.csv`.*")
 else:
     adjusted = pd.read_csv(adj_path)
-    availability = adjusted_cpi10_availability_summary(adjusted_cpi10=adjusted)
-    counts = adjusted_cpi10_forecaster_counts_by_survey(adjusted_cpi10=adjusted)
-    revision_ready = adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10=adjusted)
+    availability_df = pd.DataFrame([availability_summary(df=adjusted, value_col="adjusted_cpi10")])
+    counts = counts_by_survey(
+        df=adjusted,
+        value_col="adjusted_cpi10",
+        count_name="n_forecasters_with_adjusted_cpi10",
+    )
+    revision_ready = revision_ready_counts(
+        df=adjusted,
+        value_col="adjusted_cpi10",
+        count_name="n_forecasters_with_prev_quarter_adjusted_cpi10",
+    )
     merged = counts.merge(
         revision_ready,
         how="left",
@@ -248,43 +444,14 @@ else:
     merged["n_forecasters_with_prev_quarter_adjusted_cpi10"] = (
         merged["n_forecasters_with_prev_quarter_adjusted_cpi10"].fillna(0).astype(int)
     )
-
-    availability_df = pd.DataFrame(
-        [
-            {
-                "first_survey": (
-                    f"{availability['first_survey_year']}:Q{availability['first_survey_quarter']}"
-                    if pd.notna(availability["first_survey_year"])
-                    else "N/A"
-                ),
-                "last_survey": (
-                    f"{availability['last_survey_year']}:Q{availability['last_survey_quarter']}"
-                    if pd.notna(availability["last_survey_year"])
-                    else "N/A"
-                ),
-                "n_surveys_with_data": availability["n_surveys_with_data"],
-                "n_rows_with_data": availability["n_rows_with_data"],
-            }
-        ]
-    )
-
-    print("\n### Availability Summary\n")
+    print("\n#### Availability Summary\n")
     print(availability_df.to_markdown(index=False))
-
-    print("\n### Forecasters by survey\n")
+    print("\n#### Forecasters by survey\n")
     print(merged.to_markdown(index=False))
 ```
 
-## CPI10 and adjusted CPI10 plots
-
-These plots summarize, by survey year-quarter, the mean and median across
-`forecaster_id` for raw `CPI10` and `adjusted_cpi10`. The first plot uses all
-available forecasters; the second uses only forecasters with previous-quarter
-adjusted CPI10 available.
-
-```{python}
+```{python long-term-inflation-codebook-figure}
 #| echo: false
-import matplotlib.pyplot as plt
 
 fi_path = CLEANED_DIR / "forecast_individual.csv"
 adj_path = CLEANED_DIR / "adjusted_cpi10.csv"
@@ -293,59 +460,181 @@ if not fi_path.exists() or not adj_path.exists():
 else:
     forecast_individual = pd.read_csv(fi_path)
     adjusted = pd.read_csv(adj_path)
-
-    plot_all = adjusted_cpi10_plot_summary_all(
+    plot_all = plot_summary_all(
         forecast_individual=forecast_individual,
-        adjusted_cpi10=adjusted,
+        adjusted=adjusted,
     )
-    plot_revision_ready = adjusted_cpi10_plot_summary_revision_ready(
+    plot_revision_ready = plot_summary_revision_ready(
         forecast_individual=forecast_individual,
-        adjusted_cpi10=adjusted,
+        adjusted=adjusted,
     )
 
-    def quarter_labels(df):
-        return [
-            f"{int(y)}:Q{int(q)}"
-            for y, q in zip(df["survey_year"], df["survey_quarter"])
-        ]
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 8), sharex=False)
 
-    fig, ax = plt.subplots(figsize=(10, 4))
-    x = range(len(plot_all))
-    ax.plot(x, plot_all["mean_cpi10"], label="Mean CPI10")
-    ax.plot(x, plot_all["median_cpi10"], label="Median CPI10")
-    ax.plot(x, plot_all["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
-    ax.plot(x, plot_all["median_adjusted_cpi10"], label="Median adjusted CPI10")
-    ax.set_title("CPI10 and adjusted CPI10: all forecasters")
-    ax.set_ylabel("Annualized percentage points")
-    ax.set_xlabel("Survey year-quarter")
+    axes[0].plot(plot_all.index, plot_all["mean_cpi10"], label="Mean CPI10")
+    axes[0].plot(plot_all.index, plot_all["median_cpi10"], label="Median CPI10")
+    axes[0].plot(plot_all.index, plot_all["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
+    axes[0].plot(plot_all.index, plot_all["median_adjusted_cpi10"], label="Median adjusted CPI10")
+    axes[0].set_title("CPI10 and adjusted CPI10: all forecasters")
+    axes[0].set_ylabel("Annualized percentage points")
     if len(plot_all) > 0:
         tick_idx = list(range(0, len(plot_all), max(len(plot_all) // 8, 1)))
-        ax.set_xticks(tick_idx)
-        ax.set_xticklabels([quarter_labels(plot_all)[i] for i in tick_idx], rotation=45, ha="right")
-    ax.legend()
-    ax.grid(True, alpha=0.3)
-    plt.tight_layout()
-    plt.show()
+        axes[0].set_xticks(tick_idx)
+        axes[0].set_xticklabels([quarter_labels(plot_all)[i] for i in tick_idx], rotation=45, ha="right")
+    axes[0].legend()
+    axes[0].grid(True, alpha=0.3)
 
-    fig, ax = plt.subplots(figsize=(10, 4))
-    x = range(len(plot_revision_ready))
-    ax.plot(x, plot_revision_ready["mean_cpi10"], label="Mean CPI10")
-    ax.plot(x, plot_revision_ready["median_cpi10"], label="Median CPI10")
-    ax.plot(x, plot_revision_ready["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
-    ax.plot(x, plot_revision_ready["median_adjusted_cpi10"], label="Median adjusted CPI10")
-    ax.set_title("CPI10 and adjusted CPI10: revision-ready forecasters")
-    ax.set_ylabel("Annualized percentage points")
-    ax.set_xlabel("Survey year-quarter")
+    axes[1].plot(plot_revision_ready.index, plot_revision_ready["mean_cpi10"], label="Mean CPI10")
+    axes[1].plot(plot_revision_ready.index, plot_revision_ready["median_cpi10"], label="Median CPI10")
+    axes[1].plot(plot_revision_ready.index, plot_revision_ready["mean_adjusted_cpi10"], label="Mean adjusted CPI10")
+    axes[1].plot(plot_revision_ready.index, plot_revision_ready["median_adjusted_cpi10"], label="Median adjusted CPI10")
+    axes[1].set_title("CPI10 and adjusted CPI10: revision-ready forecasters")
+    axes[1].set_ylabel("Annualized percentage points")
+    axes[1].set_xlabel("Survey year-quarter")
     if len(plot_revision_ready) > 0:
         tick_idx = list(range(0, len(plot_revision_ready), max(len(plot_revision_ready) // 8, 1)))
-        ax.set_xticks(tick_idx)
-        ax.set_xticklabels(
+        axes[1].set_xticks(tick_idx)
+        axes[1].set_xticklabels(
             [quarter_labels(plot_revision_ready)[i] for i in tick_idx],
             rotation=45,
             ha="right",
         )
-    ax.legend()
-    ax.grid(True, alpha=0.3)
+    axes[1].legend()
+    axes[1].grid(True, alpha=0.3)
+
     plt.tight_layout()
     plt.show()
+```
+
+### Inflation news
+
+This section reports the cleaned inflation-news table once it is generated. The
+table should be keyed by `(survey_year, survey_quarter, forecaster_id)` and use
+the timing rule `CPI1(y,q) - CPI2(y,q-1)` with the Q1 rollover to `(y-1,4)`.
+
+```{python inflation-news-codebook-table}
+#| echo: false
+#| output: asis
+
+news_path = CLEANED_DIR / "inflation_news.csv"
+if not news_path.exists():
+    print("*Run the inflation-news construction step to generate `inflation_news.csv`.*")
+else:
+    inflation_news = pd.read_csv(news_path)
+    availability_df = pd.DataFrame([availability_summary(df=inflation_news, value_col="inflation_news")])
+    counts = counts_by_survey(
+        df=inflation_news,
+        value_col="inflation_news",
+        count_name="n_forecasters_with_inflation_news",
+    )
+    revision_ready = revision_ready_counts(
+        df=inflation_news,
+        value_col="inflation_news",
+        count_name="n_forecasters_with_prev_quarter_inflation_news",
+    )
+    merged = counts.merge(
+        revision_ready,
+        how="left",
+        on=["survey_year", "survey_quarter"],
+    )
+    merged["n_forecasters_with_prev_quarter_inflation_news"] = (
+        merged["n_forecasters_with_prev_quarter_inflation_news"].fillna(0).astype(int)
+    )
+    print("\n#### Availability Summary\n")
+    print(availability_df.to_markdown(index=False))
+    print("\n#### Forecasters by survey\n")
+    print(merged.to_markdown(index=False))
+```
+
+```{python inflation-news-codebook-figure}
+#| echo: false
+
+news_path = CLEANED_DIR / "inflation_news.csv"
+if not news_path.exists():
+    print("*Run the inflation-news construction step to generate `inflation_news.csv`.*")
+else:
+    inflation_news = pd.read_csv(news_path)
+    available = available_rows(df=inflation_news, value_col="inflation_news")
+    if len(available) == 0:
+        print("*`inflation_news.csv` exists but has no non-missing `inflation_news` values.*")
+    else:
+        survey_summary = (
+            available.groupby(["survey_year", "survey_quarter"], as_index=False)
+            .agg(
+                mean_inflation_news=("inflation_news", "mean"),
+                median_inflation_news=("inflation_news", "median"),
+            )
+            .sort_values(["survey_year", "survey_quarter"])
+        )
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(survey_summary.index, survey_summary["mean_inflation_news"], label="Mean inflation news")
+        ax.plot(survey_summary.index, survey_summary["median_inflation_news"], label="Median inflation news")
+        ax.set_title("Inflation news by survey")
+        ax.set_ylabel("Annualized percentage points")
+        ax.set_xlabel("Survey year-quarter")
+        tick_idx = list(range(0, len(survey_summary), max(len(survey_summary) // 8, 1)))
+        ax.set_xticks(tick_idx)
+        ax.set_xticklabels([quarter_labels(survey_summary)[i] for i in tick_idx], rotation=45, ha="right")
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()
+```
+
+### Reputation measure
+
+This section reports the cleaned reputation-measure table once it is generated.
+The construction uses the long-term inflation expectation input `x` together
+with config-loaded parameter values for `q`, `pi_target`, `pi_NE`, `z_a`, and
+`z_alpha`.
+
+```{python reputation-measure-codebook-table}
+#| echo: false
+#| output: asis
+
+rho_path = CLEANED_DIR / "reputation_measure.csv"
+if not rho_path.exists():
+    print("*Run the reputation-measure construction step to generate `reputation_measure.csv`.*")
+else:
+    reputation = pd.read_csv(rho_path)
+    availability_df = pd.DataFrame([availability_summary(df=reputation, value_col="rho")])
+    print("\n#### Availability Summary\n")
+    print(availability_df.to_markdown(index=False))
+    print("\n#### Summary Statistics\n")
+    print(compute_summary(reputation).to_markdown(index=False))
+```
+
+```{python reputation-measure-codebook-figure}
+#| echo: false
+
+rho_path = CLEANED_DIR / "reputation_measure.csv"
+if not rho_path.exists():
+    print("*Run the reputation-measure construction step to generate `reputation_measure.csv`.*")
+else:
+    reputation = pd.read_csv(rho_path)
+    available = available_rows(df=reputation, value_col="rho")
+    if len(available) == 0:
+        print("*`reputation_measure.csv` exists but has no non-missing `rho` values.*")
+    else:
+        survey_summary = (
+            available.groupby(["survey_year", "survey_quarter"], as_index=False)
+            .agg(
+                mean_rho=("rho", "mean"),
+                median_rho=("rho", "median"),
+            )
+            .sort_values(["survey_year", "survey_quarter"])
+        )
+        fig, ax = plt.subplots(figsize=(10, 4))
+        ax.plot(survey_summary.index, survey_summary["mean_rho"], label="Mean rho")
+        ax.plot(survey_summary.index, survey_summary["median_rho"], label="Median rho")
+        ax.set_title("Reputation measure by survey")
+        ax.set_ylabel("rho")
+        ax.set_xlabel("Survey year-quarter")
+        tick_idx = list(range(0, len(survey_summary), max(len(survey_summary) // 8, 1)))
+        ax.set_xticks(tick_idx)
+        ax.set_xticklabels([quarter_labels(survey_summary)[i] for i in tick_idx], rotation=45, ha="right")
+        ax.legend()
+        ax.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.show()
 ```

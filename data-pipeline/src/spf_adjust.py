@@ -1,15 +1,8 @@
-"""Adjust SPF 10-year CPI forecasts using realized CPI1 values.
-
-The cleaned `forecast_individual` table is the input. This module returns a
-minimal adjusted table with one row per (survey_year, survey_quarter,
-forecaster_id) and one adjusted variable: adjusted_cpi10. For Q2-Q4 surveys,
-the adjusted value removes realized CPI1 terms from the raw 40-quarter average
-and re-averages over the remaining forward-looking quarters.
-"""
+"""Construct forecast-revision regression inputs from cleaned SPF data."""
 
 from __future__ import annotations
 
-from collections.abc import Iterable
+from collections.abc import Iterable, Mapping
 
 import pandas as pd
 
@@ -203,200 +196,118 @@ def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def adjusted_cpi10_availability_summary(adjusted_cpi10: pd.DataFrame) -> dict[str, object]:
-    """Summarize the availability window for non-missing adjusted CPI10 values."""
-    required = {"survey_year", "survey_quarter", "adjusted_cpi10"}
-    missing = required.difference(adjusted_cpi10.columns)
+def construct_inflation_news(forecast_individual: pd.DataFrame) -> pd.DataFrame:
+    """Return minimal table of inflation news by survey and forecaster."""
+    required = {"survey_year", "survey_quarter", "forecaster_id", "CPI1", "CPI2"}
+    missing = required.difference(forecast_individual.columns)
     if missing:
         raise KeyError(f"Missing required columns: {sorted(missing)}")
 
-    available = adjusted_cpi10.loc[adjusted_cpi10["adjusted_cpi10"].notna()].copy()
-    if len(available) == 0:
-        return {
-            "first_survey_year": pd.NA,
-            "first_survey_quarter": pd.NA,
-            "last_survey_year": pd.NA,
-            "last_survey_quarter": pd.NA,
-            "n_surveys_with_data": 0,
-            "n_rows_with_data": 0,
-        }
-
-    survey_keys = available[["survey_year", "survey_quarter"]].drop_duplicates()
-    first_row = available.sort_values(["survey_year", "survey_quarter"]).iloc[0]
-    last_row = available.sort_values(["survey_year", "survey_quarter"]).iloc[-1]
-    return {
-        "first_survey_year": int(first_row["survey_year"]),
-        "first_survey_quarter": int(first_row["survey_quarter"]),
-        "last_survey_year": int(last_row["survey_year"]),
-        "last_survey_quarter": int(last_row["survey_quarter"]),
-        "n_surveys_with_data": int(len(survey_keys)),
-        "n_rows_with_data": int(len(available)),
-    }
-
-
-def adjusted_cpi10_forecaster_counts_by_survey(adjusted_cpi10: pd.DataFrame) -> pd.DataFrame:
-    """Count forecasters with non-missing adjusted CPI10 by survey."""
-    required = {"survey_year", "survey_quarter", "forecaster_id", "adjusted_cpi10"}
-    missing = required.difference(adjusted_cpi10.columns)
-    if missing:
-        raise KeyError(f"Missing required columns: {sorted(missing)}")
-
-    available = adjusted_cpi10.loc[adjusted_cpi10["adjusted_cpi10"].notna()].copy()
-    counts = (
-        available.groupby(["survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
-        .nunique()
-        .rename(columns={"forecaster_id": "n_forecasters_with_adjusted_cpi10"})
-        .sort_values(["survey_year", "survey_quarter"])
+    rows = (
+        forecast_individual.loc[:, ["survey_year", "survey_quarter", "forecaster_id"]]
+        .drop_duplicates()
+        .sort_values(["survey_year", "survey_quarter", "forecaster_id"])
     )
-    return counts
 
+    news_rows: list[dict[str, object]] = []
+    for row in rows.itertuples(index=False):
+        cpi1_current = _get_value_or_missing(
+            forecast_individual=forecast_individual,
+            survey_year=int(row.survey_year),
+            survey_quarter=int(row.survey_quarter),
+            forecaster_id=int(row.forecaster_id),
+            horizon="CPI1",
+        )
+        if row.survey_quarter == 1:
+            lagged_survey_year = int(row.survey_year) - 1
+            lagged_survey_quarter = 4
+        else:
+            lagged_survey_year = int(row.survey_year)
+            lagged_survey_quarter = int(row.survey_quarter) - 1
 
-def adjusted_cpi10_revision_ready_counts_by_survey(adjusted_cpi10: pd.DataFrame) -> pd.DataFrame:
-    """Count forecasters with non-missing adjusted CPI10 in consecutive surveys."""
-    required = {"survey_year", "survey_quarter", "forecaster_id", "adjusted_cpi10"}
-    missing = required.difference(adjusted_cpi10.columns)
-    if missing:
-        raise KeyError(f"Missing required columns: {sorted(missing)}")
+        cpi2_lagged = _get_value_or_missing(
+            forecast_individual=forecast_individual,
+            survey_year=lagged_survey_year,
+            survey_quarter=lagged_survey_quarter,
+            forecaster_id=int(row.forecaster_id),
+            horizon="CPI2",
+        )
+        if pd.isna(cpi1_current) or pd.isna(cpi2_lagged):
+            inflation_news = pd.NA
+        else:
+            inflation_news = float(cpi1_current) - float(cpi2_lagged)
 
-    available = adjusted_cpi10.loc[adjusted_cpi10["adjusted_cpi10"].notna()].copy()
-    if len(available) == 0:
+        news_rows.append(
+            {
+                "survey_year": int(row.survey_year),
+                "survey_quarter": int(row.survey_quarter),
+                "forecaster_id": int(row.forecaster_id),
+                "inflation_news": inflation_news,
+            }
+        )
+
+    out = pd.DataFrame(news_rows)
+    if len(out) == 0:
         return pd.DataFrame(
-            columns=[
-                "survey_year",
-                "survey_quarter",
-                "n_forecasters_with_prev_quarter_adjusted_cpi10",
-            ]
+            columns=["survey_year", "survey_quarter", "forecaster_id", "inflation_news"]
         )
-
-    available = available[["survey_year", "survey_quarter", "forecaster_id"]].drop_duplicates().copy()
-    available["prev_survey_year"] = available["survey_year"]
-    available["prev_survey_quarter"] = available["survey_quarter"] - 1
-    q1_mask = available["survey_quarter"] == 1
-    available.loc[q1_mask, "prev_survey_year"] = available.loc[q1_mask, "survey_year"] - 1
-    available.loc[q1_mask, "prev_survey_quarter"] = 4
-
-    prev = available[["survey_year", "survey_quarter", "forecaster_id"]].rename(
-        columns={
-            "survey_year": "prev_survey_year",
-            "survey_quarter": "prev_survey_quarter",
-            "forecaster_id": "forecaster_id",
-        }
-    )
-    merged = available.merge(
-        prev,
-        how="left",
-        left_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
-        right_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
-        indicator=True,
-    )
-    revision_ready = merged.loc[merged["_merge"] == "both"]
-    counts = (
-        revision_ready.groupby(["survey_year", "survey_quarter"], as_index=False)["forecaster_id"]
-        .nunique()
-        .rename(columns={"forecaster_id": "n_forecasters_with_prev_quarter_adjusted_cpi10"})
-        .sort_values(["survey_year", "survey_quarter"])
-    )
-    return counts
+    out["survey_year"] = out["survey_year"].astype("Int64")
+    out["survey_quarter"] = out["survey_quarter"].astype("Int64")
+    out["forecaster_id"] = out["forecaster_id"].astype("Int64")
+    out["inflation_news"] = pd.to_numeric(out["inflation_news"], errors="coerce")
+    return out
 
 
-def _summarize_plot_panel(df: pd.DataFrame) -> pd.DataFrame:
-    """Summarize mean/median raw and adjusted CPI10 by survey."""
-    summary = (
-        df.groupby(["survey_year", "survey_quarter"], as_index=False)
-        .agg(
-            mean_cpi10=("CPI10", "mean"),
-            median_cpi10=("CPI10", "median"),
-            mean_adjusted_cpi10=("adjusted_cpi10", "mean"),
-            median_adjusted_cpi10=("adjusted_cpi10", "median"),
-        )
-        .sort_values(["survey_year", "survey_quarter"])
-    )
-    return summary
-
-
-def adjusted_cpi10_plot_summary_all(
-    forecast_individual: pd.DataFrame,
-    adjusted_cpi10: pd.DataFrame,
+def construct_reputation_measure(
+    x_table: pd.DataFrame,
+    *,
+    config: Mapping[str, object],
 ) -> pd.DataFrame:
-    """Build survey-level plot summary across all forecasters with data."""
-    required_forecast = {"survey_year", "survey_quarter", "forecaster_id", "CPI10"}
-    missing_forecast = required_forecast.difference(forecast_individual.columns)
-    if missing_forecast:
-        raise KeyError(f"Missing required forecast columns: {sorted(missing_forecast)}")
+    """Return table with the same keys as x_table and one rho column."""
+    required = {"survey_year", "survey_quarter", "x"}
+    missing = required.difference(x_table.columns)
+    if missing:
+        raise KeyError(f"Missing required columns: {sorted(missing)}")
 
-    required_adjusted = {"survey_year", "survey_quarter", "forecaster_id", "adjusted_cpi10"}
-    missing_adjusted = required_adjusted.difference(adjusted_cpi10.columns)
-    if missing_adjusted:
-        raise KeyError(f"Missing required adjusted columns: {sorted(missing_adjusted)}")
+    required_config = {"q", "pi_target", "pi_NE", "z_a", "z_alpha"}
+    missing_config = required_config.difference(config)
+    if missing_config:
+        raise KeyError(f"Missing required config values: {sorted(missing_config)}")
 
-    merged = forecast_individual[
-        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
-    ].merge(
-        adjusted_cpi10,
-        how="inner",
-        on=["survey_year", "survey_quarter", "forecaster_id"],
-    )
-    merged["CPI10"] = pd.to_numeric(merged["CPI10"], errors="coerce")
-    merged["adjusted_cpi10"] = pd.to_numeric(merged["adjusted_cpi10"], errors="coerce")
-    merged = merged.loc[merged["CPI10"].notna() & merged["adjusted_cpi10"].notna()].copy()
-    return _summarize_plot_panel(merged)
+    q = float(config["q"])
+    pi_target = float(config["pi_target"])
+    pi_ne = float(config["pi_NE"])
+    z_a = float(config["z_a"])
+    z_alpha = float(config["z_alpha"])
+    target_term = (1.0 - q) * pi_target + q * z_a
+    ne_term = (1.0 - q) * pi_ne + q * z_alpha
+    denominator = target_term - ne_term
+    if denominator == 0.0:
+        raise ValueError("Reputation denominator is zero.")
 
+    key_columns = [column for column in x_table.columns if column != "x"]
+    output_rows: list[dict[str, object]] = []
+    for row in x_table.itertuples(index=False):
+        row_dict = row._asdict()
+        x_value = _as_numeric(row_dict["x"])
+        if pd.isna(x_value):
+            rho = pd.NA
+        else:
+            rho = (float(x_value) - ne_term) / denominator
 
-def adjusted_cpi10_plot_summary_revision_ready(
-    forecast_individual: pd.DataFrame,
-    adjusted_cpi10: pd.DataFrame,
-) -> pd.DataFrame:
-    """Build survey-level plot summary for revision-ready forecasters only."""
-    all_summary_input = forecast_individual[
-        ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
-    ].merge(
-        adjusted_cpi10,
-        how="inner",
-        on=["survey_year", "survey_quarter", "forecaster_id"],
-    )
-    all_summary_input["CPI10"] = pd.to_numeric(all_summary_input["CPI10"], errors="coerce")
-    all_summary_input["adjusted_cpi10"] = pd.to_numeric(
-        all_summary_input["adjusted_cpi10"], errors="coerce"
-    )
-    all_summary_input = all_summary_input.loc[
-        all_summary_input["CPI10"].notna() & all_summary_input["adjusted_cpi10"].notna()
-    ].copy()
-    if len(all_summary_input) == 0:
-        return pd.DataFrame(
-            columns=[
-                "survey_year",
-                "survey_quarter",
-                "mean_cpi10",
-                "median_cpi10",
-                "mean_adjusted_cpi10",
-                "median_adjusted_cpi10",
-            ]
-        )
-
-    available = all_summary_input[["survey_year", "survey_quarter", "forecaster_id"]].drop_duplicates().copy()
-    available["prev_survey_year"] = available["survey_year"]
-    available["prev_survey_quarter"] = available["survey_quarter"] - 1
-    q1_mask = available["survey_quarter"] == 1
-    available.loc[q1_mask, "prev_survey_year"] = available.loc[q1_mask, "survey_year"] - 1
-    available.loc[q1_mask, "prev_survey_quarter"] = 4
-
-    prev = available[["survey_year", "survey_quarter", "forecaster_id"]].rename(
-        columns={
-            "survey_year": "prev_survey_year",
-            "survey_quarter": "prev_survey_quarter",
-            "forecaster_id": "forecaster_id",
+        output_row = {
+            key: row_dict[key]
+            for key in key_columns
         }
-    )
-    revision_ready = available.merge(
-        prev,
-        how="inner",
-        left_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
-        right_on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
-    )[["survey_year", "survey_quarter", "forecaster_id"]]
+        output_row["rho"] = rho
+        output_rows.append(output_row)
 
-    revision_ready_panel = all_summary_input.merge(
-        revision_ready,
-        how="inner",
-        on=["survey_year", "survey_quarter", "forecaster_id"],
-    )
-    return _summarize_plot_panel(revision_ready_panel)
+    out = pd.DataFrame(output_rows)
+    if len(out) == 0:
+        return pd.DataFrame(columns=[*key_columns, "rho"])
+
+    for integer_column in ["survey_year", "survey_quarter", "forecaster_id"]:
+        if integer_column in out.columns:
+            out[integer_column] = pd.to_numeric(out[integer_column], errors="coerce").astype("Int64")
+    out["rho"] = pd.to_numeric(out["rho"], errors="coerce")
+    return out
