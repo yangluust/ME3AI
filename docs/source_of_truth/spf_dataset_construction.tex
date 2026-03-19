@@ -3,6 +3,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{algorithm}
 \usepackage[noend]{algpseudocode}
+\usepackage{float}
+\usepackage{graphicx}
 \usepackage{geometry}
 \usepackage{xurl}
 \usepackage{booktabs}
@@ -10,6 +12,7 @@
 
 \title{Construction of SPF Datasets for the ME3AI Project}
 \date{}
+\newcommand{\forecastrevisionoutputroot}{d:/ME3AI/data-pipeline/output/forecast_revision}
 
 \begin{document}
 \maketitle
@@ -276,16 +279,18 @@ previous survey $s^{-}$.
 \subsection{Construct reputation measure}
 
 A dedicated regression config file determines how the long-term inflation
-expectation $x_{u,s}$ is defined for the forecast revision pipeline. If the
-config selects raw \texttt{CPI10}, then
+expectation $x_{u,s}$ is defined for the forecast revision pipeline. The config
+contains an ordered list of specifications to run, namely raw
+\texttt{CPI10} and adjusted \texttt{CPI10}. If one specification selects raw
+\texttt{CPI10}, then
 \begin{equation}
 x_{u,s} \equiv \text{CPI10}_{u,s}.
 \end{equation}
-If instead the config selects adjusted \texttt{CPI10}, then $x_{u,s}$ equals
-the adjusted long-term inflation expectation constructed in the previous
+If another specification selects adjusted \texttt{CPI10}, then $x_{u,s}$
+equals the adjusted long-term inflation expectation constructed in the previous
 subsection and stored in \texttt{adjusted\_cpi10.csv}. In either case, $u$
-corresponds to \texttt{forecaster\_id}. The same config-selected definition of
-$x_{u,s}$ is used in both \texttt{reputation\_measure.csv} and
+corresponds to \texttt{forecaster\_id}. Each configured definition of $x_{u,s}$
+is propagated through its own versions of \texttt{reputation\_measure.csv} and
 \texttt{regression\_dataset.csv}. Define the reputation measure $\rho$ from
 \begin{equation}
 x_{u,s} = \rho_{u,s}\left((1-q)\pi_{\text{target}} + q z_a\right)
@@ -301,12 +306,14 @@ $z_{\alpha}$, this equation implies
 \end{equation}
 The implementation must load the parameter values from a config file rather
 than hardcoding them in the construction procedure. It must also load the
-choice of long-term inflation expectation from the dedicated regression config
-file. For each observation where $x_{u,s}$ is available, compute $\rho_{u,s}$
-using the configured parameter values and the config-selected definition of
-$x_{u,s}$ dated at the same survey $s$. The constructed output is written as
+configured list of long-term inflation expectation definitions from the
+dedicated regression config file. For each observation where $x_{u,s}$ is
+available, compute $\rho_{u,s}$ using the configured parameter values and the
+selected definition of $x_{u,s}$ dated at the same survey $s$. The constructed
+output for each specification is written as
 \texttt{reputation\_measure.csv} with columns
-\texttt{(survey\_year, survey\_quarter, forecaster\_id, rho)}.
+\texttt{(survey\_year, survey\_quarter, forecaster\_id, rho)} in its own
+specification-specific output directory.
 
 \subsection{Construct regression dataset}
 
@@ -349,7 +356,7 @@ The three OLS regressions are estimated at the survey level with a constant:
 \end{align}
 The estimation sample is restricted by the dedicated regression config file,
 which specifies the start survey date and end survey date to use for both
-estimation and fitted-value comparisons.
+estimation and fitted-value comparisons for each configured specification.
 
 \subsection{Reported regression statistics}
 
@@ -588,7 +595,8 @@ Helper functions used by the main procedure are specified below.
 \begin{algorithm}[H]
 \caption{\textsc{SelectLongTermInflationExpectation}$(\textit{forecast\_individual}, \textit{regression\_config})$}
 \begin{algorithmic}[1]
-\State \textbf{Require} $\textit{regression\_config}$ contains \texttt{x\_definition}.
+\State \textbf{Require} $\textit{regression\_config}$ contains \texttt{x\_definitions}.
+\For{each \texttt{x\_definition} in \texttt{x\_definitions}}
 \If{\texttt{x\_definition} = \texttt{raw\_cpi10}}
     \State Set \texttt{x} equal to \texttt{CPI10} from \texttt{forecast\_individual}.
 \ElsIf{\texttt{x\_definition} = \texttt{adjusted\_cpi10}}
@@ -598,6 +606,7 @@ Helper functions used by the main procedure are specified below.
 \EndIf
 \State \Return table indexed by
 \Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id}, \textit{x})$.
+\EndFor
 \end{algorithmic}
 \end{algorithm}
 
@@ -668,7 +677,7 @@ Helper functions used by the main procedure are specified below.
 \State \textbf{Require} $\textit{regression\_dataset}$: survey-level table containing
 \Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \bar{r}_s, \bar{n}_s, z_{2,s}, z_{3,s})$.
 \State \textbf{Require} $\textit{regression\_config}$ contains the sample start and end survey dates.
-\State Keep only survey dates inside the configured sample window.
+\State Keep only survey dates inside the configured sample window for the current specification.
 \State Initialize output table for regression statistics.
 \State Estimate Model 1 by OLS with a constant:
 \Statex \quad $\bar{r}_s = \alpha_1 + \beta_1 \bar{n}_s + \varepsilon_{1,s}$.
@@ -706,9 +715,72 @@ Helper functions used by the main procedure are specified below.
 \end{algorithmic}
 \end{algorithm}
 
+\section{Results and comparison}
+
+The forecast revision pipeline is run twice using the two
+\texttt{x\_definitions} listed in
+\texttt{data-pipeline/config/forecast\_revision.json}: raw \texttt{CPI10} and
+adjusted \texttt{CPI10}. This produces two specification-specific regression
+tables, two specification-specific regression figures, and a set of
+survey-level matched-sample comparison figures. The embedded objects below are
+generated by the pipeline and written under
+\texttt{data-pipeline/output/forecast\_revision/}.
+
+\subsection{Regression results: raw CPI10}
+
+\input{\forecastrevisionoutputroot/raw_cpi10/regression_results.tex}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/raw_cpi10/cumulative_forecast_revision_comparison.png}
+\caption{Cumulative forecast revision comparison using raw CPI10.}
+\end{figure}
+
+\subsection{Regression results: adjusted CPI10}
+
+\input{\forecastrevisionoutputroot/adjusted_cpi10/regression_results.tex}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/adjusted_cpi10/cumulative_forecast_revision_comparison.png}
+\caption{Cumulative forecast revision comparison using adjusted CPI10.}
+\end{figure}
+
+\subsection{Survey-level matched-sample comparison figures}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/comparison/long_term_forecast_revision_comparison.png}
+\caption{Survey-level matched-sample mean long-term forecast revision: raw versus adjusted CPI10.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/comparison/reputation_measure_comparison.png}
+\caption{Survey-level matched-sample mean previous-survey reputation: raw versus adjusted CPI10.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/comparison/regressor_1_comparison.png}
+\caption{Survey-level matched-sample mean regressor 1: raw versus adjusted CPI10.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/comparison/regressor_2_comparison.png}
+\caption{Survey-level matched-sample mean regressor 2: raw versus adjusted CPI10.}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\textwidth]{\forecastrevisionoutputroot/comparison/regressor_3_comparison.png}
+\caption{Survey-level matched-sample mean regressor 3: raw versus adjusted CPI10.}
+\end{figure}
+
 \section{Notes}
 
-Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, \texttt{adjusted\_cpi10}, \texttt{inflation\_news}, \texttt{reputation\_measure}, and \texttt{regression\_dataset}, all written as CSV. The dedicated regression config file \texttt{data-pipeline/config/forecast\_revision.json} specifies both the sample window for the regression analysis and whether the long-term inflation expectation used in \texttt{reputation\_measure}, \texttt{regression\_dataset}, and the regression outputs is based on raw \texttt{CPI10} or \texttt{adjusted\_cpi10}. Under the forecast revision regression design, the analysis results are written to \texttt{output/forecast\_revision/}, including \texttt{regression\_results.csv} and \texttt{cumulative\_forecast\_revision\_comparison.png}. Level/mean/median and probability tables remain out of scope unless added explicitly later.
+Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, \texttt{adjusted\_cpi10}, \texttt{inflation\_news}, and specification-specific versions of \texttt{reputation\_measure} and \texttt{regression\_dataset}, all written as CSV. The dedicated regression config file \texttt{data-pipeline/config/forecast\_revision.json} specifies both the sample window for the regression analysis and the ordered list of long-term inflation expectation definitions to compare. Under the forecast revision regression design, the analysis results are written to \texttt{output/forecast\_revision/}, including specification-specific regression tables and figures plus the survey-level matched-sample comparison figures. Level/mean/median and probability tables remain out of scope unless added explicitly later.
 Codebook tables and figures are generated in \texttt{data-pipeline/report/codebook.qmd}; they are not part of the construction pseudocode.
 
 \end{document}

@@ -82,6 +82,17 @@ def _sample_window_label(config: Mapping[str, object]) -> str:
     )
 
 
+def format_x_definition_label(x_definition: str) -> str:
+    """Return readable label for one x-definition specification."""
+    labels = {
+        "raw_cpi10": "Raw CPI10",
+        "adjusted_cpi10": "Adjusted CPI10",
+    }
+    if x_definition not in labels:
+        raise ValueError(f"Unsupported x_definition label: {x_definition}")
+    return labels[x_definition]
+
+
 def _fit_ols_with_constant(
     regression_dataset: pd.DataFrame,
     *,
@@ -286,3 +297,96 @@ def plot_cumulative_forecast_revision_comparison(
     axis.legend()
     figure.tight_layout()
     return figure, plot_panel
+
+
+def build_specification_comparison_panel(
+    regression_datasets: Mapping[str, pd.DataFrame],
+    *,
+    value_column: str,
+    config: Mapping[str, object],
+) -> pd.DataFrame:
+    """Return panel comparing one survey-level series across x definitions."""
+    panels: list[pd.DataFrame] = []
+    for x_definition, regression_dataset in regression_datasets.items():
+        _validate_regression_dataset(regression_dataset=regression_dataset)
+        if value_column not in regression_dataset.columns:
+            raise KeyError(f"Missing required comparison column: {value_column}")
+
+        panel = _restrict_to_sample_window(
+            regression_dataset=regression_dataset.loc[
+                :, ["survey_year", "survey_quarter", value_column]
+            ].copy(),
+            config=config,
+        )
+        panel = panel.rename(columns={value_column: x_definition})
+        panels.append(panel)
+
+    if len(panels) == 0:
+        raise ValueError("regression_datasets must contain at least one specification.")
+
+    comparison_panel = panels[0]
+    for panel in panels[1:]:
+        comparison_panel = comparison_panel.merge(
+            panel,
+            how="outer",
+            on=["survey_year", "survey_quarter"],
+        )
+
+    comparison_panel = comparison_panel.sort_values(
+        ["survey_year", "survey_quarter"]
+    ).reset_index(drop=True)
+    for column in comparison_panel.columns:
+        if column not in {"survey_year", "survey_quarter"}:
+            comparison_panel[column] = pd.to_numeric(comparison_panel[column], errors="coerce")
+    return comparison_panel
+
+
+def plot_specification_comparison(
+    comparison_panel: pd.DataFrame,
+    *,
+    raw_column: str,
+    adjusted_column: str,
+    title: str,
+    y_label: str,
+) -> plt.Figure:
+    """Plot one survey-level comparison figure for raw versus adjusted x."""
+    required = {"survey_year", "survey_quarter", raw_column, adjusted_column}
+    missing = required.difference(comparison_panel.columns)
+    if missing:
+        raise KeyError(f"Missing required comparison_panel columns: {sorted(missing)}")
+
+    figure, axis = plt.subplots(figsize=(10, 4))
+    x_positions = range(len(comparison_panel))
+    axis.plot(
+        x_positions,
+        comparison_panel[raw_column].to_numpy(),
+        color="black",
+        linestyle="-",
+        label=format_x_definition_label(raw_column),
+    )
+    axis.plot(
+        x_positions,
+        comparison_panel[adjusted_column].to_numpy(),
+        color="blue",
+        linestyle="-",
+        label=format_x_definition_label(adjusted_column),
+    )
+    axis.set_xlabel("Survey year-quarter")
+    axis.set_ylabel(y_label)
+    axis.set_title(title)
+    if len(comparison_panel) > 0:
+        tick_step = max(len(comparison_panel) // 8, 1)
+        tick_idx = list(range(0, len(comparison_panel), tick_step))
+        axis.set_xticks(tick_idx)
+        axis.set_xticklabels(
+            [
+                f"{int(row.survey_year)}:Q{int(row.survey_quarter)}"
+                for row in comparison_panel.iloc[tick_idx].itertuples(index=False)
+            ],
+            rotation=45,
+            ha="right",
+        )
+    axis.grid(True, alpha=0.3)
+    axis.legend()
+    figure.tight_layout()
+    return figure

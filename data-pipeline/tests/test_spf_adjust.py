@@ -18,6 +18,7 @@ from src.spf_adjust import (
     construct_reputation_measure,
     construct_regression_dataset,
     get_quarter_specific_value,
+    get_configured_x_definitions,
     select_long_term_inflation_expectation,
 )
 
@@ -165,6 +166,15 @@ def test_select_long_term_inflation_expectation_uses_adjusted_cpi10_config():
     assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == pytest.approx(
         (2.60 * 40 - 1.20) / 39
     )
+
+
+def test_get_configured_x_definitions_returns_ordered_list():
+    """Configured x definitions should be read in order from regression config."""
+    x_definitions = get_configured_x_definitions(
+        config={"x_definitions": [RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]},
+    )
+
+    assert x_definitions == [RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]
 
 
 def test_construct_inflation_news_returns_minimal_table():

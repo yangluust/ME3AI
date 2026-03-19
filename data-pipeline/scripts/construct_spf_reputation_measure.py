@@ -10,7 +10,11 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.spf_adjust import construct_reputation_measure, select_long_term_inflation_expectation
+from src.spf_adjust import (
+    construct_reputation_measure,
+    get_configured_x_definitions,
+    select_long_term_inflation_expectation,
+)
 
 
 def main(
@@ -42,27 +46,29 @@ def main(
 
     cleaned_dir = repo_root / clean_settings["cleaned_dir"]
     input_path = cleaned_dir / "forecast_individual.csv"
-    output_path = cleaned_dir / "reputation_measure.csv"
-
     forecast_individual = pd.read_csv(input_path)
-    x_table = select_long_term_inflation_expectation(
-        forecast_individual=forecast_individual,
-        config=regression_settings,
-    )
-    reputation_measure = construct_reputation_measure(
-        x_table=x_table,
-        config=reputation_settings,
-    )
-
-    cleaned_dir.mkdir(parents=True, exist_ok=True)
-    reputation_measure.to_csv(output_path, index=False)
+    x_definitions = get_configured_x_definitions(config=regression_settings)
 
     print("Constructed SPF reputation measure")
     print(f"  Input:  {input_path}")
     print(f"  Config: {reputation_config}")
-    print(f"  X def:  {regression_settings['x_definition']}")
-    print(f"  Output: {output_path}")
-    print(f"  Rows:   {len(reputation_measure)}")
+    for x_definition in x_definitions:
+        x_table = select_long_term_inflation_expectation(
+            forecast_individual=forecast_individual,
+            config={"x_definition": x_definition},
+        )
+        reputation_measure = construct_reputation_measure(
+            x_table=x_table,
+            config=reputation_settings,
+        )
+        output_path = (
+            cleaned_dir / "forecast_revision" / x_definition / "reputation_measure.csv"
+        )
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        reputation_measure.to_csv(output_path, index=False)
+        print(f"  X def:  {x_definition}")
+        print(f"  Output: {output_path}")
+        print(f"  Rows:   {len(reputation_measure)}")
     print("Done.")
 
 

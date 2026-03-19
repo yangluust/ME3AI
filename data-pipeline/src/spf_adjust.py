@@ -243,6 +243,25 @@ def construct_raw_cpi10_x(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def get_configured_x_definitions(config: Mapping[str, object]) -> list[str]:
+    """Return the ordered list of configured x definitions."""
+    if "x_definitions" not in config:
+        raise KeyError("Missing required config value: x_definitions")
+
+    configured = list(config["x_definitions"])
+    if len(configured) == 0:
+        raise ValueError("x_definitions must contain at least one entry.")
+
+    supported = {RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE}
+    unsupported = [value for value in configured if str(value) not in supported]
+    if unsupported:
+        raise ValueError(
+            "Unsupported x_definitions: "
+            f"{unsupported}. Expected entries from {sorted(supported)}."
+        )
+    return [str(value) for value in configured]
+
+
 def select_long_term_inflation_expectation(
     forecast_individual: pd.DataFrame,
     *,

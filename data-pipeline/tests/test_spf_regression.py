@@ -11,7 +11,9 @@ import pytest
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.spf_regression import (
+    build_specification_comparison_panel,
     plot_cumulative_forecast_revision_comparison,
+    plot_specification_comparison,
     run_forecast_revision_regressions,
 )
 
@@ -176,3 +178,56 @@ def test_run_forecast_revision_regressions_uses_configured_sample_window():
     for row in regression_statistics.itertuples(index=False):
         assert int(row.sample_size) == 3
     assert fitted_values["fitted_model_1"].tolist() == pytest.approx([5.0, 7.0, 9.0])
+
+
+def test_build_specification_comparison_panel_aligns_series_by_survey():
+    """Comparison panel should align raw and adjusted survey-level series by date."""
+    raw_dataset = _sample_regression_dataset()
+    adjusted_dataset = _sample_regression_dataset().copy()
+    adjusted_dataset["r_bar"] = adjusted_dataset["r_bar"].where(
+        adjusted_dataset["r_bar"].isna(),
+        adjusted_dataset["r_bar"] + 1.0,
+    )
+
+    comparison_panel = build_specification_comparison_panel(
+        regression_datasets={
+            "raw_cpi10": raw_dataset,
+            "adjusted_cpi10": adjusted_dataset,
+        },
+        value_column="r_bar",
+        config=_sample_regression_config(),
+    )
+
+    assert comparison_panel["raw_cpi10"].tolist() == pytest.approx([3.0, 5.0, 7.0, 9.0])
+    assert comparison_panel["adjusted_cpi10"].tolist() == pytest.approx([4.0, 6.0, 8.0, 10.0])
+
+
+def test_plot_specification_comparison_draws_two_specification_lines():
+    """Specification comparison plot should include raw and adjusted lines."""
+    comparison_panel = pd.DataFrame(
+        [
+            {
+                "survey_year": 1991,
+                "survey_quarter": 4,
+                "raw_cpi10": 1.0,
+                "adjusted_cpi10": 1.5,
+            },
+            {
+                "survey_year": 1992,
+                "survey_quarter": 1,
+                "raw_cpi10": 2.0,
+                "adjusted_cpi10": 2.5,
+            },
+        ]
+    )
+
+    figure = plot_specification_comparison(
+        comparison_panel=comparison_panel,
+        raw_column="raw_cpi10",
+        adjusted_column="adjusted_cpi10",
+        title="Comparison",
+        y_label="Value",
+    )
+
+    assert len(figure.axes[0].lines) == 2
+    plt.close(figure)

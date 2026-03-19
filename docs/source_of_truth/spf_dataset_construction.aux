@@ -18,17 +18,17 @@
 \@writefile{toc}{\contentsline {section}{\numberline {6}OLS regressions for forecast revision}{6}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.1}Reported regression statistics}{6}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {6.2}Comparison figure}{6}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {7}Regression results}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {7}Regression results}{7}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {8}Algorithms: download automation}{7}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces \textsc  {VariablePageURL}$(\textit  {var})$}}{7}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces \textsc  {GetDownloadLinks}$(\textit  {page\_url}, \textit  {file\_types})$}}{7}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces \textsc  {DownloadOneFile}$(\textit  {download\_url}, \textit  {outpath}, \texttt  {overwrite})$}}{7}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces \textsc  {DownloadByVariableNames}$(\textit  {variable\_names}, \textit  {file\_types}, \textit  {out\_dir}, \texttt  {overwrite})$}}{7}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces \textsc  {DownloadByVariableNames}$(\textit  {variable\_names}, \textit  {file\_types}, \textit  {out\_dir}, \texttt  {overwrite})$}}{8}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {9}Algorithm: construct cleaned datasets (individual only)}{8}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces \textsc  {LoadIndividualSheet}$(\textit  {path})$}}{8}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces \textsc  {HorizonSortKey}$(\textit  {col})$}}{8}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {7}{\ignorespaces \textsc  {BuildForecastIndividual}$(\textit  {df\_long})$}}{8}{}\protected@file@percent }
-\@writefile{loa}{\contentsline {algorithm}{\numberline {8}{\ignorespaces \textsc  {BuildForecasterSurvey}$(\textit  {df\_long})$}}{8}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {7}{\ignorespaces \textsc  {BuildForecastIndividual}$(\textit  {df\_long})$}}{9}{}\protected@file@percent }
+\@writefile{loa}{\contentsline {algorithm}{\numberline {8}{\ignorespaces \textsc  {BuildForecasterSurvey}$(\textit  {df\_long})$}}{9}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {9}{\ignorespaces \textsc  {CleanIndividualTo3NF}$(\textit  {input\_dir}, \textit  {cleaned\_dir})$}}{9}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {10}{\ignorespaces \textsc  {GetQuarterSpecificValue}$(\textit  {key}, \textit  {horizon})$}}{9}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {section}{\numberline {10}Algorithms: prepare dataset for forecast revision regression}{10}{}\protected@file@percent }
@@ -46,5 +46,18 @@
 \@writefile{loa}{\contentsline {algorithm}{\numberline {16}{\ignorespaces \textsc  {RunForecastRevisionRegressions}$(\textit  {regression\_dataset}, \textit  {regression\_config})$}}{13}{}\protected@file@percent }
 \@writefile{toc}{\contentsline {subsection}{\numberline {11.2}Comparison figure}{13}{}\protected@file@percent }
 \@writefile{loa}{\contentsline {algorithm}{\numberline {17}{\ignorespaces \textsc  {PlotCumulativeForecastRevisionComparison}$(\textit  {regression\_dataset}, \textit  {fitted\_values}, \textit  {regression\_config})$}}{13}{}\protected@file@percent }
-\@writefile{toc}{\contentsline {section}{\numberline {12}Notes}{13}{}\protected@file@percent }
-\gdef \@abspage@last{14}
+\@writefile{toc}{\contentsline {section}{\numberline {12}Results and comparison}{13}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.1}Regression results: raw CPI10}{14}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Forecast revision regression results using Raw CPI10 (1991:Q4 to 2024:Q2).}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Cumulative forecast revision comparison using raw CPI10.}}{14}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.2}Regression results: adjusted CPI10}{14}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces Forecast revision regression results using Adjusted CPI10 (1991:Q4 to 2024:Q2).}}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Cumulative forecast revision comparison using adjusted CPI10.}}{15}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {12.3}Survey-level matched-sample comparison figures}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Survey-level matched-sample mean long-term forecast revision: raw versus adjusted CPI10.}}{15}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Survey-level matched-sample mean previous-survey reputation: raw versus adjusted CPI10.}}{16}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Survey-level matched-sample mean regressor 1: raw versus adjusted CPI10.}}{16}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Survey-level matched-sample mean regressor 2: raw versus adjusted CPI10.}}{17}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Survey-level matched-sample mean regressor 3: raw versus adjusted CPI10.}}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {13}Notes}{17}{}\protected@file@percent }
+\gdef \@abspage@last{18}
