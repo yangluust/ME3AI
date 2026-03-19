@@ -186,8 +186,8 @@ filtering in the codebook or a README in the cleaned folder.
 \section{Prepare dataset for forecast revision regression}
 
 In this section, all constructed objects are indexed by a forecast unit $u$ and
-a survey date $s=(y,q)$. The unit index $u$ may denote an individual
-forecaster, or an aggregate forecast object such as a mean or median series.
+a survey date $s=(y,q)$. Here the unit index $u$ corresponds to
+\texttt{forecaster\_id}.
 Let $s^{-}$ denote the previous survey date corresponding to $s$: if
 $q \in \{2,3,4\}$ then $s^{-}=(y,q-1)$, while if $q=1$ then
 $s^{-}=(y-1,4)$. With this notation, the three key constructed objects are the
@@ -212,9 +212,7 @@ adjustment. The adjusted output is written as a separate minimal table
 \texttt{adjusted\_cpi10.csv} with columns
 \texttt{(survey\_year, survey\_quarter, forecaster\_id, adjusted\_cpi10)}. This
 adjusted object is the individual-level long-term inflation expectation
-$x_{u,s}$ used in the forecast revision regression. For individual forecasts,
-$u$ corresponds to \texttt{forecaster\_id}; for later mean or median
-constructions, $u$ can instead denote the corresponding aggregate unit.
+$x_{u,s}$ used in the forecast revision regression.
 
 With quarterly inflation, the raw 10-year object is the average of 40 quarterly
 inflation rates. For the first-quarter survey, there is no realized quarter
@@ -275,10 +273,8 @@ previous survey $s^{-}$.
 \subsection{Construct reputation measure}
 
 Let $x_{u,s}$ denote the long-term inflation expectation used in the forecast
-revision regression. The construction of $x$ is intentionally flexible: it may
-be an adjusted individual CPI10 forecast, or an adjusted mean or median CPI10
-forecast, provided it is organized as a table indexed by survey date and any
-optional forecast-identity key. Define the reputation measure $\rho$ from
+revision regression, where $u$ is \texttt{forecaster\_id}. Define the
+reputation measure $\rho$ from
 \begin{equation}
 x_{u,s} = \rho_{u,s}\left((1-q)\pi_{\text{target}} + q z_a\right)
  + (1-\rho_{u,s})\left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right).
@@ -562,8 +558,7 @@ Helper functions used by the main procedure are specified below.
 \begin{algorithmic}[1]
 \State \textbf{Require} $\textit{x\_table}$: table containing long-term inflation expectation \texttt{x}.
 \State \textbf{Require} $\textit{x\_table}$ has columns
-\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{x})$ and may also contain
-\Statex \quad an optional forecast-identity key such as \texttt{forecaster\_id} or \texttt{summary\_type}.
+\Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id}, \textit{x})$.
 \State \textbf{Require} $\textit{config}$: parameter source containing
 \Statex \quad \texttt{q}, \texttt{pi\_target}, \texttt{pi\_NE}, \texttt{z\_a}, \texttt{z\_alpha}.
 \State Load parameter values from $\textit{config}$.
