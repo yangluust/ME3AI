@@ -89,6 +89,24 @@ def _get_value_or_missing(
         return pd.NA
 
 
+def _previous_survey_date(*, survey_year: int, survey_quarter: int) -> tuple[int, int]:
+    """Return the previous SPF survey date with Q1 rollover."""
+    if survey_quarter == 1:
+        return survey_year - 1, 4
+    return survey_year, survey_quarter - 1
+
+
+def _with_previous_survey_columns(df: pd.DataFrame) -> pd.DataFrame:
+    """Add previous-survey keys using SPF survey timing."""
+    out = df.copy()
+    out["prev_survey_year"] = out["survey_year"]
+    out["prev_survey_quarter"] = out["survey_quarter"] - 1
+    q1_mask = out["survey_quarter"] == 1
+    out.loc[q1_mask, "prev_survey_year"] = out.loc[q1_mask, "survey_year"] - 1
+    out.loc[q1_mask, "prev_survey_quarter"] = 4
+    return out
+
+
 def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     """Return minimal table of adjusted 10-year CPI forecasts."""
     required = {"survey_year", "survey_quarter", "forecaster_id", "CPI1", "CPI10"}
@@ -196,6 +214,14 @@ def adjust_cpi10_forecasts(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
+def construct_long_term_inflation_expectation(
+    forecast_individual: pd.DataFrame,
+) -> pd.DataFrame:
+    """Return forecaster-level long-term inflation expectation x."""
+    adjusted_cpi10 = adjust_cpi10_forecasts(forecast_individual=forecast_individual)
+    return adjusted_cpi10.rename(columns={"adjusted_cpi10": "x"})
+
+
 def construct_inflation_news(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     """Return minimal table of inflation news by survey and forecaster."""
     required = {"survey_year", "survey_quarter", "forecaster_id", "CPI1", "CPI2"}
@@ -263,8 +289,8 @@ def construct_reputation_measure(
     *,
     config: Mapping[str, object],
 ) -> pd.DataFrame:
-    """Return table with the same keys as x_table and one rho column."""
-    required = {"survey_year", "survey_quarter", "x"}
+    """Return forecaster-level reputation measure keyed by survey date."""
+    required = {"survey_year", "survey_quarter", "forecaster_id", "x"}
     missing = required.difference(x_table.columns)
     if missing:
         raise KeyError(f"Missing required columns: {sorted(missing)}")
@@ -285,7 +311,7 @@ def construct_reputation_measure(
     if denominator == 0.0:
         raise ValueError("Reputation denominator is zero.")
 
-    key_columns = [column for column in x_table.columns if column != "x"]
+    key_columns = ["survey_year", "survey_quarter", "forecaster_id"]
     output_rows: list[dict[str, object]] = []
     for row in x_table.itertuples(index=False):
         row_dict = row._asdict()
@@ -311,3 +337,136 @@ def construct_reputation_measure(
             out[integer_column] = pd.to_numeric(out[integer_column], errors="coerce").astype("Int64")
     out["rho"] = pd.to_numeric(out["rho"], errors="coerce")
     return out
+
+
+def construct_regression_dataset(
+    x_table: pd.DataFrame,
+    *,
+    inflation_news: pd.DataFrame,
+    reputation_measure: pd.DataFrame,
+) -> pd.DataFrame:
+    """Return survey-level regression dataset using matched forecaster samples."""
+    required_x = {"survey_year", "survey_quarter", "forecaster_id", "x"}
+    missing_x = required_x.difference(x_table.columns)
+    if missing_x:
+        raise KeyError(f"Missing required x_table columns: {sorted(missing_x)}")
+
+    required_news = {"survey_year", "survey_quarter", "forecaster_id", "inflation_news"}
+    missing_news = required_news.difference(inflation_news.columns)
+    if missing_news:
+        raise KeyError(f"Missing required inflation_news columns: {sorted(missing_news)}")
+
+    required_rho = {"survey_year", "survey_quarter", "forecaster_id", "rho"}
+    missing_rho = required_rho.difference(reputation_measure.columns)
+    if missing_rho:
+        raise KeyError(f"Missing required reputation_measure columns: {sorted(missing_rho)}")
+
+    current_keys = x_table.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id"]
+    ].drop_duplicates()
+    current_keys = _with_previous_survey_columns(df=current_keys)
+
+    current_x = x_table.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "x"]
+    ].rename(columns={"x": "x_current"})
+    prev_x = x_table.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "x"]
+    ].rename(
+        columns={
+            "survey_year": "prev_survey_year",
+            "survey_quarter": "prev_survey_quarter",
+            "x": "x_prev",
+        }
+    )
+    current_news = inflation_news.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "inflation_news"]
+    ].rename(columns={"inflation_news": "n_current"})
+    prev_rho = reputation_measure.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "rho"]
+    ].rename(
+        columns={
+            "survey_year": "prev_survey_year",
+            "survey_quarter": "prev_survey_quarter",
+            "rho": "rho_prev",
+        }
+    )
+
+    matched = current_keys.merge(
+        current_x,
+        how="left",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    matched = matched.merge(
+        prev_x,
+        how="left",
+        on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+    )
+    matched = matched.merge(
+        current_news,
+        how="left",
+        on=["survey_year", "survey_quarter", "forecaster_id"],
+    )
+    matched = matched.merge(
+        prev_rho,
+        how="left",
+        on=["prev_survey_year", "prev_survey_quarter", "forecaster_id"],
+    )
+
+    for value_column in ["x_current", "x_prev", "n_current", "rho_prev"]:
+        matched[value_column] = pd.to_numeric(matched[value_column], errors="coerce")
+    matched = matched.loc[
+        matched["x_current"].notna()
+        & matched["x_prev"].notna()
+        & matched["n_current"].notna()
+        & matched["rho_prev"].notna()
+    ].copy()
+    if len(matched) == 0:
+        return pd.DataFrame(
+            columns=[
+                "survey_year",
+                "survey_quarter",
+                "prev_survey_year",
+                "prev_survey_quarter",
+                "r_bar",
+                "n_bar",
+                "rho_bar_prev",
+                "z2",
+                "z3",
+                "matched_sample_size",
+            ]
+        )
+
+    matched["revision"] = matched["x_current"] - matched["x_prev"]
+    aggregated = (
+        matched.groupby(
+            ["survey_year", "survey_quarter", "prev_survey_year", "prev_survey_quarter"],
+            as_index=False,
+        )
+        .agg(
+            r_bar=("revision", "mean"),
+            n_bar=("n_current", "mean"),
+            rho_bar_prev=("rho_prev", "mean"),
+            matched_sample_size=("forecaster_id", "nunique"),
+        )
+        .sort_values(["survey_year", "survey_quarter"])
+    )
+    aggregated["z2"] = aggregated["n_bar"] * aggregated["rho_bar_prev"] * (
+        1.0 - aggregated["rho_bar_prev"]
+    )
+    aggregated["z3"] = aggregated["n_bar"] * aggregated["rho_bar_prev"] * (
+        1.0 - aggregated["rho_bar_prev"]
+    ) ** 2
+
+    for integer_column in [
+        "survey_year",
+        "survey_quarter",
+        "prev_survey_year",
+        "prev_survey_quarter",
+        "matched_sample_size",
+    ]:
+        aggregated[integer_column] = pd.to_numeric(
+            aggregated[integer_column], errors="coerce"
+        ).astype("Int64")
+    for value_column in ["r_bar", "n_bar", "rho_bar_prev", "z2", "z3"]:
+        aggregated[value_column] = pd.to_numeric(aggregated[value_column], errors="coerce")
+    return aggregated
