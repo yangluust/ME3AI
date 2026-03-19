@@ -18,13 +18,13 @@ def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
         raise KeyError(f"Missing required regression_dataset columns: {sorted(missing)}")
 
 
-def _fit_no_constant_ols(
+def _fit_ols_with_constant(
     regression_dataset: pd.DataFrame,
     *,
     regressor_column: str,
     model_label: str,
 ) -> tuple[dict[str, object], pd.DataFrame]:
-    """Estimate one no-constant OLS regression and return stats plus fitted values."""
+    """Estimate one OLS regression with intercept and return stats plus fitted values."""
     working = regression_dataset.loc[
         :, ["survey_year", "survey_quarter", "r_bar", regressor_column]
     ].copy()
@@ -36,29 +36,34 @@ def _fit_no_constant_ols(
 
     x = working[regressor_column].to_numpy(dtype=float)
     y = working["r_bar"].to_numpy(dtype=float)
-    x_sum_squares = float(np.dot(x, x))
-    if x_sum_squares == 0.0:
-        raise ValueError(f"{model_label} regressor has zero sum of squares.")
+    design_matrix = np.column_stack([np.ones(len(working), dtype=float), x])
+    if np.linalg.matrix_rank(design_matrix) < 2:
+        raise ValueError(f"{model_label} design matrix is rank deficient.")
 
-    estimate = float(np.dot(x, y) / x_sum_squares)
-    fitted = estimate * x
+    coefficients, _, _, _ = np.linalg.lstsq(design_matrix, y, rcond=None)
+    intercept = float(coefficients[0])
+    estimate = float(coefficients[1])
+    fitted = design_matrix @ coefficients
     residuals = y - fitted
     sample_size = len(working)
-    degrees_of_freedom = sample_size - 1
+    degrees_of_freedom = sample_size - 2
+    if degrees_of_freedom <= 0:
+        raise ValueError(f"{model_label} requires at least three observations.")
     ssr = float(np.dot(residuals, residuals))
     rmse = math.sqrt(ssr / sample_size)
-    uncentered_tss = float(np.dot(y, y))
-    if uncentered_tss == 0.0:
+    centered_tss = float(np.dot(y - y.mean(), y - y.mean()))
+    if centered_tss == 0.0:
         adjusted_r_squared = math.nan
     else:
-        rsquared = 1.0 - ssr / uncentered_tss
-        adjusted_r_squared = 1.0 - (sample_size / degrees_of_freedom) * (1.0 - rsquared)
+        rsquared = 1.0 - ssr / centered_tss
+        adjusted_r_squared = 1.0 - ((sample_size - 1.0) / degrees_of_freedom) * (1.0 - rsquared)
 
     if ssr == 0.0:
         p_value = 0.0
     else:
         variance = ssr / degrees_of_freedom
-        standard_error = math.sqrt(variance / x_sum_squares)
+        xtx_inverse = np.linalg.inv(design_matrix.T @ design_matrix)
+        standard_error = math.sqrt(float(variance * xtx_inverse[1, 1]))
         if standard_error == 0.0:
             p_value = 0.0
         else:
@@ -83,7 +88,7 @@ def _fit_no_constant_ols(
 def run_forecast_revision_regressions(
     regression_dataset: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Estimate the three no-constant forecast-revision regressions."""
+    """Estimate the three forecast-revision regressions with intercepts."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
 
     model_specs = [
@@ -94,7 +99,7 @@ def run_forecast_revision_regressions(
     statistics_rows: list[dict[str, object]] = []
     fitted_values: pd.DataFrame | None = None
     for model_label, regressor_column in model_specs:
-        statistics_row, model_fitted = _fit_no_constant_ols(
+        statistics_row, model_fitted = _fit_ols_with_constant(
             regression_dataset=regression_dataset,
             regressor_column=regressor_column,
             model_label=model_label,

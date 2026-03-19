@@ -259,7 +259,10 @@ realized inflation for the current quarter minus the nowcast of that same
 quarter made in the previous survey. In the cleaned wide table
 \texttt{forecast\_individual.csv}, the realized term is \texttt{CPI1} from the
 current survey row, while the nowcast term is \texttt{CPI2} from the previous
-survey row for the same unit. Thus,
+survey row for the same unit. The constructed output is written as
+\texttt{inflation\_news.csv} with columns
+\texttt{(survey\_year, survey\_quarter, forecaster\_id, inflation\_news)}.
+Thus,
 \begin{equation}
 n_{u,s} \equiv \text{CPI1}_{u,s} - \text{CPI2}_{u,s^{-}}.
 \end{equation}
@@ -291,7 +294,9 @@ The implementation must load the parameter values from a config file rather
 than hardcoding them in the construction procedure. For each observation where
 $x_{u,s}$ is available, compute $\rho_{u,s}$ using the configured parameter
 values and the constructed long-term inflation expectation dated at the same
-survey $s$.
+survey $s$. The constructed output is written as
+\texttt{reputation\_measure.csv} with columns
+\texttt{(survey\_year, survey\_quarter, forecaster\_id, rho)}.
 
 \subsection{Construct regression dataset}
 
@@ -321,14 +326,16 @@ variable $\bar{r}_s$ and the three survey-level regressors
 $\bar{n}_s$, $z_{2,s}$, and $z_{3,s}$. The reputation term entering the
 nonlinear regressors is the matched-sample mean previous-survey reputation
 $\bar{\rho}_{s^{-}}$, computed using the same set of units $\mathcal{U}_s$.
+The constructed survey-level dataset is written as
+\texttt{regression\_dataset.csv}.
 
 \section{OLS regressions for forecast revision}
 
-The three OLS regressions are estimated at the survey level without a constant:
+The three OLS regressions are estimated at the survey level with a constant:
 \begin{align}
-\bar{r}_s &= \beta_1 \bar{n}_s + \varepsilon_{1,s}, \\
-\bar{r}_s &= \beta_2 z_{2,s} + \varepsilon_{2,s}, \\
-\bar{r}_s &= \beta_3 z_{3,s} + \varepsilon_{3,s}.
+\bar{r}_s &= \alpha_1 + \beta_1 \bar{n}_s + \varepsilon_{1,s}, \\
+\bar{r}_s &= \alpha_2 + \beta_2 z_{2,s} + \varepsilon_{2,s}, \\
+\bar{r}_s &= \alpha_3 + \beta_3 z_{3,s} + \varepsilon_{3,s}.
 \end{align}
 
 \subsection{Reported regression statistics}
@@ -347,6 +354,18 @@ counterparts produced by the three regression models, using the same survey
 window in each series. Plot the data using a black dashed line. Plot the fitted
 counterpart from Model 1 using a magenta solid line, Model 2 using a blue solid
 line, and Model 3 using a red solid line.
+
+\section{Regression results}
+
+The regression implementation writes a results table and a comparison figure to
+\texttt{output/forecast\_revision/}. The table is
+\texttt{regression\_results.csv}; it contains one row for each model and the
+reported statistics described above: coefficient estimate, p value, adjusted
+$R^2$, RMSE, and sample size. The figure is
+\texttt{cumulative\_forecast\_revision\_comparison.png}; it plots the cumulative
+change in long-term inflation forecast since 1991:Q4 for the data series and
+for the fitted counterparts from Models 1, 2, and 3 using the specified line
+styles and colors.
 
 \section{Algorithms: download automation}
 
@@ -618,12 +637,12 @@ Helper functions used by the main procedure are specified below.
 \State \textbf{Require} $\textit{regression\_dataset}$: survey-level table containing
 \Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \bar{r}_s, \bar{n}_s, z_{2,s}, z_{3,s})$.
 \State Initialize output table for regression statistics.
-\State Estimate Model 1 by OLS without a constant:
-\Statex \quad $\bar{r}_s = \beta_1 \bar{n}_s + \varepsilon_{1,s}$.
-\State Estimate Model 2 by OLS without a constant:
-\Statex \quad $\bar{r}_s = \beta_2 z_{2,s} + \varepsilon_{2,s}$.
-\State Estimate Model 3 by OLS without a constant:
-\Statex \quad $\bar{r}_s = \beta_3 z_{3,s} + \varepsilon_{3,s}$.
+\State Estimate Model 1 by OLS with a constant:
+\Statex \quad $\bar{r}_s = \alpha_1 + \beta_1 \bar{n}_s + \varepsilon_{1,s}$.
+\State Estimate Model 2 by OLS with a constant:
+\Statex \quad $\bar{r}_s = \alpha_2 + \beta_2 z_{2,s} + \varepsilon_{2,s}$.
+\State Estimate Model 3 by OLS with a constant:
+\Statex \quad $\bar{r}_s = \alpha_3 + \beta_3 z_{3,s} + \varepsilon_{3,s}$.
 \For{each estimated model $m \in \{1,2,3\}$}
     \State Extract coefficient estimate, p value, adjusted $R^2$, RMSE, and sample size.
     \State Write one row of statistics for model $m$ to the output table.
@@ -655,7 +674,7 @@ Helper functions used by the main procedure are specified below.
 
 \section{Notes}
 
-Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, and \texttt{adjusted\_cpi10}, all written as CSV. Under the forecast revision regression design, the intended constructed outputs are the long-term inflation expectation $x_{u,s}$, inflation news $n_{u,s}$, and the reputation measure $\rho_{u,s}$. At present, scripts that write \texttt{inflation\_news.csv} and \texttt{reputation\_measure.csv} have not yet been added; these objects are specified here as part of the source-of-truth narrative and pseudocode, and the codebook is organized to accommodate them once implemented. Level/mean/median and probability tables remain out of scope unless added explicitly later.
+Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, \texttt{adjusted\_cpi10}, \texttt{inflation\_news}, \texttt{reputation\_measure}, and \texttt{regression\_dataset}, all written as CSV. Under the forecast revision regression design, the analysis results are written to \texttt{output/forecast\_revision/}, including \texttt{regression\_results.csv} and \texttt{cumulative\_forecast\_revision\_comparison.png}. Level/mean/median and probability tables remain out of scope unless added explicitly later.
 Codebook tables and figures are generated in \texttt{data-pipeline/report/codebook.qmd}; they are not part of the construction pseudocode.
 
 \end{document}

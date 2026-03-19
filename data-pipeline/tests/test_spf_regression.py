@@ -5,6 +5,7 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 import pandas as pd
+import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
@@ -31,7 +32,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
             {
                 "survey_year": 1991,
                 "survey_quarter": 4,
-                "r_bar": 2.0,
+                "r_bar": 3.0,
                 "n_bar": 1.0,
                 "rho_bar_prev": 0.5,
                 "z2": 1.0,
@@ -41,7 +42,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
             {
                 "survey_year": 1992,
                 "survey_quarter": 1,
-                "r_bar": 4.0,
+                "r_bar": 5.0,
                 "n_bar": 2.0,
                 "rho_bar_prev": 0.5,
                 "z2": 2.0,
@@ -51,7 +52,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
             {
                 "survey_year": 1992,
                 "survey_quarter": 2,
-                "r_bar": 6.0,
+                "r_bar": 7.0,
                 "n_bar": 3.0,
                 "rho_bar_prev": 0.5,
                 "z2": 3.0,
@@ -81,7 +82,7 @@ def test_run_forecast_revision_regressions_returns_statistics_and_fitted_values(
 
 
 def test_run_forecast_revision_regressions_matches_exact_linear_fit():
-    """Exact linear data should produce estimate 2, zero RMSE, and full fit."""
+    """Exact linear data should produce intercept 1, slope 2, zero RMSE, and full fit."""
     regression_dataset = _sample_regression_dataset()
 
     regression_statistics, fitted_values = run_forecast_revision_regressions(
@@ -89,14 +90,14 @@ def test_run_forecast_revision_regressions_matches_exact_linear_fit():
     )
 
     for row in regression_statistics.itertuples(index=False):
-        assert float(row.estimate) == 2.0
-        assert float(row.rmse) == 0.0
+        assert float(row.estimate) == pytest.approx(2.0)
+        assert float(row.rmse) == pytest.approx(0.0)
         assert int(row.sample_size) == 3
-        assert float(row.adjusted_r_squared) == 1.0
-        assert float(row.p_value) == 0.0
+        assert float(row.adjusted_r_squared) == pytest.approx(1.0)
+        assert float(row.p_value) == pytest.approx(0.0)
 
     exact_fit = fitted_values.loc[fitted_values["fitted_model_1"].notna()].copy()
-    assert exact_fit["fitted_model_1"].tolist() == [2.0, 4.0, 6.0]
+    assert exact_fit["fitted_model_1"].tolist() == pytest.approx([3.0, 5.0, 7.0])
 
 
 def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
@@ -116,6 +117,6 @@ def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
         {"survey_year": 1992, "survey_quarter": 1},
         {"survey_year": 1992, "survey_quarter": 2},
     ]
-    assert plot_panel["cumulative_data"].tolist() == [2.0, 6.0, 12.0]
+    assert plot_panel["cumulative_data"].tolist() == pytest.approx([3.0, 8.0, 15.0])
     assert len(figure.axes[0].lines) == 4
     plt.close(figure)
