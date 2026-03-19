@@ -342,6 +342,8 @@ The three OLS regressions are estimated at the survey level with a constant:
 \bar{r}_s &= \alpha_2 + \beta_2 z_{2,s} + \varepsilon_{2,s}, \\
 \bar{r}_s &= \alpha_3 + \beta_3 z_{3,s} + \varepsilon_{3,s}.
 \end{align}
+The estimation sample is restricted to survey dates from 1991:Q4 through
+2024:Q2, inclusive.
 
 \subsection{Reported regression statistics}
 
@@ -353,12 +355,12 @@ to estimate that model.
 \subsection{Comparison figure}
 
 Construct a figure showing the cumulative change in long-term inflation
-forecast since 1991:Q4. The figure should plot the cumulative sum of the
-survey-level data series $\bar{r}_s$ against the cumulative sums of the fitted
-counterparts produced by the three regression models, using the same survey
-window in each series. Plot the data using a black dashed line. Plot the fitted
-counterpart from Model 1 using a magenta solid line, Model 2 using a blue solid
-line, and Model 3 using a red solid line.
+forecast from 1991:Q4 through 2024:Q2. The figure should plot the cumulative
+sum of the survey-level data series $\bar{r}_s$ against the cumulative sums of
+the fitted counterparts produced by the three regression models, using the same
+bounded survey window in each series. Plot the data using a black dashed line.
+Plot the fitted counterpart from Model 1 using a magenta solid line, Model 2
+using a blue solid line, and Model 3 using a red solid line.
 
 \section{Regression results}
 
@@ -368,7 +370,8 @@ The regression implementation writes a results table and a comparison figure to
 reported statistics described above: coefficient estimate, p value, adjusted
 $R^2$, RMSE, and sample size. The figure is
 \texttt{cumulative\_forecast\_revision\_comparison.png}; it plots the cumulative
-change in long-term inflation forecast since 1991:Q4 for the data series and
+change in long-term inflation forecast from 1991:Q4 through 2024:Q2 for the
+data series and
 for the fitted counterparts from Models 1, 2, and 3 using the specified line
 styles and colors.
 

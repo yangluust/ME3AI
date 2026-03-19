@@ -59,6 +59,26 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "z3": 3.0,
                 "matched_sample_size": 2,
             },
+            {
+                "survey_year": 2024,
+                "survey_quarter": 2,
+                "r_bar": 9.0,
+                "n_bar": 4.0,
+                "rho_bar_prev": 0.5,
+                "z2": 4.0,
+                "z3": 4.0,
+                "matched_sample_size": 2,
+            },
+            {
+                "survey_year": 2024,
+                "survey_quarter": 3,
+                "r_bar": 11.0,
+                "n_bar": 5.0,
+                "rho_bar_prev": 0.5,
+                "z2": 5.0,
+                "z3": 5.0,
+                "matched_sample_size": 2,
+            },
         ]
     )
 
@@ -92,16 +112,16 @@ def test_run_forecast_revision_regressions_matches_exact_linear_fit():
     for row in regression_statistics.itertuples(index=False):
         assert float(row.estimate) == pytest.approx(2.0)
         assert float(row.rmse) == pytest.approx(0.0)
-        assert int(row.sample_size) == 3
+        assert int(row.sample_size) == 4
         assert float(row.adjusted_r_squared) == pytest.approx(1.0)
         assert float(row.p_value) == pytest.approx(0.0)
 
     exact_fit = fitted_values.loc[fitted_values["fitted_model_1"].notna()].copy()
-    assert exact_fit["fitted_model_1"].tolist() == pytest.approx([3.0, 5.0, 7.0])
+    assert exact_fit["fitted_model_1"].tolist() == pytest.approx([3.0, 5.0, 7.0, 9.0])
 
 
 def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
-    """Comparison plot should start at 1991:Q4 and include four plotted lines."""
+    """Comparison plot should use the bounded 1991:Q4 to 2024:Q2 window."""
     regression_dataset = _sample_regression_dataset()
     _, fitted_values = run_forecast_revision_regressions(
         regression_dataset=regression_dataset,
@@ -116,7 +136,8 @@ def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
         {"survey_year": 1991, "survey_quarter": 4},
         {"survey_year": 1992, "survey_quarter": 1},
         {"survey_year": 1992, "survey_quarter": 2},
+        {"survey_year": 2024, "survey_quarter": 2},
     ]
-    assert plot_panel["cumulative_data"].tolist() == pytest.approx([3.0, 8.0, 15.0])
+    assert plot_panel["cumulative_data"].tolist() == pytest.approx([3.0, 8.0, 15.0, 24.0])
     assert len(figure.axes[0].lines) == 4
     plt.close(figure)

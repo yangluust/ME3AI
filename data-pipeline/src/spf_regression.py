@@ -9,6 +9,11 @@ import numpy as np
 import pandas as pd
 from scipy import stats
 
+SAMPLE_START_YEAR = 1991
+SAMPLE_START_QUARTER = 4
+SAMPLE_END_YEAR = 2024
+SAMPLE_END_QUARTER = 2
+
 
 def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
     """Require the columns needed for the survey-level regressions."""
@@ -16,6 +21,26 @@ def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
     missing = required.difference(regression_dataset.columns)
     if missing:
         raise KeyError(f"Missing required regression_dataset columns: {sorted(missing)}")
+
+
+def _restrict_to_sample_window(regression_dataset: pd.DataFrame) -> pd.DataFrame:
+    """Return the bounded survey sample used for estimation and plotting."""
+    return regression_dataset.loc[
+        (
+            (regression_dataset["survey_year"] > SAMPLE_START_YEAR)
+            | (
+                (regression_dataset["survey_year"] == SAMPLE_START_YEAR)
+                & (regression_dataset["survey_quarter"] >= SAMPLE_START_QUARTER)
+            )
+        )
+        & (
+            (regression_dataset["survey_year"] < SAMPLE_END_YEAR)
+            | (
+                (regression_dataset["survey_year"] == SAMPLE_END_YEAR)
+                & (regression_dataset["survey_quarter"] <= SAMPLE_END_QUARTER)
+            )
+        )
+    ].copy()
 
 
 def _fit_ols_with_constant(
@@ -90,6 +115,7 @@ def run_forecast_revision_regressions(
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Estimate the three forecast-revision regressions with intercepts."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
+    regression_dataset = _restrict_to_sample_window(regression_dataset=regression_dataset)
 
     model_specs = [
         ("model_1", "n_bar"),
@@ -131,7 +157,7 @@ def plot_cumulative_forecast_revision_comparison(
     *,
     fitted_values: pd.DataFrame,
 ) -> tuple[plt.Figure, pd.DataFrame]:
-    """Plot cumulative data and fitted counterparts since 1991:Q4."""
+    """Plot cumulative data and fitted counterparts from 1991:Q4 to 2024:Q2."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
 
     required_fitted = {
@@ -150,10 +176,7 @@ def plot_cumulative_forecast_revision_comparison(
         how="inner",
         on=["survey_year", "survey_quarter"],
     )
-    plot_panel = plot_panel.loc[
-        (plot_panel["survey_year"] > 1991)
-        | ((plot_panel["survey_year"] == 1991) & (plot_panel["survey_quarter"] >= 4))
-    ].copy()
+    plot_panel = _restrict_to_sample_window(regression_dataset=plot_panel)
     plot_panel = plot_panel.sort_values(["survey_year", "survey_quarter"]).reset_index(drop=True)
     for value_column in ["r_bar", "fitted_model_1", "fitted_model_2", "fitted_model_3"]:
         plot_panel[value_column] = pd.to_numeric(plot_panel[value_column], errors="coerce")
@@ -195,7 +218,7 @@ def plot_cumulative_forecast_revision_comparison(
     )
     axis.set_xlabel("Survey year-quarter")
     axis.set_ylabel("Cumulative change in long-term inflation forecast")
-    axis.set_title("Cumulative change in long-term inflation forecast since 1991:Q4")
+    axis.set_title("Cumulative change in long-term inflation forecast, 1991:Q4 to 2024:Q2")
     if len(plot_panel) > 0:
         tick_step = max(len(plot_panel) // 8, 1)
         tick_idx = list(range(0, len(plot_panel), tick_step))
