@@ -75,7 +75,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#variables-3" id="toc-variables-3" class="nav-link" data-scroll-target="#variables-3">Variables</a></li>
   <li><a href="#summary-statistics-3" id="toc-summary-statistics-3" class="nav-link" data-scroll-target="#summary-statistics-3">Summary Statistics</a></li>
   </ul></li>
-  <li><a href="#reputation_measure.csv" id="toc-reputation_measure.csv" class="nav-link" data-scroll-target="#reputation_measure.csv">reputation_measure.csv</a>
+  <li><a href="#forecast_revisionreputation_measure.csv" id="toc-forecast_revisionreputation_measure.csv" class="nav-link" data-scroll-target="#forecast_revisionreputation_measure.csv">forecast_revision/<x_definition>/reputation_measure.csv</x_definition></a>
   <ul class="collapse">
   <li><a href="#keys-4" id="toc-keys-4" class="nav-link" data-scroll-target="#keys-4">Keys</a></li>
   <li><a href="#variables-4" id="toc-variables-4" class="nav-link" data-scroll-target="#variables-4">Variables</a></li>
@@ -118,7 +118,7 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="table-overview" class="level2">
 <h2 class="anchored" data-anchor-id="table-overview">Table Overview</h2>
-<div id="c5263a0d" class="cell" data-execution_count="2">
+<div id="f69434d1" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-display" data-execution_count="2">
 <div>
 
@@ -160,13 +160,13 @@ ul.task-list li input[type="checkbox"] {
 <td>`inflation_news.csv`</td>
 <td>Inflation news by survey and forecaster: curre...</td>
 <td>`survey_year`, `survey_quarter`, `forecaster_id`</td>
-<td>N/A</td>
+<td>9215</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
-<td>`reputation_measure.csv`</td>
-<td>Reputation measure rho constructed from long-t...</td>
-<td>`survey_year`, `survey_quarter`, `u`</td>
+<td>`forecast_revision/&lt;x_definition&gt;/reputation_m...</td>
+<td>Reputation measure rho constructed from the co...</td>
+<td>`survey_year`, `survey_quarter`, `forecaster_id`</td>
 <td>N/A</td>
 </tr>
 </tbody>
@@ -683,17 +683,82 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="summary-statistics-3" class="level3">
 <h3 class="anchored" data-anchor-id="summary-statistics-3">Summary Statistics</h3>
-<p><em>Run the cleaning pipeline first to generate this table</em></p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 13%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">N</th>
+<th style="text-align: right;">Missing</th>
+<th style="text-align: right;">Unique</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Std</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">survey_year</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">1995.52</td>
+<td style="text-align: right;">17.73</td>
+<td style="text-align: right;">1968</td>
+<td style="text-align: right;">2026</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">survey_quarter</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.52</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">forecaster_id</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">463</td>
+<td style="text-align: right;">310.72</td>
+<td style="text-align: right;">215.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">612</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">inflation_news</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">4270</td>
+<td style="text-align: right;">1594</td>
+<td style="text-align: right;">0.07</td>
+<td style="text-align: right;">1.72</td>
+<td style="text-align: right;">-14.1</td>
+<td style="text-align: right;">10.7</td>
+</tr>
+</tbody>
+</table>
 <hr>
 </section>
 </section>
-<section id="reputation_measure.csv" class="level2">
-<h2 class="anchored" data-anchor-id="reputation_measure.csv">reputation_measure.csv</h2>
-<p>Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters. The unit index is generic and may be a forecaster id or an aggregate identifier such as a summary type.</p>
+<section id="forecast_revisionreputation_measure.csv" class="level2">
+<h2 class="anchored" data-anchor-id="forecast_revisionreputation_measure.csv">forecast_revision/<x_definition>/reputation_measure.csv</x_definition></h2>
+<p>Reputation measure rho constructed from the config-selected long-term inflation expectation x and config-loaded structural parameters. The current pipeline writes one file per specification, such as raw_cpi10 or adjusted_cpi10.</p>
 <section id="keys-4" class="level3">
 <h3 class="anchored" data-anchor-id="keys-4">Keys</h3>
 <ul>
-<li><strong>Primary Key:</strong> <code>survey_year</code>, <code>survey_quarter</code>, <code>u</code></li>
+<li><strong>Primary Key:</strong> <code>survey_year</code>, <code>survey_quarter</code>, <code>forecaster_id</code></li>
 <li><strong>Foreign Keys:</strong> None</li>
 </ul>
 </section>
@@ -728,10 +793,10 @@ ul.task-list li input[type="checkbox"] {
 <td>Survey quarter (1-4).</td>
 </tr>
 <tr class="odd">
-<td><code>u</code></td>
-<td>string or integer</td>
+<td><code>forecaster_id</code></td>
+<td>integer</td>
 <td>-</td>
-<td>Generic unit index identifying the forecast unit, such as forecaster_id or summary_type.</td>
+<td>SPF forecaster identifier.</td>
 </tr>
 <tr class="even">
 <td><code>rho</code></td>
@@ -2826,7 +2891,7 @@ ul.task-list li input[type="checkbox"] {
 </tr>
 </tbody>
 </table>
-<div id="9df5f86c" class="cell" data-execution_count="6">
+<div id="23eec3e0" class="cell" data-execution_count="6">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -2840,22 +2905,1341 @@ ul.task-list li input[type="checkbox"] {
 <section id="inflation-news" class="level3">
 <h3 class="anchored" data-anchor-id="inflation-news">Inflation news</h3>
 <p>This section reports the cleaned inflation-news table once it is generated. The table should be keyed by <code>(survey_year, survey_quarter, forecaster_id)</code> and use the timing rule <code>CPI1(y,q) - CPI2(y,q-1)</code> with the Q1 rollover to <code>(y-1,4)</code>.</p>
-<p><em>Run the inflation-news construction step to generate <code>inflation_news.csv</code>.</em></p>
-<div id="ae62901e" class="cell" data-execution_count="8">
-<div class="cell-output cell-output-stdout">
-<pre><code>*Run the inflation-news construction step to generate `inflation_news.csv`.*</code></pre>
+<section id="availability-summary-1" class="level4">
+<h4 class="anchored" data-anchor-id="availability-summary-1">Availability Summary</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 20%">
+<col style="width: 31%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">first_survey</th>
+<th style="text-align: left;">last_survey</th>
+<th style="text-align: right;">n_surveys_with_data</th>
+<th style="text-align: right;">n_rows_with_data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1981:Q4</td>
+<td style="text-align: left;">2026:Q1</td>
+<td style="text-align: right;">178</td>
+<td style="text-align: right;">4945</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="forecasters-by-survey-1" class="level4">
+<h4 class="anchored" data-anchor-id="forecasters-by-survey-1">Forecasters by survey</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 12%">
+<col style="width: 15%">
+<col style="width: 30%">
+<col style="width: 41%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">survey_year</th>
+<th style="text-align: right;">survey_quarter</th>
+<th style="text-align: right;">n_forecasters_with_inflation_news</th>
+<th style="text-align: right;">n_forecasters_with_prev_quarter_inflation_news</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1981</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1982</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1982</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1982</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1982</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1983</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1984</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1985</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1986</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1986</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1986</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1986</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1987</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1987</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1987</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">19</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1987</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1988</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1988</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1988</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1988</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1989</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1989</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1989</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1989</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1990</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1991</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1992</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1993</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1993</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1993</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1993</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1994</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1994</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1994</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1994</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1995</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1996</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1997</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1998</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">16</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1999</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">24</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2001</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2002</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">22</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2003</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2004</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">20</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">41</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2005</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">39</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">44</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">47</td>
+<td style="text-align: right;">42</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2006</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">36</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2007</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">34</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">42</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2008</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">34</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2009</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2010</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2011</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2011</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2011</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2011</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2012</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">39</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2013</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2014</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2014</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2014</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">33</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2014</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2015</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">36</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2016</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">35</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2017</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2018</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2019</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2020</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">32</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2021</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">33</td>
+<td style="text-align: right;">30</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">31</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">29</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2022</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2023</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">29</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2024</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">25</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">30</td>
+<td style="text-align: right;">28</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">23</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2026</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">24</td>
+</tr>
+</tbody>
+</table>
+<div id="03974bf7" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="codebook_files/figure-html/cell-9-output-1.png" width="950" height="374" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
+</section>
 <section id="reputation-measure" class="level3">
 <h3 class="anchored" data-anchor-id="reputation-measure">Reputation measure</h3>
-<p>This section reports the cleaned reputation-measure table once it is generated. The construction uses the long-term inflation expectation input <code>x</code> together with config-loaded parameter values for <code>q</code>, <code>pi_target</code>, <code>pi_NE</code>, <code>z_a</code>, and <code>z_alpha</code>.</p>
-<p><em>Run the reputation-measure construction step to generate <code>reputation_measure.csv</code>.</em></p>
-<div id="7a32b3dc" class="cell" data-execution_count="10">
-<div class="cell-output cell-output-stdout">
-<pre><code>*Run the reputation-measure construction step to generate `reputation_measure.csv`.*</code></pre>
+<p>This section reports the cleaned reputation-measure tables once they are generated. The current pipeline writes one table for each forecast-revision specification:</p>
+<ul>
+<li><code>cleaned/forecast_revision/raw_cpi10/reputation_measure.csv</code></li>
+<li><code>cleaned/forecast_revision/adjusted_cpi10/reputation_measure.csv</code></li>
+</ul>
+<p>The construction uses the long-term inflation expectation input <code>x</code> together with config-loaded parameter values for <code>q</code>, <code>pi_target</code>, <code>pi_NE</code>, <code>z_a</code>, and <code>z_alpha</code>.</p>
+<section id="raw_cpi10" class="level4">
+<h4 class="anchored" data-anchor-id="raw_cpi10">raw_cpi10</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 20%">
+<col style="width: 31%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">first_survey</th>
+<th style="text-align: left;">last_survey</th>
+<th style="text-align: right;">n_surveys_with_data</th>
+<th style="text-align: right;">n_rows_with_data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1991:Q4</td>
+<td style="text-align: left;">2026:Q1</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">4613</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="summary-statistics-5" class="level4">
+<h4 class="anchored" data-anchor-id="summary-statistics-5">Summary Statistics</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">N</th>
+<th style="text-align: right;">Missing</th>
+<th style="text-align: right;">Unique</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Std</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">survey_year</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">1995.52</td>
+<td style="text-align: right;">17.73</td>
+<td style="text-align: right;">1968</td>
+<td style="text-align: right;">2026</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">survey_quarter</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.52</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">forecaster_id</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">463</td>
+<td style="text-align: right;">310.72</td>
+<td style="text-align: right;">215.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">612</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rho</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">4602</td>
+<td style="text-align: right;">331</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.19</td>
+<td style="text-align: right;">1.11</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="adjusted_cpi10" class="level4">
+<h4 class="anchored" data-anchor-id="adjusted_cpi10">adjusted_cpi10</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 21%">
+<col style="width: 20%">
+<col style="width: 31%">
+<col style="width: 27%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">first_survey</th>
+<th style="text-align: left;">last_survey</th>
+<th style="text-align: right;">n_surveys_with_data</th>
+<th style="text-align: right;">n_rows_with_data</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1991:Q4</td>
+<td style="text-align: left;">2026:Q1</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">4032</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="summary-statistics-6" class="level4">
+<h4 class="anchored" data-anchor-id="summary-statistics-6">Summary Statistics</h4>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 7%">
+<col style="width: 14%">
+<col style="width: 12%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 11%">
+<col style="width: 11%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: right;">N</th>
+<th style="text-align: right;">Missing</th>
+<th style="text-align: right;">Unique</th>
+<th style="text-align: right;">Mean</th>
+<th style="text-align: right;">Std</th>
+<th style="text-align: right;">Min</th>
+<th style="text-align: right;">Max</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">survey_year</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">59</td>
+<td style="text-align: right;">1995.52</td>
+<td style="text-align: right;">17.73</td>
+<td style="text-align: right;">1968</td>
+<td style="text-align: right;">2026</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">survey_quarter</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2.52</td>
+<td style="text-align: right;">1.12</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">forecaster_id</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">463</td>
+<td style="text-align: right;">310.72</td>
+<td style="text-align: right;">215.65</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">612</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rho</td>
+<td style="text-align: right;">9215</td>
+<td style="text-align: right;">5183</td>
+<td style="text-align: right;">1375</td>
+<td style="text-align: right;">0.87</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: right;">1.13</td>
+</tr>
+</tbody>
+</table>
+<div id="d2961691" class="cell" data-execution_count="10">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="codebook_files/figure-html/cell-11-output-1.png" width="950" height="758" class="figure-img"></p>
+</figure>
 </div>
 </div>
+</div>
+</section>
 </section>
 </section>
 
