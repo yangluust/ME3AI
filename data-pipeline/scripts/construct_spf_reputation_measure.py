@@ -1,4 +1,4 @@
-"""Construct SPF reputation-measure table from adjusted CPI10 forecasts."""
+"""Construct SPF reputation-measure table from raw CPI10 forecasts."""
 
 from __future__ import annotations
 
@@ -10,7 +10,7 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.spf_adjust import construct_reputation_measure
+from src.spf_adjust import construct_raw_cpi10_x, construct_reputation_measure
 
 
 def main(
@@ -34,11 +34,11 @@ def main(
         reputation_settings = json.load(file)
 
     cleaned_dir = repo_root / clean_settings["cleaned_dir"]
-    input_path = cleaned_dir / "adjusted_cpi10.csv"
+    input_path = cleaned_dir / "forecast_individual.csv"
     output_path = cleaned_dir / "reputation_measure.csv"
 
-    adjusted_cpi10 = pd.read_csv(input_path)
-    x_table = adjusted_cpi10.rename(columns={"adjusted_cpi10": "x"})
+    forecast_individual = pd.read_csv(input_path)
+    x_table = construct_raw_cpi10_x(forecast_individual=forecast_individual)
     reputation_measure = construct_reputation_measure(
         x_table=x_table,
         config=reputation_settings,

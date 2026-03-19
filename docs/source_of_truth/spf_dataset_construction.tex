@@ -275,9 +275,14 @@ previous survey $s^{-}$.
 
 \subsection{Construct reputation measure}
 
-Let $x_{u,s}$ denote the long-term inflation expectation used in the forecast
-revision regression, where $u$ is \texttt{forecaster\_id}. Define the
-reputation measure $\rho$ from
+For the construction of reputation and the regression dataset, let $x_{u,s}$
+denote the raw SPF 10-year CPI forecast,
+\begin{equation}
+x_{u,s} \equiv \text{CPI10}_{u,s},
+\end{equation}
+where $u$ is \texttt{forecaster\_id}. This construction intentionally uses raw
+\texttt{CPI10} rather than \texttt{adjusted\_cpi10}. Define the reputation
+measure $\rho$ from
 \begin{equation}
 x_{u,s} = \rho_{u,s}\left((1-q)\pi_{\text{target}} + q z_a\right)
  + (1-\rho_{u,s})\left((1-q)\pi_{\text{NE}} + q z_{\alpha}\right).
@@ -293,16 +298,16 @@ $z_{\alpha}$, this equation implies
 The implementation must load the parameter values from a config file rather
 than hardcoding them in the construction procedure. For each observation where
 $x_{u,s}$ is available, compute $\rho_{u,s}$ using the configured parameter
-values and the constructed long-term inflation expectation dated at the same
-survey $s$. The constructed output is written as
+values and the raw \texttt{CPI10} forecast dated at the same survey $s$. The
+constructed output is written as
 \texttt{reputation\_measure.csv} with columns
 \texttt{(survey\_year, survey\_quarter, forecaster\_id, rho)}.
 
 \subsection{Construct regression dataset}
 
 The regression dataset is indexed at the survey-date level. For each survey
-date $s$, define the individual long-term inflation forecast revision for unit
-$u$ by
+date $s$, define the individual raw 10-year CPI forecast revision for unit $u$
+by
 \begin{equation}
 r_{u,s} \equiv x_{u,s} - x_{u,s^{-}}.
 \end{equation}
@@ -575,7 +580,7 @@ Helper functions used by the main procedure are specified below.
 \begin{algorithm}[H]
 \caption{\textsc{ConstructReputationMeasure}$(\textit{x\_table}, \textit{config})$}
 \begin{algorithmic}[1]
-\State \textbf{Require} $\textit{x\_table}$: table containing long-term inflation expectation \texttt{x}.
+\State \textbf{Require} $\textit{x\_table}$: table containing raw \texttt{CPI10} as \texttt{x}.
 \State \textbf{Require} $\textit{x\_table}$ has columns
 \Statex \quad $(\textit{survey\_year}, \textit{survey\_quarter}, \textit{forecaster\_id}, \textit{x})$.
 \State \textbf{Require} $\textit{config}$: parameter source containing
@@ -599,7 +604,7 @@ Helper functions used by the main procedure are specified below.
 \begin{algorithm}[H]
 \caption{\textsc{ConstructRegressionDataset}$(\textit{x\_table}, \textit{inflation\_news}, \textit{reputation\_measure})$}
 \begin{algorithmic}[1]
-\State \textbf{Require} $\textit{x\_table}$: table containing long-term inflation expectation \texttt{x}.
+\State \textbf{Require} $\textit{x\_table}$: table containing raw \texttt{CPI10} as \texttt{x}.
 \State \textbf{Require} $\textit{inflation\_news}$: table containing \texttt{inflation\_news}.
 \State \textbf{Require} $\textit{reputation\_measure}$: table containing \texttt{rho}.
 \State \textbf{Require} each table is indexed by
@@ -674,7 +679,7 @@ Helper functions used by the main procedure are specified below.
 
 \section{Notes}
 
-Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, \texttt{adjusted\_cpi10}, \texttt{inflation\_news}, \texttt{reputation\_measure}, and \texttt{regression\_dataset}, all written as CSV. Under the forecast revision regression design, the analysis results are written to \texttt{output/forecast\_revision/}, including \texttt{regression\_results.csv} and \texttt{cumulative\_forecast\_revision\_comparison.png}. Level/mean/median and probability tables remain out of scope unless added explicitly later.
+Obtaining official Excel files may be implemented by \textsc{DownloadByVariableNames}: given variable names (e.g., CPI10, NGDP), the procedure uses \textsc{VariablePageURL} to form each variable's data page URL (e.g., \url{https://www.philadelphiafed.org/surveys-and-data/cpi10}), \textsc{GetDownloadLinks} to parse the page for Individual (and optionally other) links, and \textsc{DownloadOneFile} to save each file to \texttt{data-pipeline/input/} under the same filename as on the site. The currently implemented cleaned individual-level outputs are \texttt{forecast\_individual}, \texttt{forecaster\_survey}, \texttt{adjusted\_cpi10}, \texttt{inflation\_news}, \texttt{reputation\_measure}, and \texttt{regression\_dataset}, all written as CSV. The table \texttt{adjusted\_cpi10} remains available as a separate adjusted long-term expectation object, but the constructions of \texttt{reputation\_measure} and \texttt{regression\_dataset} use raw \texttt{CPI10} from \texttt{forecast\_individual}. Under the forecast revision regression design, the analysis results are written to \texttt{output/forecast\_revision/}, including \texttt{regression\_results.csv} and \texttt{cumulative\_forecast\_revision\_comparison.png}. Level/mean/median and probability tables remain out of scope unless added explicitly later.
 Codebook tables and figures are generated in \texttt{data-pipeline/report/codebook.qmd}; they are not part of the construction pseudocode.
 
 \end{document}

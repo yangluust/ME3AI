@@ -222,6 +222,24 @@ def construct_long_term_inflation_expectation(
     return adjusted_cpi10.rename(columns={"adjusted_cpi10": "x"})
 
 
+def construct_raw_cpi10_x(forecast_individual: pd.DataFrame) -> pd.DataFrame:
+    """Return forecaster-level raw CPI10 keyed as x."""
+    required = {"survey_year", "survey_quarter", "forecaster_id", "CPI10"}
+    missing = required.difference(forecast_individual.columns)
+    if missing:
+        raise KeyError(f"Missing required columns: {sorted(missing)}")
+
+    out = forecast_individual.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].copy()
+    out = out.rename(columns={"CPI10": "x"})
+    out["survey_year"] = pd.to_numeric(out["survey_year"], errors="coerce").astype("Int64")
+    out["survey_quarter"] = pd.to_numeric(out["survey_quarter"], errors="coerce").astype("Int64")
+    out["forecaster_id"] = pd.to_numeric(out["forecaster_id"], errors="coerce").astype("Int64")
+    out["x"] = pd.to_numeric(out["x"], errors="coerce")
+    return out
+
+
 def construct_inflation_news(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     """Return minimal table of inflation news by survey and forecaster."""
     required = {"survey_year", "survey_quarter", "forecaster_id", "CPI1", "CPI2"}
