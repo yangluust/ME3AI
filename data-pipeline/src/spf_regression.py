@@ -13,7 +13,7 @@ from scipy import stats
 
 def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
     """Require the columns needed for the survey-level regressions."""
-    required = {"survey_year", "survey_quarter", "r_bar", "n_bar", "z2", "z3"}
+    required = {"survey_year", "survey_quarter", "r_bar", "n_bar", "z2", "z3", "zP"}
     missing = required.difference(regression_dataset.columns)
     if missing:
         raise KeyError(f"Missing required regression_dataset columns: {sorted(missing)}")
@@ -165,7 +165,7 @@ def run_forecast_revision_regressions(
     *,
     config: Mapping[str, object],
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """Estimate the three forecast-revision regressions with intercepts."""
+    """Estimate the forecast-revision regressions with intercepts."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
     regression_dataset = _restrict_to_sample_window(
         regression_dataset=regression_dataset,
@@ -176,6 +176,7 @@ def run_forecast_revision_regressions(
         ("model_1", "n_bar"),
         ("model_2", "z2"),
         ("model_3", "z3"),
+        ("model_P", "zP"),
     ]
     statistics_rows: list[dict[str, object]] = []
     fitted_values: pd.DataFrame | None = None
@@ -222,6 +223,7 @@ def plot_cumulative_forecast_revision_comparison(
         "fitted_model_1",
         "fitted_model_2",
         "fitted_model_3",
+        "fitted_model_P",
     }
     missing_fitted = required_fitted.difference(fitted_values.columns)
     if missing_fitted:
@@ -237,13 +239,20 @@ def plot_cumulative_forecast_revision_comparison(
         config=config,
     )
     plot_panel = plot_panel.sort_values(["survey_year", "survey_quarter"]).reset_index(drop=True)
-    for value_column in ["r_bar", "fitted_model_1", "fitted_model_2", "fitted_model_3"]:
+    for value_column in [
+        "r_bar",
+        "fitted_model_1",
+        "fitted_model_2",
+        "fitted_model_3",
+        "fitted_model_P",
+    ]:
         plot_panel[value_column] = pd.to_numeric(plot_panel[value_column], errors="coerce")
 
     plot_panel["cumulative_data"] = plot_panel["r_bar"].cumsum()
     plot_panel["cumulative_model_1"] = plot_panel["fitted_model_1"].cumsum()
     plot_panel["cumulative_model_2"] = plot_panel["fitted_model_2"].cumsum()
     plot_panel["cumulative_model_3"] = plot_panel["fitted_model_3"].cumsum()
+    plot_panel["cumulative_model_P"] = plot_panel["fitted_model_P"].cumsum()
 
     figure, axis = plt.subplots(figsize=(10, 4))
     x_positions = range(len(plot_panel))
@@ -274,6 +283,13 @@ def plot_cumulative_forecast_revision_comparison(
         color="red",
         linestyle="-",
         label="Model 3",
+    )
+    axis.plot(
+        x_positions,
+        plot_panel["cumulative_model_P"].to_numpy(),
+        color="green",
+        linestyle="-",
+        label="Model P",
     )
     axis.set_xlabel("Survey year-quarter")
     axis.set_ylabel("Cumulative change in long-term inflation forecast")

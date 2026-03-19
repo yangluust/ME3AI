@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.12)  19 MAR 2026 16:18
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.5.12)  19 MAR 2026 17:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -306,28 +306,28 @@ Overfull \hbox (18.85841pt too wide) in paragraph at lines 271--278
 
 
 [5]
-Overfull \hbox (47.938pt too wide) in paragraph at lines 381--391
+Overfull \hbox (47.938pt too wide) in paragraph at lines 384--394
 \OT1/cmr/m/n/10.95 The re-gres-sion im-ple-men-ta-tion writes a re-sults ta-ble and a com-par-i-son fig-ure to \OT1/cmtt/m/n/10.95 output/forecast[]revision/\OT1/cmr/m/n/10.95 .
  []
 
 
 
 [6]
-Underfull \hbox (badness 3690) in paragraph at lines 410--411
+Underfull \hbox (badness 3690) in paragraph at lines 413--414
 [] $\OMS/cmsy/m/n/10.95 f[]\OML/cmm/m/it/10.95 ; []; []; []; []; []\OMS/cmsy/m/n/10.95 g$\OT1/cmr/m/n/10.95 , and
  []
 
 
 
 [7]
-Overfull \hbox (34.55362pt too wide) in paragraph at lines 452--459
+Overfull \hbox (34.55362pt too wide) in paragraph at lines 455--462
 \OT1/cmr/m/n/10.95 Ex-cel files to cleaned CSV. Raw files \OT1/cmtt/m/n/10.95 Individual[]VAR.xlsx \OT1/cmr/m/n/10.95 are as-sumed present in \OT1/cmtt/m/n/10.95 data-pipeline/input/
  []
 
 
 
 [8]
-Underfull \hbox (badness 2941) in paragraph at lines 514--515
+Underfull \hbox (badness 2941) in paragraph at lines 517--518
 []\OT1/cmr/m/n/10.95 Write $[]$ to $[]$/\OT1/cmtt/m/n/10.95 forecast[]individual.csv\OT1/cmr/m/n/10.95 , $[]$ to
  []
 
@@ -340,33 +340,33 @@ Underfull \hbox (badness 2941) in paragraph at lines 514--515
 [11]
 
 [12]
-Underfull \hbox (badness 10000) in paragraph at lines 699--699
+Underfull \hbox (badness 10000) in paragraph at lines 705--705
 []\OT1/cmr/bx/n/10.95 Algorithm 17 \OT1/cmr/m/sc/10.95 PlotCu-mu-la-tive-Fore-cas-tRe-vi-sion-Com-par-i-
  []
 
 
-Overfull \hbox (154.12299pt too wide) in paragraph at lines 720--728
+Overfull \hbox (154.12299pt too wide) in paragraph at lines 727--735
 \OT1/cmr/m/n/10.95 The fore-cast re-vi-sion pipeline is run twice us-ing the two \OT1/cmtt/m/n/10.95 x[]definitions \OT1/cmr/m/n/10.95 listed in \OT1/cmtt/m/n/10.95 data-pipeline/config/forecast[]revision.json\OT1/cmr/m/n/10.95 :
  []
 
 
-Overfull \hbox (118.01709pt too wide) in paragraph at lines 720--728
+Overfull \hbox (118.01709pt too wide) in paragraph at lines 727--735
 \OT1/cmr/m/n/10.95 The em-bed-ded ob-jects be-low are gen-er-ated by the pipeline and writ-ten un-der \OT1/cmtt/m/n/10.95 data-pipeline/output/forecast[]revision/\OT1/cmr/m/n/10.95 . 
  []
 
-(d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/regression_results.tex
 
-[13])
+
+[13] (d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/regression_results.tex)
 <d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/cumulative_forecast_revision_comparison.png, id=61, 714.7503pt x 294.1389pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/cumulative_forecast_revision_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/cumulative_forecast_revision_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/cumulative_forecast_revision_comparison.png  used on input line 735.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/raw_cpi10/cumulative_forecast_revision_comparison.png  used on input line 742.
 (pdftex.def)             Requested size: 469.75502pt x 193.32439pt.
  (d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/regression_results.tex)
 <d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/cumulative_forecast_revision_comparison.png, id=63, 714.7503pt x 294.1389pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/cumulative_forecast_revision_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/cumulative_forecast_revision_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/cumulative_forecast_revision_comparison.png  used on input line 745.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/adjusted_cpi10/cumulative_forecast_revision_comparison.png  used on input line 752.
 (pdftex.def)             Requested size: 469.75502pt x 193.32439pt.
 
 
@@ -375,7 +375,7 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/long_term_forecast_revision_comparison.png, id=64, 714.7503pt x 281.3712pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/long_term_forecast_revision_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/long_term_forecast_revision_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/long_term_forecast_revision_comparison.png  used on input line 753.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/long_term_forecast_revision_comparison.png  used on input line 760.
 (pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
 
 
@@ -383,7 +383,7 @@ Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/compari
 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/reputation_measure_comparison.png, id=69, 714.7503pt x 281.3712pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/reputation_measure_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/reputation_measure_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/reputation_measure_comparison.png  used on input line 759.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/reputation_measure_comparison.png  used on input line 766.
 (pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
 
 
@@ -391,12 +391,12 @@ Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/compari
 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_1_comparison.png, id=75, 714.7503pt x 281.3712pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_1_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_1_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_1_comparison.png  used on input line 765.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_1_comparison.png  used on input line 772.
 (pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png, id=76, 714.7503pt x 281.3712pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png  used on input line 771.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png  used on input line 778.
 (pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
 
 
@@ -404,41 +404,46 @@ Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/compari
 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png, id=82, 714.7503pt x 281.3712pt>
 File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png Graphic file (type png)
 <use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png>
-Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png  used on input line 777.
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png  used on input line 784.
+(pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
+<d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_P_comparison.png, id=83, 714.7503pt x 281.3712pt>
+File: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_P_comparison.png Graphic file (type png)
+<use d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_P_comparison.png>
+Package pdftex.def Info: d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_P_comparison.png  used on input line 790.
 (pdftex.def)             Requested size: 469.75502pt x 184.93275pt.
 
-Overfull \hbox (74.89189pt too wide) in paragraph at lines 783--785
+
+[17 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png> <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png>]
+Overfull \hbox (74.89189pt too wide) in paragraph at lines 796--798
 \OT1/cmtt/m/n/10.95 forecaster[]survey\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 adjusted[]cpi10\OT1/cmr/m/n/10.95 , \OT1/cmtt/m/n/10.95 inflation[]news\OT1/cmr/m/n/10.95 , and specification-specific ver-sions of \OT1/cmtt/m/n/10.95 reputation[]measure
  []
 
 
-Overfull \hbox (160.17558pt too wide) in paragraph at lines 783--785
+Overfull \hbox (160.17558pt too wide) in paragraph at lines 796--798
 \OT1/cmr/m/n/10.95 and \OT1/cmtt/m/n/10.95 regression[]dataset\OT1/cmr/m/n/10.95 , all writ-ten as CSV. The ded-i-cated re-gres-sion con-fig file \OT1/cmtt/m/n/10.95 data-pipeline/config/forecast[]revision.json
  []
 
 
 
-[17 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_2_comparison.png> <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_3_comparison.png>]
-
-[18] (./spf_dataset_construction.aux)
+[18 <d:/ME3AI/data-pipeline/output/forecast_revision/comparison/regressor_P_comparison.png>] (./spf_dataset_construction.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-04-14>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 4078 strings out of 469607
- 64973 string characters out of 5474758
- 461435 words of memory out of 5000000
- 30857 multiletter control sequences out of 15000+600000
+ 4085 strings out of 469607
+ 65616 string characters out of 5474758
+ 462435 words of memory out of 5000000
+ 30864 multiletter control sequences out of 15000+600000
  637939 words of font info for 81 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  57i,12n,65p,1439b,318s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb><c:/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sfrm1095.pfb>
-Output written on spf_dataset_construction.pdf (18 pages, 1872817 bytes).
+Output written on spf_dataset_construction.pdf (18 pages, 2147311 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
+ 165 PDF objects out of 1000 (max. 8388607)
  94 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

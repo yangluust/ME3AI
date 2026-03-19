@@ -305,6 +305,7 @@ def test_construct_regression_dataset_uses_matched_sample_means():
     assert float(row_q1["rho_bar_prev"]) == pytest.approx(0.5)
     assert float(row_q1["z2"]) == pytest.approx(0.075)
     assert float(row_q1["z3"]) == pytest.approx(0.0375)
+    assert float(row_q1["zP"]) == pytest.approx(0.0375)
     assert int(row_q1["matched_sample_size"]) == 2
 
     assert int(row_q2["prev_survey_year"]) == 2026
@@ -314,4 +315,5 @@ def test_construct_regression_dataset_uses_matched_sample_means():
     assert float(row_q2["rho_bar_prev"]) == pytest.approx(0.5)
     assert float(row_q2["z2"]) == pytest.approx(0.15)
     assert float(row_q2["z3"]) == pytest.approx(0.075)
+    assert float(row_q2["zP"]) == pytest.approx(0.075)
     assert int(row_q2["matched_sample_size"]) == 1

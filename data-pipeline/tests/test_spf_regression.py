@@ -40,6 +40,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": pd.NA,
                 "z3": pd.NA,
+                "zP": pd.NA,
                 "matched_sample_size": 1,
             },
             {
@@ -50,6 +51,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": 1.0,
                 "z3": 1.0,
+                "zP": 0.125,
                 "matched_sample_size": 2,
             },
             {
@@ -60,6 +62,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": 2.0,
                 "z3": 2.0,
+                "zP": 0.25,
                 "matched_sample_size": 2,
             },
             {
@@ -70,6 +73,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": 3.0,
                 "z3": 3.0,
+                "zP": 0.375,
                 "matched_sample_size": 2,
             },
             {
@@ -80,6 +84,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": 4.0,
                 "z3": 4.0,
+                "zP": 0.5,
                 "matched_sample_size": 2,
             },
             {
@@ -90,6 +95,7 @@ def _sample_regression_dataset() -> pd.DataFrame:
                 "rho_bar_prev": 0.5,
                 "z2": 5.0,
                 "z3": 5.0,
+                "zP": 0.625,
                 "matched_sample_size": 2,
             },
         ]
@@ -105,13 +111,14 @@ def test_run_forecast_revision_regressions_returns_statistics_and_fitted_values(
         config=_sample_regression_config(),
     )
 
-    assert list(regression_statistics["model"]) == ["model_1", "model_2", "model_3"]
+    assert list(regression_statistics["model"]) == ["model_1", "model_2", "model_3", "model_P"]
     assert list(fitted_values.columns) == [
         "survey_year",
         "survey_quarter",
         "fitted_model_1",
         "fitted_model_2",
         "fitted_model_3",
+        "fitted_model_P",
     ]
 
 
@@ -124,8 +131,14 @@ def test_run_forecast_revision_regressions_matches_exact_linear_fit():
         config=_sample_regression_config(),
     )
 
+    expected_estimates = {
+        "model_1": 2.0,
+        "model_2": 2.0,
+        "model_3": 2.0,
+        "model_P": 16.0,
+    }
     for row in regression_statistics.itertuples(index=False):
-        assert float(row.estimate) == pytest.approx(2.0)
+        assert float(row.estimate) == pytest.approx(expected_estimates[str(row.model)])
         assert float(row.rmse) == pytest.approx(0.0)
         assert int(row.sample_size) == 4
         assert float(row.adjusted_r_squared) == pytest.approx(1.0)
@@ -156,7 +169,7 @@ def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
         {"survey_year": 2024, "survey_quarter": 2},
     ]
     assert plot_panel["cumulative_data"].tolist() == pytest.approx([3.0, 8.0, 15.0, 24.0])
-    assert len(figure.axes[0].lines) == 4
+    assert len(figure.axes[0].lines) == 5
     plt.close(figure)
 
 

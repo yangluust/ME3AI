@@ -45,11 +45,13 @@ def _regression_results_to_latex(
         "n_bar": r"$\bar{n}_s$",
         "z2": r"$z_{2,s}$",
         "z3": r"$z_{3,s}$",
+        "zP": r"$z_{P,s}$",
     }
     model_labels = {
         "model_1": "Model 1",
         "model_2": "Model 2",
         "model_3": "Model 3",
+        "model_P": "Model P",
     }
     lines = [
         r"\begin{table}[h]",
@@ -197,6 +199,12 @@ def main(
             "regressor_3_comparison.png",
             "Survey-level matched-sample mean regressor 3",
             "Regressor 3",
+        ),
+        (
+            "zP",
+            "regressor_P_comparison.png",
+            "Survey-level matched-sample mean placebo regressor",
+            "Regressor P",
         ),
     ]
     for value_column, filename, title, y_label in comparison_specs:

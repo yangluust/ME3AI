@@ -495,6 +495,7 @@ def construct_regression_dataset(
                 "rho_bar_prev",
                 "z2",
                 "z3",
+                "zP",
                 "matched_sample_size",
             ]
         )
@@ -519,6 +520,11 @@ def construct_regression_dataset(
     aggregated["z3"] = aggregated["n_bar"] * aggregated["rho_bar_prev"] * (
         1.0 - aggregated["rho_bar_prev"]
     ) ** 2
+    aggregated["zP"] = (
+        aggregated["n_bar"]
+        * (aggregated["rho_bar_prev"] ** 2)
+        * (1.0 - aggregated["rho_bar_prev"])
+    )
 
     for integer_column in [
         "survey_year",
@@ -530,6 +536,6 @@ def construct_regression_dataset(
         aggregated[integer_column] = pd.to_numeric(
             aggregated[integer_column], errors="coerce"
         ).astype("Int64")
-    for value_column in ["r_bar", "n_bar", "rho_bar_prev", "z2", "z3"]:
+    for value_column in ["r_bar", "n_bar", "rho_bar_prev", "z2", "z3", "zP"]:
         aggregated[value_column] = pd.to_numeric(aggregated[value_column], errors="coerce")
     return aggregated
