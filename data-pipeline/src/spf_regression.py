@@ -3,16 +3,12 @@
 from __future__ import annotations
 
 import math
+from collections.abc import Mapping
 
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy import stats
-
-SAMPLE_START_YEAR = 1991
-SAMPLE_START_QUARTER = 4
-SAMPLE_END_YEAR = 2024
-SAMPLE_END_QUARTER = 2
 
 
 def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
@@ -23,24 +19,67 @@ def _validate_regression_dataset(regression_dataset: pd.DataFrame) -> None:
         raise KeyError(f"Missing required regression_dataset columns: {sorted(missing)}")
 
 
-def _restrict_to_sample_window(regression_dataset: pd.DataFrame) -> pd.DataFrame:
+def _validate_regression_config(config: Mapping[str, object]) -> None:
+    """Require regression config values needed for sample selection."""
+    required = {
+        "sample_start_year",
+        "sample_start_quarter",
+        "sample_end_year",
+        "sample_end_quarter",
+    }
+    missing = required.difference(config)
+    if missing:
+        raise KeyError(f"Missing required regression config values: {sorted(missing)}")
+
+    start_year = int(config["sample_start_year"])
+    start_quarter = int(config["sample_start_quarter"])
+    end_year = int(config["sample_end_year"])
+    end_quarter = int(config["sample_end_quarter"])
+    if start_quarter not in {1, 2, 3, 4}:
+        raise ValueError("sample_start_quarter must be in {1, 2, 3, 4}.")
+    if end_quarter not in {1, 2, 3, 4}:
+        raise ValueError("sample_end_quarter must be in {1, 2, 3, 4}.")
+    if (start_year, start_quarter) > (end_year, end_quarter):
+        raise ValueError("Regression sample start must not be after the end.")
+
+
+def _restrict_to_sample_window(
+    regression_dataset: pd.DataFrame,
+    *,
+    config: Mapping[str, object],
+) -> pd.DataFrame:
     """Return the bounded survey sample used for estimation and plotting."""
+    _validate_regression_config(config=config)
+    sample_start_year = int(config["sample_start_year"])
+    sample_start_quarter = int(config["sample_start_quarter"])
+    sample_end_year = int(config["sample_end_year"])
+    sample_end_quarter = int(config["sample_end_quarter"])
+
     return regression_dataset.loc[
         (
-            (regression_dataset["survey_year"] > SAMPLE_START_YEAR)
+            (regression_dataset["survey_year"] > sample_start_year)
             | (
-                (regression_dataset["survey_year"] == SAMPLE_START_YEAR)
-                & (regression_dataset["survey_quarter"] >= SAMPLE_START_QUARTER)
+                (regression_dataset["survey_year"] == sample_start_year)
+                & (regression_dataset["survey_quarter"] >= sample_start_quarter)
             )
         )
         & (
-            (regression_dataset["survey_year"] < SAMPLE_END_YEAR)
+            (regression_dataset["survey_year"] < sample_end_year)
             | (
-                (regression_dataset["survey_year"] == SAMPLE_END_YEAR)
-                & (regression_dataset["survey_quarter"] <= SAMPLE_END_QUARTER)
+                (regression_dataset["survey_year"] == sample_end_year)
+                & (regression_dataset["survey_quarter"] <= sample_end_quarter)
             )
         )
     ].copy()
+
+
+def _sample_window_label(config: Mapping[str, object]) -> str:
+    """Return sample window label for reporting and figure titles."""
+    _validate_regression_config(config=config)
+    return (
+        f"{int(config['sample_start_year'])}:Q{int(config['sample_start_quarter'])}"
+        f" to {int(config['sample_end_year'])}:Q{int(config['sample_end_quarter'])}"
+    )
 
 
 def _fit_ols_with_constant(
@@ -112,10 +151,15 @@ def _fit_ols_with_constant(
 
 def run_forecast_revision_regressions(
     regression_dataset: pd.DataFrame,
+    *,
+    config: Mapping[str, object],
 ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Estimate the three forecast-revision regressions with intercepts."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
-    regression_dataset = _restrict_to_sample_window(regression_dataset=regression_dataset)
+    regression_dataset = _restrict_to_sample_window(
+        regression_dataset=regression_dataset,
+        config=config,
+    )
 
     model_specs = [
         ("model_1", "n_bar"),
@@ -156,8 +200,9 @@ def plot_cumulative_forecast_revision_comparison(
     regression_dataset: pd.DataFrame,
     *,
     fitted_values: pd.DataFrame,
+    config: Mapping[str, object],
 ) -> tuple[plt.Figure, pd.DataFrame]:
-    """Plot cumulative data and fitted counterparts from 1991:Q4 to 2024:Q2."""
+    """Plot cumulative data and fitted counterparts for the configured sample."""
     _validate_regression_dataset(regression_dataset=regression_dataset)
 
     required_fitted = {
@@ -176,7 +221,10 @@ def plot_cumulative_forecast_revision_comparison(
         how="inner",
         on=["survey_year", "survey_quarter"],
     )
-    plot_panel = _restrict_to_sample_window(regression_dataset=plot_panel)
+    plot_panel = _restrict_to_sample_window(
+        regression_dataset=plot_panel,
+        config=config,
+    )
     plot_panel = plot_panel.sort_values(["survey_year", "survey_quarter"]).reset_index(drop=True)
     for value_column in ["r_bar", "fitted_model_1", "fitted_model_2", "fitted_model_3"]:
         plot_panel[value_column] = pd.to_numeric(plot_panel[value_column], errors="coerce")
@@ -218,7 +266,10 @@ def plot_cumulative_forecast_revision_comparison(
     )
     axis.set_xlabel("Survey year-quarter")
     axis.set_ylabel("Cumulative change in long-term inflation forecast")
-    axis.set_title("Cumulative change in long-term inflation forecast, 1991:Q4 to 2024:Q2")
+    axis.set_title(
+        "Cumulative change in long-term inflation forecast, "
+        f"{_sample_window_label(config=config)}"
+    )
     if len(plot_panel) > 0:
         tick_step = max(len(plot_panel) // 8, 1)
         tick_idx = list(range(0, len(plot_panel), tick_step))

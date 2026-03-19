@@ -1,0 +1,7 @@
+{
+    "sample_start_year": 1991,
+    "sample_start_quarter": 4,
+    "sample_end_year": 2024,
+    "sample_end_quarter": 2,
+    "x_definition": "raw_cpi10"
+}

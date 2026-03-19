@@ -9,6 +9,8 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.spf_adjust import (
+    ADJUSTED_CPI10_X_SOURCE,
+    RAW_CPI10_X_SOURCE,
     adjust_cpi10_forecasts,
     construct_long_term_inflation_expectation,
     construct_raw_cpi10_x,
@@ -16,6 +18,7 @@ from src.spf_adjust import (
     construct_reputation_measure,
     construct_regression_dataset,
     get_quarter_specific_value,
+    select_long_term_inflation_expectation,
 )
 
 
@@ -136,6 +139,32 @@ def test_construct_raw_cpi10_x_returns_raw_forecast_as_x():
         "x",
     ]
     assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == 2.60
+
+
+def test_select_long_term_inflation_expectation_uses_raw_cpi10_config():
+    """Config-selected x should use raw CPI10 when requested."""
+    forecast_individual = _sample_forecast_individual()
+
+    x_table = select_long_term_inflation_expectation(
+        forecast_individual=forecast_individual,
+        config={"x_definition": RAW_CPI10_X_SOURCE},
+    )
+
+    assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == 2.60
+
+
+def test_select_long_term_inflation_expectation_uses_adjusted_cpi10_config():
+    """Config-selected x should use adjusted CPI10 when requested."""
+    forecast_individual = _sample_forecast_individual()
+
+    x_table = select_long_term_inflation_expectation(
+        forecast_individual=forecast_individual,
+        config={"x_definition": ADJUSTED_CPI10_X_SOURCE},
+    )
+
+    assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == pytest.approx(
+        (2.60 * 40 - 1.20) / 39
+    )
 
 
 def test_construct_inflation_news_returns_minimal_table():

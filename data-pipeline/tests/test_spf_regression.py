@@ -1,6 +1,7 @@
 """Tests for forecast-revision regression functions."""
 
 import sys
+from typing import Dict
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -13,6 +14,16 @@ from src.spf_regression import (
     plot_cumulative_forecast_revision_comparison,
     run_forecast_revision_regressions,
 )
+
+
+def _sample_regression_config() -> Dict[str, int]:
+    """Create the default bounded sample window used in tests."""
+    return {
+        "sample_start_year": 1991,
+        "sample_start_quarter": 4,
+        "sample_end_year": 2024,
+        "sample_end_quarter": 2,
+    }
 
 
 def _sample_regression_dataset() -> pd.DataFrame:
@@ -89,6 +100,7 @@ def test_run_forecast_revision_regressions_returns_statistics_and_fitted_values(
 
     regression_statistics, fitted_values = run_forecast_revision_regressions(
         regression_dataset=regression_dataset,
+        config=_sample_regression_config(),
     )
 
     assert list(regression_statistics["model"]) == ["model_1", "model_2", "model_3"]
@@ -107,6 +119,7 @@ def test_run_forecast_revision_regressions_matches_exact_linear_fit():
 
     regression_statistics, fitted_values = run_forecast_revision_regressions(
         regression_dataset=regression_dataset,
+        config=_sample_regression_config(),
     )
 
     for row in regression_statistics.itertuples(index=False):
@@ -125,11 +138,13 @@ def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
     regression_dataset = _sample_regression_dataset()
     _, fitted_values = run_forecast_revision_regressions(
         regression_dataset=regression_dataset,
+        config=_sample_regression_config(),
     )
 
     figure, plot_panel = plot_cumulative_forecast_revision_comparison(
         regression_dataset=regression_dataset,
         fitted_values=fitted_values,
+        config=_sample_regression_config(),
     )
 
     assert plot_panel[["survey_year", "survey_quarter"]].to_dict("records") == [
@@ -141,3 +156,23 @@ def test_plot_cumulative_forecast_revision_comparison_filters_from_1991_q4():
     assert plot_panel["cumulative_data"].tolist() == pytest.approx([3.0, 8.0, 15.0, 24.0])
     assert len(figure.axes[0].lines) == 4
     plt.close(figure)
+
+
+def test_run_forecast_revision_regressions_uses_configured_sample_window():
+    """Changing the config window should change the estimation sample."""
+    regression_dataset = _sample_regression_dataset()
+    config = {
+        "sample_start_year": 1992,
+        "sample_start_quarter": 1,
+        "sample_end_year": 2024,
+        "sample_end_quarter": 2,
+    }
+
+    regression_statistics, fitted_values = run_forecast_revision_regressions(
+        regression_dataset=regression_dataset,
+        config=config,
+    )
+
+    for row in regression_statistics.itertuples(index=False):
+        assert int(row.sample_size) == 3
+    assert fitted_values["fitted_model_1"].tolist() == pytest.approx([5.0, 7.0, 9.0])

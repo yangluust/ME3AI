@@ -6,6 +6,9 @@ from collections.abc import Iterable, Mapping
 
 import pandas as pd
 
+RAW_CPI10_X_SOURCE = "raw_cpi10"
+ADJUSTED_CPI10_X_SOURCE = "adjusted_cpi10"
+
 
 def _as_numeric(value: object) -> float | pd.NA:
     """Convert SPF cell content to numeric, coercing placeholders to missing."""
@@ -238,6 +241,29 @@ def construct_raw_cpi10_x(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     out["forecaster_id"] = pd.to_numeric(out["forecaster_id"], errors="coerce").astype("Int64")
     out["x"] = pd.to_numeric(out["x"], errors="coerce")
     return out
+
+
+def select_long_term_inflation_expectation(
+    forecast_individual: pd.DataFrame,
+    *,
+    config: Mapping[str, object],
+) -> pd.DataFrame:
+    """Return config-selected long-term inflation expectation x."""
+    if "x_definition" not in config:
+        raise KeyError("Missing required config value: x_definition")
+
+    x_definition = str(config["x_definition"])
+    if x_definition == RAW_CPI10_X_SOURCE:
+        return construct_raw_cpi10_x(forecast_individual=forecast_individual)
+    if x_definition == ADJUSTED_CPI10_X_SOURCE:
+        return construct_long_term_inflation_expectation(
+            forecast_individual=forecast_individual,
+        )
+    raise ValueError(
+        "Unsupported x_definition: "
+        f"{x_definition}. Expected one of "
+        f"{[RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]}."
+    )
 
 
 def construct_inflation_news(forecast_individual: pd.DataFrame) -> pd.DataFrame:
