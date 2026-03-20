@@ -32,3 +32,9 @@ Verified long-term forecast revision root cause:
   Instead, the fitted figure uses model_input['dCPI10mn'], which is the first difference of the all-respondent quarterly mean CPI10 series.
   This creates a built-in divergence between the more revision-like quantity already available inside the replication script and the quantity actually plotted and regressed.
   The separate saved comparison compare_long_term_forecast_revision_continuing.png supports this as a verified local root cause of why the replication dependent variable departs from data-pipeline's regression_dataset['r_bar'].
+
+Verified cumulative-plot start note:
+  With the actual raw-input data, data-pipeline's regression_dataset['r_bar'] does not begin in 1991:Q4. Its first actual observation is 1992:Q1, because a forecast revision requires a previous-quarter CPI10 observation.
+  The first fitted values in data-pipeline at 1992:Q1 are small negative numbers, not zeros.
+  Therefore any apparent zero start in the plotted fitted lines is a visual impression from scale, not a property of the computed fitted series.
+  By contrast, replication's cumulative data series shows 0 at the start because model_input['dCPI10mn'] is missing at 1991:Q4 and the code applies np.nancumsum, which leaves the cumulative path at zero until the first non-missing change.
