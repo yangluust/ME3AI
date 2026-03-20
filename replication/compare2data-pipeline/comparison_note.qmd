@@ -1,94 +1,20 @@
 ---
 title: "Comparison Note"
-jupyter: data-pipeline-venv
 format:
   html:
     toc: true
     code-fold: false
 ---
 
-```{python}
-#| echo: false
-import importlib.util
-from pathlib import Path
-
-import matplotlib.pyplot as plt
-
-
-def _resolve_compare_dir() -> Path:
-    candidates = [
-        Path.cwd(),
-        Path.cwd() / "replication" / "compare2data-pipeline",
-    ]
-    for candidate in candidates:
-        if (candidate / "compare_series.py").exists():
-            return candidate
-    raise FileNotFoundError("Could not locate compare2data-pipeline/compare_series.py.")
-
-
-COMPARE_DIR = _resolve_compare_dir()
-COMPARE_SCRIPT_PATH = COMPARE_DIR / "compare_series.py"
-
-spec = importlib.util.spec_from_file_location("compare_series", COMPARE_SCRIPT_PATH)
-compare_series = importlib.util.module_from_spec(spec)
-assert spec.loader is not None
-spec.loader.exec_module(compare_series)
-
-replication_model_input = compare_series._build_replication_model_input()
-pipeline_regression_dataset = compare_series._build_pipeline_regression_dataset()
-
-replication_panel = compare_series._extract_replication_series(replication_model_input)
-pipeline_panel = compare_series._extract_pipeline_series(pipeline_regression_dataset)
-
-overlap_start, overlap_end = compare_series._compute_overlap_window(
-    replication_panel=replication_panel,
-    pipeline_panel=pipeline_panel,
-)
-
-
-def build_panel(replication_value_column: str, pipeline_value_column: str):
-    return compare_series._build_comparison_panel(
-        replication_panel=replication_panel,
-        pipeline_panel=pipeline_panel,
-        replication_value_column=replication_value_column,
-        pipeline_value_column=pipeline_value_column,
-        start=overlap_start,
-        end=overlap_end,
-    )
-
-
-def render_panel(panel, *, title: str, y_label: str, output_filename: str):
-    figure, axis = plt.subplots(figsize=(10, 4))
-    x_values = panel["survey_date"].to_numpy()
-    axis.plot(x_values, panel["replication"].to_numpy(), color="black", linewidth=1.5, label="replication")
-    axis.plot(x_values, panel["data_pipeline"].to_numpy(), color="blue", linewidth=1.5, label="data-pipeline")
-    axis.set_title(title)
-    axis.set_ylabel(y_label)
-    axis.set_xlabel("Survey date")
-    axis.grid(True, alpha=0.3)
-    axis.legend(frameon=False)
-    figure.autofmt_xdate()
-    figure.tight_layout()
-    figure.savefig(COMPARE_DIR / output_filename, dpi=300, bbox_inches="tight")
-    return figure
-
-
-long_term_panel = build_panel("long_term_forecast_revision", "long_term_forecast_revision")
-long_term_continuing_panel = build_panel("long_term_forecast_revision_continuing", "long_term_forecast_revision")
-regressor_1_panel = build_panel("regressor_1", "regressor_1")
-reputation_input_panel = build_panel("reputation_input", "reputation_input")
-
-long_term_panel.to_csv(COMPARE_DIR / "long_term_forecast_revision_comparison.csv", index=False)
-long_term_continuing_panel.to_csv(COMPARE_DIR / "long_term_forecast_revision_continuing_comparison.csv", index=False)
-regressor_1_panel.to_csv(COMPARE_DIR / "regressor_1_comparison.csv", index=False)
-reputation_input_panel.to_csv(COMPARE_DIR / "reputation_input_comparison.csv", index=False)
-```
-
 ## Overview
 
 Comparison source note.
 
 Overlapping sample window: `1992:Q1` to `2024:Q4`.
+
+Important dependency note:
+
+This QMD is a static report. It does not generate the comparison figures during render. The embedded figures and comparison CSV files are produced separately by `replication/compare2data-pipeline/compare_series.py`. Re-run that Python script first if the figures or aligned comparison data need to be refreshed.
 
 ## Series Sources
 
@@ -134,58 +60,16 @@ With the actual raw-input data, `data-pipeline`'s `regression_dataset['r_bar']` 
 
 ### Long-Term Forecast Revision
 
-```{python}
-#| echo: false
-_ = render_panel(
-    long_term_panel,
-    title="Long-term forecast revision: replication vs data-pipeline",
-    y_label="Long-term forecast revision",
-    output_filename="compare_long_term_forecast_revision.png",
-)
-```
+![](compare_long_term_forecast_revision.png)
 
 ### Long-Term Forecast Revision, Continuing-Member Proxy
 
-```{python}
-#| echo: false
-_ = render_panel(
-    long_term_continuing_panel,
-    title="Long-term forecast revision (dCPI10Cmn): replication vs data-pipeline",
-    y_label="Long-term forecast revision",
-    output_filename="compare_long_term_forecast_revision_continuing.png",
-)
-```
+![](compare_long_term_forecast_revision_continuing.png)
 
 ### Regressor 1
 
-```{python}
-#| echo: false
-_ = render_panel(
-    regressor_1_panel,
-    title="Regressor 1: replication vs data-pipeline",
-    y_label="Regressor 1",
-    output_filename="compare_regressor_1.png",
-)
-```
+![](compare_regressor_1.png)
 
 ### Reputation Input
 
-```{python}
-#| echo: false
-_ = render_panel(
-    reputation_input_panel,
-    title="Reputation input to regressors 2 and 3: replication vs data-pipeline",
-    y_label="Reputation input",
-    output_filename="compare_reputation_input.png",
-)
-```
-
-## Embedded Python Code
-
-```{python}
-#| echo: false
-#| results: asis
-print("```python")
-print(COMPARE_SCRIPT_PATH.read_text(encoding="utf-8"))
-print("```")
-```
+![](compare_reputation_input.png)
