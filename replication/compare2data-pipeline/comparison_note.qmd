@@ -1,0 +1,191 @@
+---
+title: "Comparison Note"
+jupyter: data-pipeline-venv
+format:
+  html:
+    toc: true
+    code-fold: false
+---
+
+```{python}
+#| echo: false
+import importlib.util
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+
+
+def _resolve_compare_dir() -> Path:
+    candidates = [
+        Path.cwd(),
+        Path.cwd() / "replication" / "compare2data-pipeline",
+    ]
+    for candidate in candidates:
+        if (candidate / "compare_series.py").exists():
+            return candidate
+    raise FileNotFoundError("Could not locate compare2data-pipeline/compare_series.py.")
+
+
+COMPARE_DIR = _resolve_compare_dir()
+COMPARE_SCRIPT_PATH = COMPARE_DIR / "compare_series.py"
+
+spec = importlib.util.spec_from_file_location("compare_series", COMPARE_SCRIPT_PATH)
+compare_series = importlib.util.module_from_spec(spec)
+assert spec.loader is not None
+spec.loader.exec_module(compare_series)
+
+replication_model_input = compare_series._build_replication_model_input()
+pipeline_regression_dataset = compare_series._build_pipeline_regression_dataset()
+
+replication_panel = compare_series._extract_replication_series(replication_model_input)
+pipeline_panel = compare_series._extract_pipeline_series(pipeline_regression_dataset)
+
+overlap_start, overlap_end = compare_series._compute_overlap_window(
+    replication_panel=replication_panel,
+    pipeline_panel=pipeline_panel,
+)
+
+
+def build_panel(replication_value_column: str, pipeline_value_column: str):
+    return compare_series._build_comparison_panel(
+        replication_panel=replication_panel,
+        pipeline_panel=pipeline_panel,
+        replication_value_column=replication_value_column,
+        pipeline_value_column=pipeline_value_column,
+        start=overlap_start,
+        end=overlap_end,
+    )
+
+
+def render_panel(panel, *, title: str, y_label: str, output_filename: str):
+    figure, axis = plt.subplots(figsize=(10, 4))
+    x_values = panel["survey_date"].to_numpy()
+    axis.plot(x_values, panel["replication"].to_numpy(), color="black", linewidth=1.5, label="replication")
+    axis.plot(x_values, panel["data_pipeline"].to_numpy(), color="blue", linewidth=1.5, label="data-pipeline")
+    axis.set_title(title)
+    axis.set_ylabel(y_label)
+    axis.set_xlabel("Survey date")
+    axis.grid(True, alpha=0.3)
+    axis.legend(frameon=False)
+    figure.autofmt_xdate()
+    figure.tight_layout()
+    figure.savefig(COMPARE_DIR / output_filename, dpi=300, bbox_inches="tight")
+    return figure
+
+
+long_term_panel = build_panel("long_term_forecast_revision", "long_term_forecast_revision")
+long_term_continuing_panel = build_panel("long_term_forecast_revision_continuing", "long_term_forecast_revision")
+regressor_1_panel = build_panel("regressor_1", "regressor_1")
+reputation_input_panel = build_panel("reputation_input", "reputation_input")
+
+long_term_panel.to_csv(COMPARE_DIR / "long_term_forecast_revision_comparison.csv", index=False)
+long_term_continuing_panel.to_csv(COMPARE_DIR / "long_term_forecast_revision_continuing_comparison.csv", index=False)
+regressor_1_panel.to_csv(COMPARE_DIR / "regressor_1_comparison.csv", index=False)
+reputation_input_panel.to_csv(COMPARE_DIR / "reputation_input_comparison.csv", index=False)
+```
+
+## Overview
+
+Comparison source note.
+
+Overlapping sample window: `1992:Q1` to `2024:Q4`.
+
+## Series Sources
+
+Dependent variable comparison 1:
+
+- `replication` -> `replication/replicate_figure.py` : `model_input['dCPI10mn']`
+- `data-pipeline` -> `data-pipeline/src/spf_adjust.py` : `regression_dataset['r_bar']` for `x_definition='raw_cpi10'`
+
+Dependent variable comparison 2:
+
+- `replication` -> `replication/replicate_figure.py` : `model_input['dCPI10Cmn']`
+- `data-pipeline` -> `data-pipeline/src/spf_adjust.py` : `regression_dataset['r_bar']` for `x_definition='raw_cpi10'`
+
+Regressor 1:
+
+- `replication` -> `replication/replicate_figure.py` : `model_input['FR0']`
+- `data-pipeline` -> `data-pipeline/src/spf_adjust.py` : `regression_dataset['n_bar']` for `x_definition='raw_cpi10'`
+
+Reputation-related survey-level input to regressors 2 and 3:
+
+- `replication` -> `replication/replicate_figure.py` : `model_input['rhob'].shift(1)`, saved in the comparison script as `rhob_prev_like`
+- `data-pipeline` -> `data-pipeline/src/spf_adjust.py` : `regression_dataset['rho_bar_prev']` for `x_definition='raw_cpi10'`
+
+## Findings
+
+Definition note:
+
+These are not equivalent objects. `replication` uses a legacy survey-level reputation proxy derived from the current-quarter all-respondent `CPI10` mean and then shifted one quarter. `data-pipeline` uses the matched-sample mean of previous-survey forecaster-level `rho`.
+
+Verified root cause note:
+
+In `replication/replicate_figure.py`, `model_input['rhob']` is constructed from `model_input['CPI10Cmn']`. Despite the name, `CPI10Cmn` is not a continuing-member mean. It is computed as the mean of all current-quarter respondents. Therefore the replication reputation input inherits all-respondent composition changes, while `data-pipeline`'s `rho_bar_prev` is a matched-sample previous-survey mean. This naming/definition mismatch is a root cause of the reputation-input difference, and it also underlies the original `dCPI10mn` dependent-variable mismatch.
+
+Verified long-term forecast revision root cause:
+
+In `replication/replicate_figure.py`, the script does calculate a continuing-member change proxy via an outer merge of adjacent quarters and `np.nanmean(change)`, but that quantity is stored as `model_input['dCPI10Cmn']` and is not used as the dependent variable in the fitted figure workflow. Instead, the fitted figure uses `model_input['dCPI10mn']`, which is the first difference of the all-respondent quarterly mean `CPI10` series. This creates a built-in divergence between the more revision-like quantity already available inside the replication script and the quantity actually plotted and regressed. The separate saved comparison `compare_long_term_forecast_revision_continuing.png` supports this as a verified local root cause of why the replication dependent variable departs from `data-pipeline`'s `regression_dataset['r_bar']`.
+
+Verified cumulative-plot start note:
+
+With the actual raw-input data, `data-pipeline`'s `regression_dataset['r_bar']` does not begin in `1991:Q4`. Its first actual observation is `1992:Q1`, because a forecast revision requires a previous-quarter `CPI10` observation. The first fitted values in `data-pipeline` at `1992:Q1` are small negative numbers, not zeros. Therefore any apparent zero start in the plotted fitted lines is a visual impression from scale, not a property of the computed fitted series. By contrast, `replication`'s cumulative data series shows `0` at the start because `model_input['dCPI10mn']` is missing at `1991:Q4` and the code applies `np.nancumsum`, which leaves the cumulative path at zero until the first non-missing change.
+
+## Figures
+
+### Long-Term Forecast Revision
+
+```{python}
+#| echo: false
+_ = render_panel(
+    long_term_panel,
+    title="Long-term forecast revision: replication vs data-pipeline",
+    y_label="Long-term forecast revision",
+    output_filename="compare_long_term_forecast_revision.png",
+)
+```
+
+### Long-Term Forecast Revision, Continuing-Member Proxy
+
+```{python}
+#| echo: false
+_ = render_panel(
+    long_term_continuing_panel,
+    title="Long-term forecast revision (dCPI10Cmn): replication vs data-pipeline",
+    y_label="Long-term forecast revision",
+    output_filename="compare_long_term_forecast_revision_continuing.png",
+)
+```
+
+### Regressor 1
+
+```{python}
+#| echo: false
+_ = render_panel(
+    regressor_1_panel,
+    title="Regressor 1: replication vs data-pipeline",
+    y_label="Regressor 1",
+    output_filename="compare_regressor_1.png",
+)
+```
+
+### Reputation Input
+
+```{python}
+#| echo: false
+_ = render_panel(
+    reputation_input_panel,
+    title="Reputation input to regressors 2 and 3: replication vs data-pipeline",
+    y_label="Reputation input",
+    output_filename="compare_reputation_input.png",
+)
+```
+
+## Embedded Python Code
+
+```{python}
+#| echo: false
+#| results: asis
+print("```python")
+print(COMPARE_SCRIPT_PATH.read_text(encoding="utf-8"))
+print("```")
+```

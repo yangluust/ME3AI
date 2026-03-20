@@ -90,8 +90,7 @@ def _build_pipeline_regression_dataset() -> pd.DataFrame:
 
 def _to_quarter_start(*, year: pd.Series, quarter: pd.Series) -> pd.Series:
     quarter_period = pd.PeriodIndex(
-        year=year.astype(int),
-        quarter=quarter.astype(int),
+        [f"{int(y)}Q{int(q)}" for y, q in zip(year, quarter)],
         freq="Q",
     )
     return pd.Series(quarter_period.to_timestamp(how="start"), index=year.index)

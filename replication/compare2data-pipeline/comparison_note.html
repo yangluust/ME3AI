@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Comparison Note</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="comparison_note_files/libs/clipboard/clipboard.min.js"></script>
+<script src="comparison_note_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="comparison_note_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="comparison_note_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="comparison_note_files/libs/quarto-html/popper.min.js"></script>
+<script src="comparison_note_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="comparison_note_files/libs/quarto-html/anchor.min.js"></script>
+<link href="comparison_note_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="comparison_note_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="comparison_note_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="comparison_note_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="comparison_note_files/libs/bootstrap/bootstrap-9e3ffae467580fdb927a41352e75a2e0.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#series-sources" id="toc-series-sources" class="nav-link" data-scroll-target="#series-sources">Series Sources</a></li>
+  <li><a href="#findings" id="toc-findings" class="nav-link" data-scroll-target="#findings">Findings</a></li>
+  <li><a href="#figures" id="toc-figures" class="nav-link" data-scroll-target="#figures">Figures</a>
+  <ul class="collapse">
+  <li><a href="#long-term-forecast-revision" id="toc-long-term-forecast-revision" class="nav-link" data-scroll-target="#long-term-forecast-revision">Long-Term Forecast Revision</a></li>
+  <li><a href="#long-term-forecast-revision-continuing-member-proxy" id="toc-long-term-forecast-revision-continuing-member-proxy" class="nav-link" data-scroll-target="#long-term-forecast-revision-continuing-member-proxy">Long-Term Forecast Revision, Continuing-Member Proxy</a></li>
+  <li><a href="#regressor-1" id="toc-regressor-1" class="nav-link" data-scroll-target="#regressor-1">Regressor 1</a></li>
+  <li><a href="#reputation-input" id="toc-reputation-input" class="nav-link" data-scroll-target="#reputation-input">Reputation Input</a></li>
+  </ul></li>
+  <li><a href="#embedded-python-code" id="toc-embedded-python-code" class="nav-link" data-scroll-target="#embedded-python-code">Embedded Python Code</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Comparison Note</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>Comparison source note.</p>
+<p>Overlapping sample window: <code>1992:Q1</code> to <code>2024:Q4</code>.</p>
+</section>
+<section id="series-sources" class="level2">
+<h2 class="anchored" data-anchor-id="series-sources">Series Sources</h2>
+<p>Dependent variable comparison 1:</p>
+<ul>
+<li><code>replication</code> -&gt; <code>replication/replicate_figure.py</code> : <code>model_input['dCPI10mn']</code></li>
+<li><code>data-pipeline</code> -&gt; <code>data-pipeline/src/spf_adjust.py</code> : <code>regression_dataset['r_bar']</code> for <code>x_definition='raw_cpi10'</code></li>
+</ul>
+<p>Dependent variable comparison 2:</p>
+<ul>
+<li><code>replication</code> -&gt; <code>replication/replicate_figure.py</code> : <code>model_input['dCPI10Cmn']</code></li>
+<li><code>data-pipeline</code> -&gt; <code>data-pipeline/src/spf_adjust.py</code> : <code>regression_dataset['r_bar']</code> for <code>x_definition='raw_cpi10'</code></li>
+</ul>
+<p>Regressor 1:</p>
+<ul>
+<li><code>replication</code> -&gt; <code>replication/replicate_figure.py</code> : <code>model_input['FR0']</code></li>
+<li><code>data-pipeline</code> -&gt; <code>data-pipeline/src/spf_adjust.py</code> : <code>regression_dataset['n_bar']</code> for <code>x_definition='raw_cpi10'</code></li>
+</ul>
+<p>Reputation-related survey-level input to regressors 2 and 3:</p>
+<ul>
+<li><code>replication</code> -&gt; <code>replication/replicate_figure.py</code> : <code>model_input['rhob'].shift(1)</code>, saved in the comparison script as <code>rhob_prev_like</code></li>
+<li><code>data-pipeline</code> -&gt; <code>data-pipeline/src/spf_adjust.py</code> : <code>regression_dataset['rho_bar_prev']</code> for <code>x_definition='raw_cpi10'</code></li>
+</ul>
+</section>
+<section id="findings" class="level2">
+<h2 class="anchored" data-anchor-id="findings">Findings</h2>
+<p>Definition note:</p>
+<p>These are not equivalent objects. <code>replication</code> uses a legacy survey-level reputation proxy derived from the current-quarter all-respondent <code>CPI10</code> mean and then shifted one quarter. <code>data-pipeline</code> uses the matched-sample mean of previous-survey forecaster-level <code>rho</code>.</p>
+<p>Verified root cause note:</p>
+<p>In <code>replication/replicate_figure.py</code>, <code>model_input['rhob']</code> is constructed from <code>model_input['CPI10Cmn']</code>. Despite the name, <code>CPI10Cmn</code> is not a continuing-member mean. It is computed as the mean of all current-quarter respondents. Therefore the replication reputation input inherits all-respondent composition changes, while <code>data-pipeline</code>’s <code>rho_bar_prev</code> is a matched-sample previous-survey mean. This naming/definition mismatch is a root cause of the reputation-input difference, and it also underlies the original <code>dCPI10mn</code> dependent-variable mismatch.</p>
+<p>Verified long-term forecast revision root cause:</p>
+<p>In <code>replication/replicate_figure.py</code>, the script does calculate a continuing-member change proxy via an outer merge of adjacent quarters and <code>np.nanmean(change)</code>, but that quantity is stored as <code>model_input['dCPI10Cmn']</code> and is not used as the dependent variable in the fitted figure workflow. Instead, the fitted figure uses <code>model_input['dCPI10mn']</code>, which is the first difference of the all-respondent quarterly mean <code>CPI10</code> series. This creates a built-in divergence between the more revision-like quantity already available inside the replication script and the quantity actually plotted and regressed. The separate saved comparison <code>compare_long_term_forecast_revision_continuing.png</code> supports this as a verified local root cause of why the replication dependent variable departs from <code>data-pipeline</code>’s <code>regression_dataset['r_bar']</code>.</p>
+<p>Verified cumulative-plot start note:</p>
+<p>With the actual raw-input data, <code>data-pipeline</code>’s <code>regression_dataset['r_bar']</code> does not begin in <code>1991:Q4</code>. Its first actual observation is <code>1992:Q1</code>, because a forecast revision requires a previous-quarter <code>CPI10</code> observation. The first fitted values in <code>data-pipeline</code> at <code>1992:Q1</code> are small negative numbers, not zeros. Therefore any apparent zero start in the plotted fitted lines is a visual impression from scale, not a property of the computed fitted series. By contrast, <code>replication</code>’s cumulative data series shows <code>0</code> at the start because <code>model_input['dCPI10mn']</code> is missing at <code>1991:Q4</code> and the code applies <code>np.nancumsum</code>, which leaves the cumulative path at zero until the first non-missing change.</p>
+</section>
+<section id="figures" class="level2">
+<h2 class="anchored" data-anchor-id="figures">Figures</h2>
+<section id="long-term-forecast-revision" class="level3">
+<h3 class="anchored" data-anchor-id="long-term-forecast-revision">Long-Term Forecast Revision</h3>
+<div id="dd596c3e" class="cell" data-execution_count="2">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="comparison_note_files/figure-html/cell-3-output-1.png" width="950" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="long-term-forecast-revision-continuing-member-proxy" class="level3">
+<h3 class="anchored" data-anchor-id="long-term-forecast-revision-continuing-member-proxy">Long-Term Forecast Revision, Continuing-Member Proxy</h3>
+<div id="6aa13f6d" class="cell" data-execution_count="3">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="comparison_note_files/figure-html/cell-4-output-1.png" width="950" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="regressor-1" class="level3">
+<h3 class="anchored" data-anchor-id="regressor-1">Regressor 1</h3>
+<div id="09e6c688" class="cell" data-execution_count="4">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="comparison_note_files/figure-html/cell-5-output-1.png" width="950" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="reputation-input" class="level3">
+<h3 class="anchored" data-anchor-id="reputation-input">Reputation Input</h3>
+<div id="a0698a5d" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="comparison_note_files/figure-html/cell-6-output-1.png" width="950" height="374" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="embedded-python-code" class="level2">
+<h2 class="anchored" data-anchor-id="embedded-python-code">Embedded Python Code</h2>
+<div id="cdec0e93" class="cell" data-results="asis" data-execution_count="6">
+<div class="cell-output cell-output-stdout">
+<pre><code>```python
+from __future__ import annotations
+
+import json
+import sys
+from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+
+
+COMPARE_DIR = Path(__file__).resolve().parent
+REPLICATION_DIR = COMPARE_DIR.parent
+REPO_ROOT = REPLICATION_DIR.parent
+DATA_PIPELINE_DIR = REPO_ROOT / "data-pipeline"
+
+sys.path.insert(0, str(REPLICATION_DIR))
+sys.path.insert(0, str(DATA_PIPELINE_DIR))
+
+from replicate_figure import build_cpiall, build_lte, load_excel_table  # noqa: E402
+from src.spf_adjust import (  # noqa: E402
+    RAW_CPI10_X_SOURCE,
+    construct_inflation_news,
+    construct_reputation_measure,
+    construct_regression_dataset,
+    select_long_term_inflation_expectation,
+)
+from src.spf_clean import build_forecast_individual, load_individual_sheet  # noqa: E402
+
+
+def _load_pipeline_forecast_individual() -&gt; pd.DataFrame:
+    input_dir = DATA_PIPELINE_DIR / "input"
+    individual_paths = [
+        input_dir / "Individual_CPI.xlsx",
+        input_dir / "Individual_CPI10.xlsx",
+    ]
+    frames = [load_individual_sheet(path=path) for path in individual_paths]
+    df_long = pd.concat(frames, ignore_index=True)
+    return build_forecast_individual(df_long=df_long)
+
+
+def _build_replication_model_input() -&gt; pd.DataFrame:
+    short_horizon_raw = load_excel_table(path=REPLICATION_DIR / "rawdata" / "Individual_CPI.xlsx")
+    long_horizon_raw = load_excel_table(path=REPLICATION_DIR / "rawdata" / "Individual_CPI10.xlsx")
+    cpiall = build_cpiall(short_horizon_raw=short_horizon_raw)
+    lte = build_lte(long_horizon_raw=long_horizon_raw)
+
+    model_input = cpiall["cont_revisions"].merge(
+        lte,
+        how="outer",
+        left_on="fdat",
+        right_on="ltfdat",
+    )
+    model_input["fdat"] = model_input["fdat"].combine_first(model_input["ltfdat"])
+    model_input = model_input.drop(columns=["ltfdat"])
+    model_input = model_input.sort_values(by="fdat", kind="mergesort").reset_index(drop=True)
+
+    gam = 0.97
+    a = 1.5
+    alph = 9.5
+    za = 3.9
+    zalph = 8.5
+    num_a = gam * a + (1.0 - gam) * za
+    num_alph = gam * alph + (1.0 - gam) * zalph
+
+    model_input["rhob"] = (num_alph - model_input["CPI10Cmn"]) / (num_alph - num_a)
+    model_input["rhob_prev_like"] = model_input["rhob"].shift(1)
+    return model_input
+
+
+def _build_pipeline_regression_dataset() -&gt; pd.DataFrame:
+    forecast_individual = _load_pipeline_forecast_individual()
+    x_table = select_long_term_inflation_expectation(
+        forecast_individual=forecast_individual,
+        config={"x_definition": RAW_CPI10_X_SOURCE},
+    )
+    inflation_news = construct_inflation_news(forecast_individual=forecast_individual)
+
+    with open(DATA_PIPELINE_DIR / "config" / "reputation_measure.json", encoding="utf-8") as file:
+        reputation_config = json.load(file)
+    reputation_measure = construct_reputation_measure(
+        x_table=x_table,
+        config=reputation_config,
+    )
+    return construct_regression_dataset(
+        x_table=x_table,
+        inflation_news=inflation_news,
+        reputation_measure=reputation_measure,
+    )
+
+
+def _to_quarter_start(*, year: pd.Series, quarter: pd.Series) -&gt; pd.Series:
+    quarter_period = pd.PeriodIndex(
+        [f"{int(y)}Q{int(q)}" for y, q in zip(year, quarter)],
+        freq="Q",
+    )
+    return pd.Series(quarter_period.to_timestamp(how="start"), index=year.index)
+
+
+def _extract_replication_series(model_input: pd.DataFrame) -&gt; pd.DataFrame:
+    out = model_input.loc[
+        :,
+        ["fdat", "dCPI10mn", "dCPI10Cmn", "FR0", "rhob_prev_like"],
+    ].copy()
+    out = out.rename(
+        columns={
+            "fdat": "survey_date",
+            "dCPI10mn": "long_term_forecast_revision",
+            "dCPI10Cmn": "long_term_forecast_revision_continuing",
+            "FR0": "regressor_1",
+            "rhob_prev_like": "reputation_input",
+        }
+    )
+    out["survey_date"] = pd.to_datetime(out["survey_date"])
+    return out
+
+
+def _extract_pipeline_series(regression_dataset: pd.DataFrame) -&gt; pd.DataFrame:
+    out = regression_dataset.loc[
+        :,
+        ["survey_year", "survey_quarter", "r_bar", "n_bar", "rho_bar_prev"],
+    ].copy()
+    out["survey_date"] = _to_quarter_start(
+        year=out["survey_year"],
+        quarter=out["survey_quarter"],
+    )
+    out = out.rename(
+        columns={
+            "r_bar": "long_term_forecast_revision",
+            "n_bar": "regressor_1",
+            "rho_bar_prev": "reputation_input",
+        }
+    )
+    return out.loc[:, ["survey_date", "long_term_forecast_revision", "regressor_1", "reputation_input"]]
+
+
+def _series_bounds(series: pd.Series, dates: pd.Series) -&gt; tuple[pd.Timestamp, pd.Timestamp]:
+    valid = series.notna()
+    if not valid.any():
+        raise ValueError("Series has no non-missing observations.")
+    valid_dates = pd.to_datetime(dates.loc[valid])
+    return valid_dates.min(), valid_dates.max()
+
+
+def _compute_overlap_window(replication_panel: pd.DataFrame, pipeline_panel: pd.DataFrame) -&gt; tuple[pd.Timestamp, pd.Timestamp]:
+    starts: list[pd.Timestamp] = []
+    ends: list[pd.Timestamp] = []
+    for column in ["long_term_forecast_revision", "regressor_1", "reputation_input"]:
+        rep_start, rep_end = _series_bounds(
+            series=replication_panel[column],
+            dates=replication_panel["survey_date"],
+        )
+        pipe_start, pipe_end = _series_bounds(
+            series=pipeline_panel[column],
+            dates=pipeline_panel["survey_date"],
+        )
+        starts.append(max(rep_start, pipe_start))
+        ends.append(min(rep_end, pipe_end))
+
+    overlap_start = max(starts)
+    overlap_end = min(ends)
+    if overlap_start &gt; overlap_end:
+        raise ValueError("No overlapping sample window across the requested series.")
+    return overlap_start, overlap_end
+
+
+def _restrict_to_window(panel: pd.DataFrame, *, start: pd.Timestamp, end: pd.Timestamp) -&gt; pd.DataFrame:
+    dates = pd.to_datetime(panel["survey_date"])
+    return panel.loc[(dates &gt;= start) &amp; (dates &lt;= end)].copy()
+
+
+def _build_comparison_panel(
+    replication_panel: pd.DataFrame,
+    pipeline_panel: pd.DataFrame,
+    *,
+    replication_value_column: str,
+    pipeline_value_column: str,
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+) -&gt; pd.DataFrame:
+    rep = _restrict_to_window(replication_panel, start=start, end=end).rename(
+        columns={replication_value_column: "replication"}
+    )
+    pipe = _restrict_to_window(pipeline_panel, start=start, end=end).rename(
+        columns={pipeline_value_column: "data_pipeline"}
+    )
+    merged = rep.loc[:, ["survey_date", "replication"]].merge(
+        pipe.loc[:, ["survey_date", "data_pipeline"]],
+        how="inner",
+        on="survey_date",
+    )
+    return merged.sort_values("survey_date").reset_index(drop=True)
+
+
+def _plot_comparison(panel: pd.DataFrame, *, title: str, y_label: str, output_path: Path) -&gt; None:
+    figure, axis = plt.subplots(figsize=(10, 4))
+    x_values = pd.to_datetime(panel["survey_date"]).to_numpy()
+    axis.plot(x_values, panel["replication"].to_numpy(), color="black", linewidth=1.5, label="replication")
+    axis.plot(x_values, panel["data_pipeline"].to_numpy(), color="blue", linewidth=1.5, label="data-pipeline")
+    axis.set_title(title)
+    axis.set_ylabel(y_label)
+    axis.set_xlabel("Survey date")
+    axis.grid(True, alpha=0.3)
+    axis.legend(frameon=False)
+    figure.autofmt_xdate()
+    figure.tight_layout()
+    figure.savefig(output_path, dpi=300, bbox_inches="tight")
+    plt.close(figure)
+
+
+def _write_note(*, sample_start: pd.Timestamp, sample_end: pd.Timestamp) -&gt; None:
+    note = "\n".join(
+        [
+            "Comparison source note",
+            "",
+            f"Overlapping sample window: {sample_start.strftime('%Y:Q')}{sample_start.quarter} to {sample_end.strftime('%Y:Q')}{sample_end.quarter}",
+            "",
+            "Dependent variable comparison 1:",
+            "  replication -&gt; replication/replicate_figure.py : model_input['dCPI10mn']",
+            "  data-pipeline -&gt; data-pipeline/src/spf_adjust.py : regression_dataset['r_bar'] for x_definition='raw_cpi10'",
+            "",
+            "Dependent variable comparison 2:",
+            "  replication -&gt; replication/replicate_figure.py : model_input['dCPI10Cmn']",
+            "  data-pipeline -&gt; data-pipeline/src/spf_adjust.py : regression_dataset['r_bar'] for x_definition='raw_cpi10'",
+            "",
+            "Regressor 1:",
+            "  replication -&gt; replication/replicate_figure.py : model_input['FR0']",
+            "  data-pipeline -&gt; data-pipeline/src/spf_adjust.py : regression_dataset['n_bar'] for x_definition='raw_cpi10'",
+            "",
+            "Reputation-related survey-level input to regressors 2 and 3:",
+            "  replication -&gt; replication/replicate_figure.py : model_input['rhob'].shift(1), saved here as 'rhob_prev_like'",
+            "  data-pipeline -&gt; data-pipeline/src/spf_adjust.py : regression_dataset['rho_bar_prev'] for x_definition='raw_cpi10'",
+            "",
+            "Definition note:",
+            "  These are not equivalent objects. replication uses a legacy survey-level reputation proxy derived from the current-quarter all-respondent CPI10 mean and then shifted one quarter. data-pipeline uses the matched-sample mean of previous-survey forecaster-level rho.",
+        ]
+    )
+    (COMPARE_DIR / "comparison_note.txt").write_text(note + "\n", encoding="utf-8")
+
+
+def main() -&gt; None:
+    COMPARE_DIR.mkdir(parents=True, exist_ok=True)
+
+    replication_model_input = _build_replication_model_input()
+    pipeline_regression_dataset = _build_pipeline_regression_dataset()
+
+    replication_panel = _extract_replication_series(replication_model_input)
+    pipeline_panel = _extract_pipeline_series(pipeline_regression_dataset)
+
+    overlap_start, overlap_end = _compute_overlap_window(
+        replication_panel=replication_panel,
+        pipeline_panel=pipeline_panel,
+    )
+
+    comparison_specs = [
+        (
+            "long_term_forecast_revision",
+            "long_term_forecast_revision",
+            "compare_long_term_forecast_revision.png",
+            "Long-term forecast revision: replication vs data-pipeline",
+            "Long-term forecast revision",
+        ),
+        (
+            "long_term_forecast_revision_continuing",
+            "long_term_forecast_revision",
+            "compare_long_term_forecast_revision_continuing.png",
+            "Long-term forecast revision (dCPI10Cmn): replication vs data-pipeline",
+            "Long-term forecast revision",
+        ),
+        (
+            "regressor_1",
+            "regressor_1",
+            "compare_regressor_1.png",
+            "Regressor 1: replication vs data-pipeline",
+            "Regressor 1",
+        ),
+        (
+            "reputation_input",
+            "reputation_input",
+            "compare_reputation_input.png",
+            "Reputation input to regressors 2 and 3: replication vs data-pipeline",
+            "Reputation input",
+        ),
+    ]
+
+    for replication_value_column, pipeline_value_column, filename, title, y_label in comparison_specs:
+        panel = _build_comparison_panel(
+            replication_panel=replication_panel,
+            pipeline_panel=pipeline_panel,
+            replication_value_column=replication_value_column,
+            pipeline_value_column=pipeline_value_column,
+            start=overlap_start,
+            end=overlap_end,
+        )
+        panel.to_csv(COMPARE_DIR / f"{replication_value_column}_comparison.csv", index=False)
+        _plot_comparison(
+            panel=panel,
+            title=title,
+            y_label=y_label,
+            output_path=COMPARE_DIR / filename,
+        )
+
+    _write_note(sample_start=overlap_start, sample_end=overlap_end)
+    print(f"Saved comparison outputs to {COMPARE_DIR}")
+    print(
+        "Overlapping sample window:",
+        f"{overlap_start.year}:Q{overlap_start.quarter}",
+        "to",
+        f"{overlap_end.year}:Q{overlap_end.quarter}",
+    )
+
+
+if __name__ == "__main__":
+    main()
+
+```</code></pre>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
