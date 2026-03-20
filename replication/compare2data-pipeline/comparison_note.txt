@@ -20,3 +20,15 @@ Reputation-related survey-level input to regressors 2 and 3:
 
 Definition note:
   These are not equivalent objects. replication uses a legacy survey-level reputation proxy derived from the current-quarter all-respondent CPI10 mean and then shifted one quarter. data-pipeline uses the matched-sample mean of previous-survey forecaster-level rho.
+
+Verified root cause note:
+  In replication/replicate_figure.py, model_input['rhob'] is constructed from model_input['CPI10Cmn'].
+  Despite the name, CPI10Cmn is not a continuing-member mean. It is computed as the mean of all current-quarter respondents.
+  Therefore the replication reputation input inherits all-respondent composition changes, while data-pipeline's rho_bar_prev is a matched-sample previous-survey mean.
+  This naming/definition mismatch is a root cause of the reputation-input difference, and it also underlies the original dCPI10mn dependent-variable mismatch.
+
+Verified long-term forecast revision root cause:
+  In replication/replicate_figure.py, the script does calculate a continuing-member change proxy via an outer merge of adjacent quarters and np.nanmean(change), but that quantity is stored as model_input['dCPI10Cmn'] and is not used as the dependent variable in the fitted figure workflow.
+  Instead, the fitted figure uses model_input['dCPI10mn'], which is the first difference of the all-respondent quarterly mean CPI10 series.
+  This creates a built-in divergence between the more revision-like quantity already available inside the replication script and the quantity actually plotted and regressed.
+  The separate saved comparison compare_long_term_forecast_revision_continuing.png supports this as a verified local root cause of why the replication dependent variable departs from data-pipeline's regression_dataset['r_bar'].
