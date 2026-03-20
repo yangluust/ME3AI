@@ -64,14 +64,14 @@ TABLES = {
         }
     },
     "reputation_measure": {
-        "file": "reputation_measure.csv",
-        "description": "Reputation measure rho constructed from long-term inflation expectation x and config-loaded structural parameters. The unit index is generic and may be a forecaster id or an aggregate identifier such as a summary type.",
-        "primary_key": ["survey_year", "survey_quarter", "u"],
+        "file": "forecast_revision/<x_definition>/reputation_measure.csv",
+        "description": "Reputation measure rho constructed from the config-selected long-term inflation expectation x and config-loaded structural parameters. The current pipeline writes one file per specification, such as raw_cpi10 or adjusted_cpi10.",
+        "primary_key": ["survey_year", "survey_quarter", "forecaster_id"],
         "foreign_keys": {},
         "variables": {
             "survey_year": {"type": "integer", "unit": "-", "desc": "Survey year."},
             "survey_quarter": {"type": "integer", "unit": "-", "desc": "Survey quarter (1-4)."},
-            "u": {"type": "string or integer", "unit": "-", "desc": "Generic unit index identifying the forecast unit, such as forecaster_id or summary_type."},
+            "forecaster_id": {"type": "integer", "unit": "-", "desc": "SPF forecaster identifier."},
             "rho": {"type": "float", "unit": "-", "desc": "Reputation measure backed out from long-term inflation expectation x and config-loaded parameters."},
         }
     },
@@ -586,7 +586,13 @@ else:
 
 ### Reputation measure
 
-This section reports the cleaned reputation-measure table once it is generated.
+This section reports the cleaned reputation-measure tables once they are
+generated. The current pipeline writes one table for each forecast-revision
+specification:
+
+- `cleaned/forecast_revision/raw_cpi10/reputation_measure.csv`
+- `cleaned/forecast_revision/adjusted_cpi10/reputation_measure.csv`
+
 The construction uses the long-term inflation expectation input `x` together
 with config-loaded parameter values for `q`, `pi_target`, `pi_NE`, `z_a`, and
 `z_alpha`.
@@ -595,30 +601,43 @@ with config-loaded parameter values for `q`, `pi_target`, `pi_NE`, `z_a`, and
 #| echo: false
 #| output: asis
 
-rho_path = CLEANED_DIR / "reputation_measure.csv"
-if not rho_path.exists():
-    print("*Run the reputation-measure construction step to generate `reputation_measure.csv`.*")
+rho_paths = {
+    "raw_cpi10": CLEANED_DIR / "forecast_revision" / "raw_cpi10" / "reputation_measure.csv",
+    "adjusted_cpi10": CLEANED_DIR / "forecast_revision" / "adjusted_cpi10" / "reputation_measure.csv",
+}
+missing = [label for label, path in rho_paths.items() if not path.exists()]
+if missing:
+    print("*Run the reputation-measure construction step to generate the specification-specific `reputation_measure.csv` files under `cleaned/forecast_revision/`.*")
 else:
-    reputation = pd.read_csv(rho_path)
-    availability_df = pd.DataFrame([availability_summary(df=reputation, value_col="rho")])
-    print("\n#### Availability Summary\n")
-    print(availability_df.to_markdown(index=False))
-    print("\n#### Summary Statistics\n")
-    print(compute_summary(reputation).to_markdown(index=False))
+    for label, rho_path in rho_paths.items():
+        reputation = pd.read_csv(rho_path)
+        availability_df = pd.DataFrame([availability_summary(df=reputation, value_col="rho")])
+        print(f"\n#### {label}\n")
+        print(availability_df.to_markdown(index=False))
+        print("\n#### Summary Statistics\n")
+        print(compute_summary(reputation).to_markdown(index=False))
 ```
 
 ```{python reputation-measure-codebook-figure}
 #| echo: false
 
-rho_path = CLEANED_DIR / "reputation_measure.csv"
-if not rho_path.exists():
-    print("*Run the reputation-measure construction step to generate `reputation_measure.csv`.*")
+rho_paths = {
+    "raw_cpi10": CLEANED_DIR / "forecast_revision" / "raw_cpi10" / "reputation_measure.csv",
+    "adjusted_cpi10": CLEANED_DIR / "forecast_revision" / "adjusted_cpi10" / "reputation_measure.csv",
+}
+missing = [label for label, path in rho_paths.items() if not path.exists()]
+if missing:
+    print("*Run the reputation-measure construction step to generate the specification-specific `reputation_measure.csv` files under `cleaned/forecast_revision/`.*")
 else:
-    reputation = pd.read_csv(rho_path)
-    available = available_rows(df=reputation, value_col="rho")
-    if len(available) == 0:
-        print("*`reputation_measure.csv` exists but has no non-missing `rho` values.*")
-    else:
+    fig, axes = plt.subplots(nrows=2, ncols=1, figsize=(10, 8), sharex=False)
+    for ax, (label, rho_path) in zip(axes, rho_paths.items()):
+        reputation = pd.read_csv(rho_path)
+        available = available_rows(df=reputation, value_col="rho")
+        if len(available) == 0:
+            ax.text(0.5, 0.5, f"No non-missing rho values for {label}", ha="center", va="center")
+            ax.set_axis_off()
+            continue
+
         survey_summary = (
             available.groupby(["survey_year", "survey_quarter"], as_index=False)
             .agg(
@@ -627,10 +646,9 @@ else:
             )
             .sort_values(["survey_year", "survey_quarter"])
         )
-        fig, ax = plt.subplots(figsize=(10, 4))
         ax.plot(survey_summary.index, survey_summary["mean_rho"], label="Mean rho")
         ax.plot(survey_summary.index, survey_summary["median_rho"], label="Median rho")
-        ax.set_title("Reputation measure by survey")
+        ax.set_title(f"Reputation measure by survey: {label}")
         ax.set_ylabel("rho")
         ax.set_xlabel("Survey year-quarter")
         tick_idx = list(range(0, len(survey_summary), max(len(survey_summary) // 8, 1)))
@@ -638,6 +656,6 @@ else:
         ax.set_xticklabels([quarter_labels(survey_summary)[i] for i in tick_idx], rotation=45, ha="right")
         ax.legend()
         ax.grid(True, alpha=0.3)
-        plt.tight_layout()
-        plt.show()
+    plt.tight_layout()
+    plt.show()
 ```

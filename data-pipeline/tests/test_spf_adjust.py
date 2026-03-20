@@ -9,12 +9,17 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from src.spf_adjust import (
+    ADJUSTED_CPI10_X_SOURCE,
+    RAW_CPI10_X_SOURCE,
     adjust_cpi10_forecasts,
     construct_long_term_inflation_expectation,
+    construct_raw_cpi10_x,
     construct_inflation_news,
     construct_reputation_measure,
     construct_regression_dataset,
     get_quarter_specific_value,
+    get_configured_x_definitions,
+    select_long_term_inflation_expectation,
 )
 
 
@@ -122,6 +127,56 @@ def test_construct_long_term_inflation_expectation_returns_x_table():
     ) / 39
 
 
+def test_construct_raw_cpi10_x_returns_raw_forecast_as_x():
+    """Raw CPI10 helper should expose the unadjusted CPI10 forecast as x."""
+    forecast_individual = _sample_forecast_individual()
+
+    x_table = construct_raw_cpi10_x(forecast_individual=forecast_individual)
+
+    assert list(x_table.columns) == [
+        "survey_year",
+        "survey_quarter",
+        "forecaster_id",
+        "x",
+    ]
+    assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == 2.60
+
+
+def test_select_long_term_inflation_expectation_uses_raw_cpi10_config():
+    """Config-selected x should use raw CPI10 when requested."""
+    forecast_individual = _sample_forecast_individual()
+
+    x_table = select_long_term_inflation_expectation(
+        forecast_individual=forecast_individual,
+        config={"x_definition": RAW_CPI10_X_SOURCE},
+    )
+
+    assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == 2.60
+
+
+def test_select_long_term_inflation_expectation_uses_adjusted_cpi10_config():
+    """Config-selected x should use adjusted CPI10 when requested."""
+    forecast_individual = _sample_forecast_individual()
+
+    x_table = select_long_term_inflation_expectation(
+        forecast_individual=forecast_individual,
+        config={"x_definition": ADJUSTED_CPI10_X_SOURCE},
+    )
+
+    assert float(x_table.loc[x_table["survey_quarter"] == 2, "x"].iloc[0]) == pytest.approx(
+        (2.60 * 40 - 1.20) / 39
+    )
+
+
+def test_get_configured_x_definitions_returns_ordered_list():
+    """Configured x definitions should be read in order from regression config."""
+    x_definitions = get_configured_x_definitions(
+        config={"x_definitions": [RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]},
+    )
+
+    assert x_definitions == [RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]
+
+
 def test_construct_inflation_news_returns_minimal_table():
     """Inflation news output should contain keys plus inflation_news only."""
     forecast_individual = pd.DataFrame(
@@ -185,10 +240,10 @@ def test_construct_reputation_measure_preserves_input_keys():
 
 
 def test_construct_reputation_measure_applies_formula():
-    """Reputation should solve the linear mixture expression row by row."""
+    """Reputation should solve the linear mixture expression row by row from raw CPI10."""
     x_table = pd.DataFrame(
         [
-            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "x": 2.1},
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "x": 2.6},
             {"survey_year": 2026, "survey_quarter": 2, "forecaster_id": 1, "x": pd.NA},
         ]
     )
@@ -198,19 +253,19 @@ def test_construct_reputation_measure_applies_formula():
     target_term = (1.0 - 0.25) * 2.0 + 0.25 * 3.0
     ne_term = (1.0 - 0.25) * 1.0 + 0.25 * 0.0
 
-    assert float(rho.loc[0, "rho"]) == (2.1 - ne_term) / (target_term - ne_term)
+    assert float(rho.loc[0, "rho"]) == (2.6 - ne_term) / (target_term - ne_term)
     assert pd.isna(rho.loc[1, "rho"])
 
 
 def test_construct_regression_dataset_uses_matched_sample_means():
-    """Regression dataset should average only forecasters matched across s and s-1."""
+    """Regression dataset should average raw CPI10 revisions on the matched sample."""
     x_table = pd.DataFrame(
         [
-            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 1, "x": 1.0},
-            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 2, "x": 2.0},
-            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "x": 1.5},
-            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 2, "x": 2.5},
-            {"survey_year": 2026, "survey_quarter": 2, "forecaster_id": 1, "x": 2.0},
+            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 1, "x": 2.0},
+            {"survey_year": 2025, "survey_quarter": 4, "forecaster_id": 2, "x": 3.0},
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 1, "x": 2.3},
+            {"survey_year": 2026, "survey_quarter": 1, "forecaster_id": 2, "x": 3.4},
+            {"survey_year": 2026, "survey_quarter": 2, "forecaster_id": 1, "x": 2.9},
         ]
     )
     inflation_news = pd.DataFrame(
@@ -245,18 +300,20 @@ def test_construct_regression_dataset_uses_matched_sample_means():
 
     assert int(row_q1["prev_survey_year"]) == 2025
     assert int(row_q1["prev_survey_quarter"]) == 4
-    assert float(row_q1["r_bar"]) == pytest.approx(0.5)
+    assert float(row_q1["r_bar"]) == pytest.approx(0.35)
     assert float(row_q1["n_bar"]) == pytest.approx(0.3)
     assert float(row_q1["rho_bar_prev"]) == pytest.approx(0.5)
     assert float(row_q1["z2"]) == pytest.approx(0.075)
     assert float(row_q1["z3"]) == pytest.approx(0.0375)
+    assert float(row_q1["zP"]) == pytest.approx(0.0375)
     assert int(row_q1["matched_sample_size"]) == 2
 
     assert int(row_q2["prev_survey_year"]) == 2026
     assert int(row_q2["prev_survey_quarter"]) == 1
-    assert float(row_q2["r_bar"]) == pytest.approx(0.5)
+    assert float(row_q2["r_bar"]) == pytest.approx(0.6)
     assert float(row_q2["n_bar"]) == pytest.approx(0.6)
     assert float(row_q2["rho_bar_prev"]) == pytest.approx(0.5)
     assert float(row_q2["z2"]) == pytest.approx(0.15)
     assert float(row_q2["z3"]) == pytest.approx(0.075)
+    assert float(row_q2["zP"]) == pytest.approx(0.075)
     assert int(row_q2["matched_sample_size"]) == 1

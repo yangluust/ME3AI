@@ -6,6 +6,9 @@ from collections.abc import Iterable, Mapping
 
 import pandas as pd
 
+RAW_CPI10_X_SOURCE = "raw_cpi10"
+ADJUSTED_CPI10_X_SOURCE = "adjusted_cpi10"
+
 
 def _as_numeric(value: object) -> float | pd.NA:
     """Convert SPF cell content to numeric, coercing placeholders to missing."""
@@ -222,6 +225,66 @@ def construct_long_term_inflation_expectation(
     return adjusted_cpi10.rename(columns={"adjusted_cpi10": "x"})
 
 
+def construct_raw_cpi10_x(forecast_individual: pd.DataFrame) -> pd.DataFrame:
+    """Return forecaster-level raw CPI10 keyed as x."""
+    required = {"survey_year", "survey_quarter", "forecaster_id", "CPI10"}
+    missing = required.difference(forecast_individual.columns)
+    if missing:
+        raise KeyError(f"Missing required columns: {sorted(missing)}")
+
+    out = forecast_individual.loc[
+        :, ["survey_year", "survey_quarter", "forecaster_id", "CPI10"]
+    ].copy()
+    out = out.rename(columns={"CPI10": "x"})
+    out["survey_year"] = pd.to_numeric(out["survey_year"], errors="coerce").astype("Int64")
+    out["survey_quarter"] = pd.to_numeric(out["survey_quarter"], errors="coerce").astype("Int64")
+    out["forecaster_id"] = pd.to_numeric(out["forecaster_id"], errors="coerce").astype("Int64")
+    out["x"] = pd.to_numeric(out["x"], errors="coerce")
+    return out
+
+
+def get_configured_x_definitions(config: Mapping[str, object]) -> list[str]:
+    """Return the ordered list of configured x definitions."""
+    if "x_definitions" not in config:
+        raise KeyError("Missing required config value: x_definitions")
+
+    configured = list(config["x_definitions"])
+    if len(configured) == 0:
+        raise ValueError("x_definitions must contain at least one entry.")
+
+    supported = {RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE}
+    unsupported = [value for value in configured if str(value) not in supported]
+    if unsupported:
+        raise ValueError(
+            "Unsupported x_definitions: "
+            f"{unsupported}. Expected entries from {sorted(supported)}."
+        )
+    return [str(value) for value in configured]
+
+
+def select_long_term_inflation_expectation(
+    forecast_individual: pd.DataFrame,
+    *,
+    config: Mapping[str, object],
+) -> pd.DataFrame:
+    """Return config-selected long-term inflation expectation x."""
+    if "x_definition" not in config:
+        raise KeyError("Missing required config value: x_definition")
+
+    x_definition = str(config["x_definition"])
+    if x_definition == RAW_CPI10_X_SOURCE:
+        return construct_raw_cpi10_x(forecast_individual=forecast_individual)
+    if x_definition == ADJUSTED_CPI10_X_SOURCE:
+        return construct_long_term_inflation_expectation(
+            forecast_individual=forecast_individual,
+        )
+    raise ValueError(
+        "Unsupported x_definition: "
+        f"{x_definition}. Expected one of "
+        f"{[RAW_CPI10_X_SOURCE, ADJUSTED_CPI10_X_SOURCE]}."
+    )
+
+
 def construct_inflation_news(forecast_individual: pd.DataFrame) -> pd.DataFrame:
     """Return minimal table of inflation news by survey and forecaster."""
     required = {"survey_year", "survey_quarter", "forecaster_id", "CPI1", "CPI2"}
@@ -432,6 +495,7 @@ def construct_regression_dataset(
                 "rho_bar_prev",
                 "z2",
                 "z3",
+                "zP",
                 "matched_sample_size",
             ]
         )
@@ -456,6 +520,11 @@ def construct_regression_dataset(
     aggregated["z3"] = aggregated["n_bar"] * aggregated["rho_bar_prev"] * (
         1.0 - aggregated["rho_bar_prev"]
     ) ** 2
+    aggregated["zP"] = (
+        aggregated["n_bar"]
+        * (aggregated["rho_bar_prev"] ** 2)
+        * (1.0 - aggregated["rho_bar_prev"])
+    )
 
     for integer_column in [
         "survey_year",
@@ -467,6 +536,6 @@ def construct_regression_dataset(
         aggregated[integer_column] = pd.to_numeric(
             aggregated[integer_column], errors="coerce"
         ).astype("Int64")
-    for value_column in ["r_bar", "n_bar", "rho_bar_prev", "z2", "z3"]:
+    for value_column in ["r_bar", "n_bar", "rho_bar_prev", "z2", "z3", "zP"]:
         aggregated[value_column] = pd.to_numeric(aggregated[value_column], errors="coerce")
     return aggregated

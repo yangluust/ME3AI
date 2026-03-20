@@ -1,4 +1,4 @@
-"""Construct SPF reputation-measure table from adjusted CPI10 forecasts."""
+"""Construct SPF reputation-measure table from config-selected x."""
 
 from __future__ import annotations
 
@@ -10,12 +10,17 @@ import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.spf_adjust import construct_reputation_measure
+from src.spf_adjust import (
+    construct_reputation_measure,
+    get_configured_x_definitions,
+    select_long_term_inflation_expectation,
+)
 
 
 def main(
     clean_config_path: str | None = None,
     reputation_config_path: str | None = None,
+    regression_config_path: str | None = None,
 ) -> None:
     """Load cleaned data and reputation parameters, then write CSV."""
     repo_root = Path(__file__).parent.parent
@@ -27,38 +32,52 @@ def main(
         reputation_config = repo_root / "config" / "reputation_measure.json"
     else:
         reputation_config = Path(reputation_config_path)
+    if regression_config_path is None:
+        regression_config = repo_root / "config" / "forecast_revision.json"
+    else:
+        regression_config = Path(regression_config_path)
 
     with open(clean_config) as file:
         clean_settings = json.load(file)
     with open(reputation_config) as file:
         reputation_settings = json.load(file)
+    with open(regression_config) as file:
+        regression_settings = json.load(file)
 
     cleaned_dir = repo_root / clean_settings["cleaned_dir"]
-    input_path = cleaned_dir / "adjusted_cpi10.csv"
-    output_path = cleaned_dir / "reputation_measure.csv"
-
-    adjusted_cpi10 = pd.read_csv(input_path)
-    x_table = adjusted_cpi10.rename(columns={"adjusted_cpi10": "x"})
-    reputation_measure = construct_reputation_measure(
-        x_table=x_table,
-        config=reputation_settings,
-    )
-
-    cleaned_dir.mkdir(parents=True, exist_ok=True)
-    reputation_measure.to_csv(output_path, index=False)
+    input_path = cleaned_dir / "forecast_individual.csv"
+    forecast_individual = pd.read_csv(input_path)
+    x_definitions = get_configured_x_definitions(config=regression_settings)
 
     print("Constructed SPF reputation measure")
     print(f"  Input:  {input_path}")
     print(f"  Config: {reputation_config}")
-    print(f"  Output: {output_path}")
-    print(f"  Rows:   {len(reputation_measure)}")
+    for x_definition in x_definitions:
+        x_table = select_long_term_inflation_expectation(
+            forecast_individual=forecast_individual,
+            config={"x_definition": x_definition},
+        )
+        reputation_measure = construct_reputation_measure(
+            x_table=x_table,
+            config=reputation_settings,
+        )
+        output_path = (
+            cleaned_dir / "forecast_revision" / x_definition / "reputation_measure.csv"
+        )
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        reputation_measure.to_csv(output_path, index=False)
+        print(f"  X def:  {x_definition}")
+        print(f"  Output: {output_path}")
+        print(f"  Rows:   {len(reputation_measure)}")
     print("Done.")
 
 
 if __name__ == "__main__":
     clean_config_arg = sys.argv[1] if len(sys.argv) > 1 else None
     reputation_config_arg = sys.argv[2] if len(sys.argv) > 2 else None
+    regression_config_arg = sys.argv[3] if len(sys.argv) > 3 else None
     main(
         clean_config_path=clean_config_arg,
         reputation_config_path=reputation_config_arg,
+        regression_config_path=regression_config_arg,
     )
