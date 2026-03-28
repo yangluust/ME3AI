@@ -1,0 +1,2338 @@
+%2multibyte Version: 5.50.0.2890 CodePage: 65001
+%\usepackage[letterpaper,top=1.5in,bottom=1.5in,left=1.5in,right=1.5in]{geometry}
+%\input{tcilatex}
+
+
+\documentclass[12pt,letter,leqno]{article}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{amsmath,amsfonts,amsthm,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage[round]{natbib}
+\usepackage{multibib}
+\newcites{latex}{Appendix References}%  \citelatex, \nocitelatex, ...
+\usepackage{bbm}
+\usepackage{ulem}
+\usepackage[letterpaper,top=1.5in,bottom=1.5in,left=1.0in,right=1.0in]{geometry}
+\usepackage{lscape}
+\usepackage{rotate}
+\usepackage{rotating}
+\usepackage[aboveskip=-4pt,belowskip=6pt]{caption}
+\usepackage{shadethm}
+\usepackage{mathrsfs}
+\usepackage{hyperref}
+\usepackage{pdflscape}
+\usepackage{subcaption}
+\usepackage{booktabs}
+% Federico Tartarini explains this package
+% https://www.youtube.com/watch?v=Rthi2q4DMQs
+%\usepackage[nomarkers,nolists,tablesfirst,heads]{endfloat}
+% % 
+%\usepackage[nolists,tablesfirst]{endfloat}
+% document will be shortest if one replaces "markers" 
+% with "no markers"
+
+
+\linespread{1.3}
+
+
+\setcounter{MaxMatrixCols}{10}
+%TCIDATA{OutputFilter=LATEX.DLL}
+%TCIDATA{Version=5.50.0.2890}
+%TCIDATA{Codepage=65001}
+%TCIDATA{<META NAME="SaveForMode" CONTENT="1">}
+%TCIDATA{BibliographyScheme=BibTeX}
+%TCIDATA{LastRevised=Wednesday, August 11, 2021 16:01:40}
+%TCIDATA{<META NAME="GraphicsSave" CONTENT="32">}
+%TCIDATA{Language=American English}
+
+\newshadetheorem{theorem}{Theorem}
+\captionsetup{compatibility=false}
+\definecolor{webgreen}{rgb}{0,.5,0}
+\definecolor{webbrown}{rgb}{.6,0,0}
+\definecolor{webyellow}{rgb}{0.98,0.92,0.73}
+\hypersetup{pdfpagemode=UseNone, colorlinks=true,
+  anchorcolor= webbrown, citecolor= webbrown, filecolor=
+  webbrown, linkcolor= webbrown, menucolor= webbrown, urlcolor=
+  webbrown, citebordercolor= 1 0 0, menubordercolor=1 0 0, urlbordercolor=1 0 0, runbordercolor=1
+  0 0}
+\newtheoremstyle{asn}{18pt}{18pt}{}{}{\sc}{.}{.5em}{}
+\theoremstyle{asn}
+\newshadetheorem{asn}{Assumption}
+\newtheoremstyle{lem}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}{}
+\theoremstyle{lem}
+\newshadetheorem{lem}{Lemma}
+\newtheoremstyle{slem}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}{}
+\theoremstyle{slem}
+\newshadetheorem{slem}{Lemma}
+\newtheoremstyle{prop}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{prop}
+\newshadetheorem{prop}{Proposition}
+\newtheoremstyle{appprop}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{appprop}
+\newshadetheorem{appprop}{Proposition}
+\newtheoremstyle{rem}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{rem}
+\newshadetheorem{rem}{Remark}
+\newtheoremstyle{defn}{18pt}{18pt}{}{}{\bfseries}{.}{.5em}{}
+\theoremstyle{defn}
+\newshadetheorem{defn}{Definition}
+\renewcommand{\sectionautorefname}{Section}
+\renewcommand{\subsectionautorefname}{Section}
+\newcommand{\defnautorefname}{Definition}
+\newcommand{\thmautorefname}{Theorem}
+\newcommand{\propautorefname}{Proposition}
+\newcommand{\lemautorefname}{Lemma}
+\newcommand{\exautorefname}{Example}
+\newcommand{\asnautorefname}{Assumption}
+\newcommand{\probautorefname}{Problem}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+%\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+%\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\newcommand{\wh}{\hat}
+\usepackage{etoolbox}
+\usepackage[left,displaymath,mathlines]{lineno} 
+\usepackage[compact]{titlesec}
+\linenumbers
+% Comments of various formsci
+\usepackage{comment}
+% discuss: hide and discuss deletion
+\excludecomment{discuss}
+% \includecomment{discuss}
+% nberonlyOLD: include in NBERwp but not submission
+\excludecomment{nberonlyOLD}
+% \includecomment{nberonlyOLD}
+
+\excludecomment{nberonly}
+
+% submitonly: include in submission but not NBERwp
+\includecomment{submitonly}
+% \excludecomment{submitonly}
+% notes to document origins of figures etc
+%\includecomment{sourcenote}
+\excludecomment{sourcenote}
+% figures of longer time periods or not
+\includecomment{ST}
+\includecomment{LG}
+% bob skip
+\includecomment{bobskip}
+
+\includecomment{bobversion}
+
+\excludecomment{oldversion}
+
+
+% % Federico Tartarini explains this package
+% % https://www.youtube.com/watch?v=Rthi2q4DMQs
+%\usepackage[nomarkers, nolists,tablesfirst,heads]{endfloat}
+%\usepackage[nolists,tablesfirst]{endfloat}
+% % document will be shortest if one replaces "markers" 
+% % with "no markers"
+
+
+% author-specific coloring of text to highlight changes
+\newcommand{\rgkcom}[1]{{\color{magenta} #1}}
+\newcommand{\ylcom}[1]{{\color{black} #1}}
+\newcommand{\gzsugg}[1]{{\color{green} #1}}
+
+% citation style:
+\defcitealias{king_mervyn_credibility_2005}{M. King (2005)}
+\defcitealias{king_managing_2008}{R.G. King et al. (2008)}
+\defcitealias{goodfriend_incredible_2005}{Goodfriend and R.G. King (2005)}
+\defcitealias{Gordon2013}{R.J. Gordon (2013)}
+\defcitealias{barro_positive_1983}{Barro and D.B. Gordon (1983a)}
+\defcitealias{barro_rules_1983}{Barro and D.B. Gordon (1983b)} 
+\defcitealias{evans_adaptive_2003}{G.W. Evans and Honkapohja (2003)}
+\defcitealias{evans_expectations_2008}{G.W. Evans and Honkapohja (2008)}
+\defcitealias{evans_inflation_1993}{M. Evans and Wachtel (1993)}
+\defcitealias{lucas_after_1979}{manifesto (1979)}
+
+\makeatletter
+\patchcmd{\@maketitle}{\LARGE}{\large}{}{}
+\makeatother
+
+
+\input{tcilatex}
+\begin{document}
+
+\title{\textbf{Evolving Reputation for Commitment:\\ Understanding Inflation and Inflation Expectations}\thanks{
+We thank the participants in various conferences, seminars, and workshops for valuable feedback. Particularly useful advice was provided by Davide Debortoli, Thorsten Drautzburg, Narayana Kocherlakota, Albert Marcet, Elmar Mertens, and Russell Cooper; valuable discussions were made by Donghai Zhang and Shengliang Ou. All errors are ours. We acknowledge the
+financial support from the RGC of HKSAR (GRF HKUST-16504317).}}
+\author{Robert G. King\thanks{%
+Boston University and NBER. Email: \href{mailto:rking@bu.edu}{$\left \langle%
+\mathtt{rking@bu.edu}\right \rangle $}} \and Yang K. Lu\thanks{%
+Corresponding author, Hong Kong University of Science and Technology. Email: 
+\href{mailto:yanglu@ust.hk}{$\left \langle \mathtt{yanglu@ust.hk}%
+\right
+\rangle $}} }
+\date{October 2025}
+\maketitle
+
+\begin{abstract}
+\baselineskip15pt
+  
+% \noindent A parsimonious model of shifting policy regimes can simultaneously capture expected and actual US inflation during 1969-2005. Our model features a forward-looking New Keynesian Phillips curve and purposeful policymakers that can or cannot commit. Private sector learning about policymaker type leads to a reputation state variable. We use model inflation forecasting rules to extract state variables from SPF inflation forecasts.  US inflation is tracked by optimal policy without commitment before 1981 and by optimal policy with commitment afterward. In theory and quantification, the interaction of private sector learning and optimal policy within regimes is central to expected and actual inflation.
+\noindent We develop a theory of how inflation expectations respond to monetary policy when policymakers strategically influence private learning. The central mechanism is reputation -- private agents’ belief in the policymaker’s commitment to announced inflation targets. Reputation evolves as agents update beliefs from deviations of realized inflation from targets. Reputation feeds back into expectations and effectiveness of monetary policy. We characterize optimal policy that internalizes this expectation–outcome loop, provide a recursive solution, and calibrate the model to demonstrate quantitative importance of strategic expectation management. Empirically, we document time-varying sensitivity of long-run inflation forecasts to inflation surprises, supporting the model’s prediction.
+\vspace{0.5em}
+
+\vspace{0.5em} \noindent \textit{Keywords}: time inconsistency, reputation
+game, optimal monetary policy, forward-looking expectations
+
+\vspace{0.5em} \noindent \textit{JEL classifications}: E52, D82, D83.
+\end{abstract}
+
+\baselineskip20pt \abovecaptionskip0pt
+% \begin{discuss}
+\baselineskip17pt \thispagestyle{empty} 
+\newpage \setcounter{page}{1}
+
+\setcounter{page}{0}
+\begin{nberonly}
+\begin{quote}
+{\color{webbrown} ``In reality, however, the anchoring of inflation
+expectations has been a hard-won achievement of monetary policy over the
+past few decades, and we should not take this stability for granted. [...] a
+policy of achieving ``temporarily" higher inflation over the medium term
+would run the risk of altering inflation expectations beyond the horizon
+that is desirable. Were that to happen, the costs of bringing expectations
+back to their current anchored state might be quite high.''}\newline
+(Donald L. Kohn, ``Monetary Policy Research and the Financial Crisis:
+Strengths and Shortcomings", October 9, 2009)
+\end{quote}
+\end{nberonly}
+
+\newpage
+\section{Introduction}
+\setcounter{page}{1}
+
+\baselineskip17pt
+
+Managing expectations is central to monetary policy decisions, because inflation expectations are important for economic activities (\cite{coibion_how_2018}) and inflation dynamics (\cite{beaudry_dominant_2024}), and are responsive to central bank policy communication (\cite{hansen_first_2016}, \cite{haldane_central_2018}, \cite{blinder_central_2024}).
+
+
+This paper develops a theory of how inflation expectations respond to monetary policy, emphasizing the role of purposeful policymakers who strategically influence private-sector learning and expectation formation. We show how to bring the theory to the data and use it to account for the joint dynamics of U.S. inflation and inflation expectations. Empirically, we validate the model’s prediction about the evolving sensitivity of long-term inflation forecasts to inflation surprises.
+
+We employ a variant of the textbook New Keynesian (NK) model featuring forward-looking inflation dynamics, purposeful policymakers with a dual mandate to stabilize inflation and output, and stochastic regime changes.\footnote{A regime is a time interval during which outcomes are interpreted as the choices of a single policymaker.} The committed policymaker follows an ex-ante optimal, state-contingent inflation plan, while the opportunistic policymaker chooses inflation sequentially to maximize short-term objectives. Private agents do not observe the policymaker's type or chosen inflation directly; instead, they observe noisy realizations of inflation, which they use to update beliefs about the likelihood that the policymaker is committed—this belief constitutes the policymaker’s \textit{reputation}—and to form expectations about future inflation.  
+
+A key conceptual result is that high reputation narrows the equilibrium policy gap between the two types, as the opportunistic policymaker is less tempted to deviate. In contrast, low reputation widens the gap, as the committed type has stronger incentives to accelerate private-sector learning. We show that this mechanism is essential for quantitatively matching salient features of U.S. inflation history, e.g., the Volcker disinflation, and for explaining the time-varying response of long-term inflation forecast revisions to inflation surprises.
+
+Our modeling approach builds on a mass literature, pioneered by Lucas, Sargent, Kydland and Prescott, that stresses the importance of policymaker commitment capacity in economic policy. \cite{lucas_after_1979} showed that traditional econometric models were inappropriate for analysis of exogenous policy rules when rational expectations is coupled with forward-looking private sector behavior. \cite{kydland_rules_1977} took the next step by incorporating purposeful policymakers into theoretical macroeconomic environments, formulated as dynamic games. They stressed the importance of policymaker commitment capacity, showing how its absence could radically change positive and normative outcomes. In the extensive elaboration of these insights over the ensuing decades, there has been growing recognition that private sector learning is important and, indeed, that policymaker commitment capacity is inherently \textit{unobservable}. A substantial body of literature now integrates private sector learning into the theory of economic policy.\footnote{See for examples: \cite{barro_reputation_1986}, \cite{backus_inflation_1985}, \cite{phelan_public_2006}, \cite{dovis_reputation_2022}.} Yet, an important gap remains as little research features purposeful policymakers who actively seek to steer the learning of private agents.
+
+This paper shows how to close this gap. We use the insights of modern contract theory (mechanism design) to develop a computable recursive equilibrium for a dynamic game with two types of purposeful policymakers, one which can commit and one which cannot, and private agents who learn policymaker type in a Bayesian manner. Forward-looking behavior of private agents, coupled with both types of policymakers being purposeful, necessitates our novel theoretical approach. In recursive equilibrium, reputation -- defined as private agents' likelihood that the policymaker can commit -- emerges as a key endogenous state variable. 
+
+\paragraph{Why new theory is necessary} 
+Forward-looking inflation dynamics in New Keynesian (NK) models have largely replaced earlier specifications used by Lucas, Sargent, Kydland, and Prescott, in which private agents form intra-temporal expectations—that is, they expect policy to be chosen in the same period as expectations are formed. In response to supply shocks, forward-looking dynamics increase the gap between optimal inflation policy with and without commitment.\footnote{See, for example, \cite{clarida_science_1999}.} Some earlier studies examine the interaction between optimal inflation policy and reputation under intra-temporal expectations, \cite{cukierman_optimal_1991, king_managing_2008, lu_optimal_2013, Dovis_2021}, taking advantage of the fact that these expectations allow dynamic games to be solved using backward induction.
+
+When expectations are forward-looking, strategic interactions become intertemporal and the earlier techniques no longer apply. To see why, consider the choice of period-$t$ committed policy: the period-$t$ payoff depends on private agents' expectations, which are affected by future committed policy, future opportunistic policy, and reputation (private agents' likelihood that each policy will take place). But future opportunistic policy cannot be taken as given because it optimally responds to future private agents' expectations that change with how period-$t$ committed and opportunistic policies affect the evolution of reputation.\footnote{A common way to avoid these strategic interactions is to assume that one type of policymaker being an automaton (\cite{lu_optimal_2016}, \cite{amador_reputation_2021}, \cite{morelli_information_2023}), or to assume that the committed policymaker ignores the effect of his policy on private sector learning (\cite{clayton_internationalizing_2025}). However, our analysis below indicates that these assumptions have considerable effects on outcomes, which are -- to our minds -- undesirable.}
+
+Our new mechanism design approach directly tackles these complications. To begin, we recast the equilibrium of the dynamic game as the solution to a dynamic principal-agent problem. The committed policymaker acts as principal to choose state contingent plans for his own policies, the policies of the opportunistic type subject to incentive compatibility constraints, and private agents' expectations subject to rational expectation constraints. We then use the techniques of dynamic contract theory to formulate the principal-agent problem as a recursive optimization with only three state variables including a highly persistent reputation state,\footnote{Reputation is capital for the committed policymaker but is a martingale in the eyes of private agents.} a more temporary cost-push shock,\footnote{We use common terminology for this shock, which shifts the policymaker's output-inflation trade-off.} and a predetermined pseudo state.\footnote{As in other studies of optimal inflation policy, this variable is required to place the committed policy in recursive form, as discussed further below.}
+
+\paragraph{Dynamic theory makes quantitative history feasible}
+Based on the solution to the recursive optimization problem, we construct a calibrated quantitative model that maps structural shocks and latent states to observable macroeconomic data. In particular, we require that the model’s inflation expectations match time series from the Survey of Professional Forecasters (SPF), beginning in late 1968. The key identification assumption is that short-term SPF forecasts are more sensitive to temporary factors, such as cost-push shocks, while longer-term forecasts reflect persistent influences, such as the evolution of policymaker reputation. Formally, we exploit the fact that the model’s dynamic system implies a nonlinear filtering structure that allows us to jointly identify shocks and states.\footnote{The standard Kalman filter is not applicable due to the model’s nonlinearity. We instead use a “sigma point” approximation method—the unscented Kalman filter—which has been shown to perform well in nonlinear regime-switching models. See \cite{sarkka_bayesian_2023} for an overview of Gaussian filtering and \cite{binning_sigma_2015}, \cite{benigno_estimating_2020}, and \cite{Foerster_learning_2022} for recent macroeconomic applications.}
+
+\paragraph{Explaining joint dynamics of expected and actual inflation}
+The nonlinear filter produces estimated reputation that exhibits a big swing, declining throughout 1970s to near zero by the end of 1980 and gradually climbing back afterwards. Using the estimated shocks and states, we compute the model-implied inflation values. Remarkably, these values align closely with the observed U.S. inflation, despite the fact that the observed inflation data is not used in estimating shocks and states. To assess the importance of purposeful policy in shaping private-sector learning, we conduct a counterfactual exercise in which a \textit{naive committed} policymaker optimizes inflation policy but ignores its impact on belief updating. The results show that such a policymaker takes significantly longer to disinflate the economy than what was observed during the Volcker disinflation following 1981. 
+
+\paragraph{Forecast revision regressions validate our theory} According to our theory, long-term inflation expectations depend on a reputation state that evolves through Bayesian updating of inflation forecast errors. Moreover, the sensitivity of reputation to forecast errors depends on optimal inflation policies and thus on the time-varying reputation state. We test these implications using regressions of SPF long-term forecast revisions on nowcast forecast errors and find that the estimated coefficient on forecast errors indeed is time-varying and in a pattern consistent with theoretical predictions. 
+
+
+
+
+\paragraph{Links to the broader literature} Our reputational equilibrium analysis adopts one of the two approaches in modern game theory, originated 
+ from \cite{milgrom_limit_1982} and \cite{kreps_reputation_1982}.\footnote{For a general discussion and specific examples see \cite{mailath_repeated_2006}. These leading theorists advocate for studying reputation as we do, writing ``The idea that a player has an incentive to build, maintain, or milk his reputation is captured by the incentive that player has to manipulate the beliefs of other players about his type. The updating of these beliefs establishes links between past behavior and expectations of future behavior. We say `reputations effects' arise if these links give rise to restrictions on equilibrium payoffs or behavior that do not arise in the underlying game of complete information."} Based on Bayesian learning in a noisy environment, our reputational state variable is the likelihood that the current policymaker has commitment capability. Another familiar reputational approach, introduced by \cite{barro_rules_1983} to macroeconomics, demonstrates that reputational forces may substitute for commitment capability, leading a ``discretionary" policymaker to behave like a committed one as in the important modern literature on sustainable plans (\cite{chari_sustainable_1990}).\footnote{Within the NK framework, optimal policy under commitment involves time-varying inflation when there are Phillips curve shocks:  \cite{KUROZUMI20081277} and \cite{LOISEL20083718} show that a policymaker without commitment capability can be led to follow such a policy if he is sufficiently patient and the shocks are not too large.} However, policymaker reputation does not vary over time in the sustainable plan literature: it is either excellent or nonexistent. Our learning-based framework permits \textit{reputation building} by a policymaker that can commit and \textit{reputation dissipation} by one that can't.
+
+Our paper is related to a large literature studying the rise, fall and stabilization of US inflation, but our approach is quite different. 
+\cite{sargent_conquest_1999} stimulated a literature on the role of a purposeful policymaker's beliefs that does not require exogenous regime changes,\footnote{See the Riksbank review article by \cite{sargent_conquest_2000} for an introduction.} with \cite{Primiceri2006} extending this approach and quantifying shifts in estimates of the Phillips curve slope and intercept.
+\cite{Bianchi2013} and \cite{Debortoli2016} develop and estimate models in which private agents anticipate a possible exogenous policy regime change but do not face a learning problem. Our quantitative theory emphasizes the evolution of \textit{private agents' beliefs} and we use the SPF to extract the evolution of such beliefs. In seeking to recover the evolution of private agents' beliefs about the commitment capacity of the Fed, our work is related to \cite{matthes_figuring_2015}, but policymakers in his study don't purposefully manage private sector learning.\footnote{\label{fn:learning} Other papers that investigate U.S. inflation history with private sector learning include \cite{ball_disinflation}, \cite{erceg_imperfect_2003}, \cite{ORPHANIDES20051927}, \cite{goodfriend_incredible_2005}, \cite{Cogley2015}, and \cite{Melosi2016}.} Our model features interaction of private sector learning and optimal policies with and without commitment, allowing us to \textit{explain observed inflation as the result of strategic expectation management by policymakers}.
+
+\cite{Hazelletal2022}, \cite{carvalho_anchored_2023}, and \cite{beaudry_dominant_2024} emphasizes the importance of inflation expectation in understanding inflation dynamics. Our work complements theirs by highlighting the role played by monetary policy in determining the dynamics of inflation expectation, and how optimal monetary policy could take into account its role in shaping inflation expectations to improve future output-inflation trade-off. 
+
+Use of the SPF also links our research to the large and growing literature on survey measures of inflation (\cite{coibion_formation_2018}).  The SPF forecasts systematically underestimated inflation during its rise in the 1970s and then systematically overestimated it during its decline. Our explanation of persistent forecasting errors is consistent with
+the view that these SPF anomalies arise from agents not knowing the policy regime (\cite{evans_inflation_1993}, \cite{coibion_formation_2018}) or the model generating the data (\cite{NBERw29495}). Our work differs from the existing literature by having unknown policy optimally evolving over time, rather than being generated by a random process or by exogenous policy rules.
+
+\paragraph{Organization} Section 2 describes the economy. In section 3, we cast the macroeconomic equilibrium in game theoretic terms, defining a Bayesian perfect equilibrium. In section 4, we develop a recursive equilibrium and describe how to solve it. In section 5, we elaborate our new method of latent state extraction from the SPF and use it to perform quantitative analysis of U.S. inflation history. In Section 6, we highlight strategic reputation management as a central feature of our model and explain how it helps to account for the Volcker disinflation and the time-varying sensitivity of long-term inflation forecasts to inflation surprises. Section 7 concludes. 
+
+\section{The Economy}
+
+A policymaker designs and announces a plan for
+current and future inflation. A private sector composed of atomistic forward-looking agents is uncertain whether the policymaker can commit or not. Their forward-looking decisions reflect the
+possibility that an announced policy plan may not be executed.
+\subsection{Private sector}
+
+Private agents' behavior is captured by a standard NK Phillips curve 
+\begin{equation}
+\pi _{t}=\underset{e_{t}}{\underbrace{\beta E_{t}\pi _{t+1}}}+\kappa
+x_{t}+\varsigma _{t},  \label{PC}
+\end{equation}%
+where $\pi_t$ is inflation, $x_t$ is the output gap, and $\varsigma _{t}$
+is a cost-push shock governed by an exogenous Markov chain with the
+transition probabilities $\varphi \left( \varsigma _{t+1};\varsigma
+_{t}\right).$ Private agents' discount factor is $\beta$ and $E_{t}\pi _{t+1}$
+is their expectation about the next-period inflation, with $e_{t}$ shorthand for discounted expected inflation. 
+%
+
+%\setcounter{section}{1}
+\subsection{Policymaker}
+
+The policymaker is responsible for the inflation rate, $\pi $, but cannot control it exactly.\footnote{%
+We use ``policymaker" rather than ``central banker" to
+recognize that inflation policy may be the result of various actors. For
+example, \cite{de_long_americas_1996},  \cite{levin_falling_2010}, and \cite{meltzer_history_2014} stress various political influences on monetary
+policy outcomes, while other economists see direct fiscal links to inflation.} There are two types of policymaker. A \textit{committed} type ($\tau=1$) chooses and announces an optimal state-contingent 
+plan for intended inflation at all dates when he first takes office and executes it in all subsequent
+periods until replaced.\footnote{%
+We specify intended inflation rather than intended output for analytical convenience, as they are equivalent via the Phillips curve. We also abstract from policy instruments because policy outcome rather than instrument matters in the model, c.f. \cite{faust_transparency_2001} and \cite{sargent_conquest_1999}.} The committed inflation plan therefore shapes private agents' expected inflation. An \textit{opportunistic} type ($\tau=0$) makes the same announcements,\footnote{The opportunistic type makes the same announcements as the committed type to avoid revelation. In a related fiscal model,  \cite{lu_optimal_2013} shows that the unique signalling equilibrium involves the committed type announcing a policy
+that solves his optimal policy problem and the opportunistic type sending the same
+message. We therefore abstract from the analysis of signalling equilibria.} but chooses intended inflation on a period-by-period basis. 
+
+At the start of each period, the policymaker may be replaced through a publicly observed mechanism: the replacement event ($\theta_t=1$) occurs with probability $q$. If no replacement occurs ($\theta_t=0$), the policymaker type remains unchanged. We discuss the reputation of a new policymaker further below. 
+
+Crucially, the private sector does not observe the policymaker's type ($\tau_t$) or his intended
+inflation, denoted by $a_{t}$ for the committed type and $\alpha_{t}$ for the opportunistic type. Yet, it observes an inflation rate $\pi_t$ which 
+deviates from the policymaker's intention by a random i.i.d. implementation error $v_{\pi,t} \sim g(\cdot)$ with $g(\cdot) = N(0,\sigma_{v,\pi}^2)$:\footnote{We interpret random implementation error as a
+reduced-form representation for all unforeseeable factors that affect
+inflation beyond policy, following \cite{cukierman_theory_1986}, \cite{faust_transparency_2001}, \cite{atkeson_advantage_2006}, etc. There is also
+ample evidence that realized inflation rates miss the intended inflation
+target, with examples including \cite{roger_target_2005} and \cite{mishkin_does_2007}.} 
+\begin{equation}\label{eq:pi}
+    \pi_t=\tau_t a_t + (1-\tau_t) \alpha_t + v_{\pi,t}.
+\end{equation}
+
+The policymaker's momentary objective depends on inflation $\pi $ and output gap $x$.%
+\begin{equation}
+u\left( \pi ,x \right) =-\frac{1}{2}[(\pi -\pi^*)^{2}+\vartheta
+_{x}(x-x^{\ast })^{2}]  \label{OBJ}
+\end{equation}%
+There is a long-run inflation target $\pi ^{\ast }$ and
+a strictly positive output target $x^{\ast }$.
+
+
+The committed type discount factor is $\beta_a$; the opportunistic type is myopic.\footnote{A myopic opportunistic type is the most parsimonious modeling of an optimizing non-committed policymaker. Our framework and recursive method can be extended to a long-lived opportunistic type, but we leave that extension for future research.}
+
+
+\subsection{Timing of events}\label{sec:timing}
+Private agents start period $t$ with a probability that the incumbent
+policymaker is the committed type, which we denote by $\rho _{t}$ and call \textit{reputation}. The within-period timing is shown in Figure \ref{fig:Timing}.
+\begin{nberonly}
+\footnote{The timing structure highlights endogenous reputation dynamics since, with constant $\rho$, decision rules are linear and independent of unintended inflation.}
+\end{nberonly}
+First, policymaker replacement may or may not occur. If this public event does occur ($\theta_t=1$), the regime clock $t$ is set to zero and the new policymaker's initial reputation $\rho_0$ is a random draw from the distribution $\Xi(\rho_0|\rho_t)$ with support [0,1] and permits some reputation inheritance\footnote{Reputation inheritance can be rationalized by a new policymaker who shares a similar academic or professional background with their predecessor, but it is not essential to our model.}. Second, the exogenous cost-push shock $\varsigma_t$ is realized. Third, there is a policy announcement. If the policymaker is new, he announces a new inflation plan that specifies current intended inflation $a_t$. Otherwise, either type of continuing policymaker reiterates current economic conditions that call for an intended inflation $a_t$ according to the plan announced at the start of the current regime. Fourth, private agents form their expectations about the next-period inflation, 
+$e_t$. Fifth, the policymaker implements intended inflation, $a_t$ or $\alpha_t$, depending
+on his type. Sixth, this action leads to a random inflation rate $\pi_t$ with a density $g(\pi_{t}|a_{t})$ or $g(\pi_{t}|\alpha_{t})$,\footnote{With a slight abuse of notation, $g(\pi|\tau a+(1-\tau)\alpha)$ is the density function of $v_{\pi}=\pi-[\tau a+(1-\tau)\alpha]$.} and an output gap $x_t$
+determined by the Phillips curve. New information leads private agents to update their beliefs about policymaker type. 
+
+\begin{figure}[t]
+\caption{Timing of events within a period}
+\label{fig:Timing}
+\begin{center}
+\includegraphics[height=1in,width=5.5in]{TimeLine with theta.pdf}
+\end{center}
+\end{figure}
+
+\section{Macro Equilibrium in a Dynamic Game}
+Our economy features random regime switches. In each regime, the policymaker can be one of two types, but their actions do not fully reveal their identity. Private agents form beliefs about the policymaker’s type and use these beliefs to forecast future inflation. Following a regime switch, a new inflation plan is initiated and private agents' beliefs about the new policymaker's type are reset randomly to $\rho_0$. This structure allows each regime to be modeled as a dynamic game with incomplete information. We now describe its equilibrium.
+
+\paragraph{Public Equilibrium}
+Define the public history of the current regime $h_{t}=\left \{ h_{t-1},\pi _{t-1},\varsigma_{t}\right \} $ as the collection of all past inflation realizations and exogenous states, with $h_0=\{\rho_{0},\varsigma_0\}$ being the public history of a new regime. We restrict our attention to equilibria in which
+all strategies depend only on the public history, i.e.,
+\textit{public strategies}.\footnote{This restriction is innocuous because: (1) the
+private sector's strategy is public since its information set is $h_{t}$; (2) the committed type's policy is public
+since it follows the announced policy plan, which needs to be verifiable by
+the private sector; and (3) given all the other player's strategies are public,
+it is also optimal for the opportunistic type to choose public strategies (%
+\cite{mailath_repeated_2006}).}  
+
+\paragraph{Perfect Bayesian Equilibrium}
+We further require the equilibrium of this incomplete information game to be perfect Bayesian. That is, private agents' beliefs are consistent
+and the strategies of the two types of policymakers satisfy sequential
+rationality.
+
+\subsection{Consistent beliefs: reputation}
+
+Consistency of beliefs requires that private agents' assessments of policymaker type are updated 
+according to Bayes' rule (\ref{BL2}) which depends on policymakers' equilibrium strategies and observed inflation $\pi_t$. Within a regime, private agents' beliefs $\rho $ are updated recursively,%
+\begin{equation}
+\rho \left( h_{t+1}\right) =\rho \left( h_{t},\pi _{t}\right) \equiv \frac{\rho
+\left( h_{t}\right) g(\pi _{t}|a\left( h_{t}\right) )}{\rho \left(
+h_{t}\right) g(\pi _{t}|a\left( h_{t}\right) )+(1-\rho \left( h_{t}\right)
+)g(\pi _{t}|\alpha \left( h_{t}\right) )}  \label{BL2}
+\end{equation}%  
+If a new regime starts at $t$, the departing policymaker's reputation $\rho(h_t)$ affects the distribution of the new policymaker's initial reputation: $\rho_0 \sim \Xi(\rho_0|\rho(h_{t}))$. 
+
+\subsection{Consistent beliefs: inflation expectations}
+Inflation expectations must be consistent with private agents' beliefs about policymaker type and equilibrium strategies. If a new regime starts at $t$, the consistent nowcast of inflation is:
+\begin{equation}\label{eq:z}
+    z(h_t) =\int \left[ \rho_0 a(\rho_0,\varsigma_t) + (1-\rho_0) \alpha(\rho_0,\varsigma_t) \right]d\Xi(\rho_0|\rho(h_t)).
+\end{equation}
+Within a regime, expectations of future inflation are:
+\begin{equation}
+e(h_{t})=\beta E(\pi_{t+1}|h_t) =\beta \rho (h_{t})E(\pi _{t+1}|h_{t},\tau_{t}=1)+\beta (1-\rho
+(h_{t}))E(\pi _{t+1}|h_{t},\tau_{t}=0)  \label{consistent belief}
+\end{equation}
+In both (\ref{eq:z}) and (\ref{consistent belief}), higher reputation makes expectations more responsive to committed policymaker's future inflation intentions. Turning to the details of (\ref{consistent belief}),
+\begin{align}
+\nonumber
+E(\pi _{t+1}|h_{t},\tau_{t}=1)& =\int \sum_{\varsigma _{t+1}}\varphi
+(\varsigma _{t+1};\varsigma _{t})\left[ \left( 1-q\right)
+a(h_{t+1})+qz\left( h_{t+1}\right) \right] g(\pi _{t}|a(h_{t}))d\pi _{t} 
+\nonumber \\
+E(\pi _{t+1}|h_{t},\tau_{t}=0)& =\int \sum_{\varsigma _{t+1}}\varphi
+(\varsigma _{t+1};\varsigma _{t})\left[ \left( 1-q\right) \alpha
+(h_{t+1})+qz\left( h_{t+1}\right) \right] g(\pi _{t}|\alpha (h_{t}))d\pi _{t}
+\nonumber
+\end{align}
+$E(\pi _{t+1}|h_{t},\tau_{t}=1)$ is conditional on the incumbent policymaker being the committed type. The committed type's intensions lead to stochastic inflation, with density $g(\pi_t|a(h_t))$, contributing to history $h_{t+1}=\{ h_t,\pi_t,\varsigma_{t+1} \}$. If the regime continues next period, the expected inflation will be the committed type's intended inflation $a(h_{t+1})$. In the event of a regime change next period, the consistent belief is the history-dependent future nowcast $z(h_{t+1})$. Similarly, $E(\pi _{t+1}|h_{t},\tau_{t}=0)$ is conditional on the incumbent policymaker being the opportunistic type. It will generate stochastic inflation $\pi_{t}$ with density $g(\pi_{t}|\alpha(h_{t}))$ and will implement $\alpha(h_{t+1})$ next period if the regime continues.
+In the event of a regime change next period, the expected inflation is $z(h_{t+1})$.
+
+\subsection{Sequential rationality of the opportunistic type}
+\label{SR_opportunistic}
+
+Denote $\underline{u}\left (\alpha ,e,\varsigma \right) \equiv \int u\left(\pi, x(\pi,e,\varsigma)\right) g\left( \pi
+|\alpha\right) d\pi$ as the expected momentary objective when the NK Phillips curve (\ref{PC}) is used to replace $x$ with $x(\pi,e,\varsigma)=\left( \pi -e-\varsigma \right)/\kappa$.
+A myopic opportunistic policymaker chooses intended inflation $\alpha$ each period to maximize the expected momentary objective, taking the expected inflation $e_t=e(h_t)$ as given:
+\begin{equation}\label{IC}
+    \alpha(h_t) = \argmax_{\alpha}\underline{u}(\alpha,e_t,\varsigma_t ) 
+\end{equation}
+The quadratic objective implies a linear best response of $\alpha$ to $e$ and $\varsigma$. 
+\begin{equation}
+\alpha _{t}=Ae_{t}+B(\varsigma _{t})  \label{eqn:alphaBR}
+\end{equation}%
+with $A=\vartheta_{x}/(\vartheta_{x}+\kappa^2)$, and $B(\varsigma_t
+)=(1-A)\pi^{\ast }+A\kappa x^*+A\varsigma_{t}$. 
+
+Since \cite{kydland_rules_1977}, it has been understood that there is inflation bias when the central bank cannot commit. In our setup with incomplete information, the extent of inflation bias $\alpha_t-\pi^*$ varies with private agents' expected inflation $e_t=\beta(E_t\pi_{t+1})$. 
+
+To highlight this unique feature, we rewrite (\ref{eqn:alphaBR}) as $\alpha_t-\pi^*=\iota + A\beta(E_t\pi_{t+1}-\pi^{\ast })$ by denoting $\iota \equiv A(\kappa x^*-(1-\beta)\pi^*)$ and setting $\varsigma_t=0$,\footnote{As is conventional, these inflation bias measures are derived without any shock $\varsigma$.} and plots the best response function with the 45 degree line in Figure \ref{fig:Opp}. If private agents expect the inflation to be at target, i.e., $E_t\pi_{t+1}=\pi^*$, the optimal inflation bias is $\iota$; we define this as \textit{intrinsic inflation bias}. If the policy without commitment is fully expected, i.e., $E_t\pi_{t+1}=\alpha_t$, the optimal inflation bias is the intersection of the two lines $\iota/(1-A\beta)$; it is the well-known \textit{Nash equilibrium (NE) inflation bias}. When $A\beta$ is close to one, NE inflation bias (square marker) can be much larger than intrinsic inflation bias (diamond marker), as it will be in our quantitative model. 
+
+Our quantitative model with incomplete information captures the U.S. inflation dynamics of the 1970s as responding to gradually rising expectations as agents learn that the policymaker is opportunistic and follows (\ref{eqn:alphaBR}). Foreshadowing this result, Figure \ref{fig:Opp} shows two one-quarter-ahead inflation forecasts from the Survey of Professional Forecasters (SPF), illustrating the impact of rising expectations on opportunistic policy.
+
+\begin{ST}
+\begin{figure}[H]
+\caption[Caption for LOF]{Optimal Response of Opportunistic Policy to Inflation Expectations}
+\centering
+\includegraphics[height=2.5in,width=5in]{2023OctFig/Fig3panelA.jpg} 
+% \smallskip
+
+% \makebox[0pt]{%
+%    \includegraphics[height=2.8in,width=6in]{KLfigs2/Fig3panelB.jpg}}
+\label{fig:Opp}
+\begin{flushleft}
+\footnotesize{The figure shows how the opportunistic policymaker's optimal inflation bias varies with expected inflation, alongside the 45-degree line. Their intersection (square marker) denotes the \textit{Nash equilibrium (NE) inflation bias}, where policy without commitment is fully anticipated. The diamond marker shows the \textit{intrinsic inflation bias}, assuming agents expect inflation at target. Two SPF one-quarter-ahead forecasts illustrate how rising expectations influence opportunistic policy.}
+\end{flushleft}
+\end{figure}
+\end{ST}
+
+
+
+\subsection{Sequential rationality of the committed type}
+
+The committed policymaker selects and announces a state-contingent plan for current and future intended inflation $\{a_t\}_{t=0}^{\infty}$ at the start of his term and then subsequently executes it.
+
+The strategy of the committed type is 
+\textit{sequentially rational} if he maximizes the expected present discounted payoff at the
+beginning of his term,\footnote{We assume the committed policymaker maximizes payoffs
+within his own term, so his discounting includes both the time discount factor $\beta_{a}$ and the replacement probability $q$.}
+\begin{equation}
+U_{0}=\sum_{t=0}^{\infty }(\beta_{a}(1-q))^{t}\sum_{h_{t}}p(h_{t})\underline{u}(a_t,e(h_{t}),\varsigma_t),
+\label{intertemporal objective text}
+\end{equation}%
+where $\underline{u}\left (a ,e,\varsigma\right) \equiv \int u\left(
+\pi, x(\pi,e,\varsigma)\right) g\left( \pi|a\right) d\pi$\ with $x(\pi,e,\varsigma)=\left( \pi -e-\varsigma \right)/\kappa$, and 
+\begin{equation}
+p(h_{t})=\varphi (\varsigma _{t};\varsigma_{t-1}) g(\pi
+_{t-1}|a(h_{t-1}))p(h_{t-1})  \label{prob h evolution}
+\end{equation}%
+The probability of a specific history $h_{t}=[\varsigma _{t},\pi _{t-1},h_{t-1}]$ is conditional on inflation being generated by the committed type, combining the likelihood of the shock $\varsigma $, the likelihood of inflation $\pi $ given the committed type's decision, and the probability of the previous history.\footnote{There is a slight abuse of notation here by using summation $\Sigma$ over history to capture the joint effects of continuous distribution of $\pi $ and discrete Markov chain distribution of $\varsigma $.}
+
+In selecting the state-contingent plan ${a(h_t)}^\infty_{t=0}$, the committed policymaker takes into account the \textit{strategic power} of his plan in shaping how private agents' inflation expectations $e_t$ respond to the history $h_t$. The consistent expectations condition (\ref{consistent belief}) reveals three channels through which this strategic power operates:
+
+i) \textit{Anchoring expectations}: $e(h_t)$ is partially anchored by the next-period committed policy $a(h_{t+1})$. ii) \textit{Managing perceived opportunistic policies}: the opportunistic policymaker chooses ${\alpha(h_t)}$ as a best response to ${e(h_t)}$ under sequential rationality. Thus, by influencing expectations, the committed policymaker also indirectly shapes the perceived behavior of the opportunistic type. iii) \textit{Building reputation}: the strength of the anchoring effect depends on $\rho(h_t)$, which evolves based on the history of past committed policies and perceived opportunistic policies, $a(h_{t-1})$ and $\alpha(h_{t-1})$.
+
+
+
+
+
+\subsection{Public Perfect Bayesian Equilibrium}
+
+We now define our dynamic game's Public Perfect Bayesian Equilibrium (PBE).
+
+\begin{defn}
+A Public Perfect Bayesian Equilibrium is a set of functions in each history $\{z(h_t), e(h_t), \rho(h_t), \alpha(h_t), a(h_t)\}^\infty_{t=0}$ such that:
+
+(i) given $\alpha(h_t)$, $a(h_t)$, and $\rho(h_t)$, private agents' nowcast of inflation $z(h_t)$ conditional on a replacement satisfies (\ref{eq:z});
+
+(ii) given $\alpha(h_t)$, $a(h_t)$, and $z(h_t)$, 
+private agents' beliefs of policymaker type $\rho(h_{t+1})$ are updated according to (\ref{BL2}); and their expected inflation function $e(h_t)$ satisfies (\ref{consistent belief}); 
+
+(iii) given the expected inflation function, $e(h_t)$, the action of the opportunistic type policymaker $\alpha(h_t)$ maximizes his expected payoff (\ref{IC}); 
+
+and, at the start of a regime (t=0), 
+
+(iv) the strategy for the committed type policymaker  $\{a(h_t)\}^\infty_{t=0}$ maximizes his 
+expected payoff (\ref{intertemporal objective text}), taking into account the strategic power of $\{a(h_t)\}^\infty_{t=0}$ on $\{e(h_t)\}^\infty_{t=0}$ and $\{\alpha(h_t)\}^\infty_{t=0}$.
+
+\end{defn}
+
+
+
+\section{Constructing the Equilibrium}
+
+Construction of the Public PBE is usefully viewed as inner and outer loops of a program. The inner loop builds a within-regime equilibrium $
+\{e(h_t), \rho(h_t), \alpha(h_t), a(h_t)\}$ taking as given beliefs $z(h_t)$ about the consequences of a regime change. \ylcom{The outer loop adjusts the beliefs $z(h_t)$ to be consistent with future regime  outcomes, i.e., to attain a fixed point between $z(h_t)$ and $\{a(h_t), \alpha(h_t),
+\rho(h_t)\}$.}
+
+\subsection{Our novel principal-agent approach}
+The strategic power of the committed policy plan $\{a(h_t)\}^\infty_{t=0}$ over $\{e(h_t)\}^\infty_{t=0}$ and $\{\alpha(h_t)\}^\infty_{t=0}$ makes solving the within-regime equilibrium challenging. The committed policymaker’s optimal choice depends on the actions of the opportunistic type, as private agents’ expectations reflect a weighted average of both types’ future policies. At the same time, the committed type cannot treat opportunistic policy as fixed, since the opportunistic type responds to expectations -- which are themselves shaped by the committed policy plan.
+
+
+To address these challenges, we reformulate the within-regime equilibrium as a principal-agent problem. The committed policymaker, acting as the principal, maximizes (\ref{intertemporal objective text}) by choosing state-contingent plans for his own actions and those of two agents -- the private sector and the opportunistic policymaker -- subject to two incentive compatibility (IC) constraints: (i) consistent beliefs and rational expectations by private agents (\ref{BL2}) and (\ref{consistent belief}); and (ii) the opportunistic type’s optimal response to expected inflation (\ref{eqn:alphaBR}).
+
+This principal-agent problem differs from the standard literature\footnote{The standard approach to solve Ramsey equilibrium is laid out and advanced by \cite{kydland_dynamic_1980}, \cite{chang_credible_1998}, \cite{phelan_sequential_2001} and \cite{marcet_recursive_2019}.} in that one of the agents -- the private sector -- \textit{disagrees} with the principal in the probability of a specific history. The private sector \textit{thinks} that current inflation could be generated by the opportunistic policymaker, as captured in $E(\pi_{t+1}|h_t,\tau_t=0)$ in the rational expectations constraint (\ref{consistent belief}). By contrast, the committed policymaker \textit{knows} that current inflation is generated by his policy choices, as reflected in $p(h_t)$ in the intertemporal objective (\ref{intertemporal objective text}). 
+
+The disagreement is particularly relevant when the opportunistic policy optimally responds to expected inflation, as different paths of realized inflation lead to different future opportunistic policies. The disagreement in the probability of current inflation thus results in different inflation expectations by the committed policymaker and the private sector.\footnote{The disagreement in the probability of current inflation will be inconsequential if the non-committed type of policymaker follows a policy rule that depends only on exogenous shocks, as in \cite{lu_optimal_2016}.} 
+
+\subsection{Recursive formulation}
+
+A key necessary step in recursive formulation is to cast the Lagrangian component associated with
+the rational expectation constraint (\ref{consistent belief}) into recursive form. Disagreement in inflation expectations between principal and agent poses a challenge in this regard. We overcome it by a ``change of measure" that expresses $ E(\pi _{t+1}|h_{t},\tau_t=0)$ in terms of the committed type's probabilities, replacing $g(\pi_t|\alpha(h_t))$ with 
+$\lambda(\pi _{t},a_{t},\alpha_{t})g(\pi_t |a(h_{t}))$ 
+where $\lambda(\pi _{t},a_{t},\alpha_{t})\equiv g(\pi_{t}|\alpha_{t})/g(\pi_{t}|a_{t})$ is the likelihood ratio. 
+We then establish:\footnote{Appendix \ref{appsec:recursive} provides a detailed derivation of the recursive program.}
+
+\begin{prop}\label{prop:W}%
+%EndExpansion
+
+Given $z(\varsigma ,\rho)$, the within-regime equilibrium is the solution to:
+\begin{eqnarray}
+W\left( \varsigma ,\rho ,\mu \right) &=&\min_{\gamma }\max_{a,\alpha
+,e}\{\underline{u}\left( a,e,\varsigma \right) +\left[ \gamma e -\mu \omega(a,\alpha,\rho,\varsigma)
+\right] +  \label{W} \\
+&&\beta_{a}\left( 1-q\right) \int \sum_{\varsigma ^{\prime }}\varphi \left(
+\varsigma ^{\prime };\varsigma \right) W\left( \varsigma ^{\prime },\rho
+^{\prime },\mu ^{\prime }\right) g\left( \pi |a\right) d\pi \}, \notag \\
+\text{with } \omega(a,\alpha,\rho,\varsigma) &\equiv& \left( 1-q\right) a+qz(\varsigma ,\rho)+\frac{1-\rho }{%
+\rho }\left[ \left( 1-q\right) \alpha +qz (\varsigma ,\rho)\right]  \label{omega} \\
+\alpha &=& Ae+B\left( \varsigma \right) \\
+\mu ^{\prime } &=&\frac{\beta }{\beta_{a}\left( 1-q\right) }\gamma \rho 
+\text{, given }\mu _{0}=0  \label{mup} \\
+\rho ^{\prime } &=&\frac{\rho g(\pi|a) }{\rho g(\pi|a) +\left( 1-\rho
+\right) g(\pi|\alpha)} \text{ with prob $g(\pi|a)$, given $\rho_0$}  \label{rhop}
+\end{eqnarray}
+\end{prop}%
+
+
+The component $\left( \gamma e-\mu \omega \right) $ arises from the Lagrangian component of the rational expectations constraints (\ref{consistent belief}) expressed in the recursive form. $\gamma$ is the multiplier to the constraint (\ref{consistent belief}) and is the shadow price of honoring the promised inflation (choice of $e$).\footnote{Our rational expectations constraint (\ref{consistent belief}) is equivalent to the Phillips curve. Viewing it as an inequality constraint, with $x_t \leq (\pi_t- \beta E_t\pi_{t+1}-\varsigma_t)/\kappa$, the Phillips curve defines a set of feasible output gaps and inflation rates. Thus, the associated multiplier $\gamma$ is nonnegative.} The pseudo state variable $\mu $ records past promises made by the committed type (contained in $\omega$).
+
+With incomplete information and stochastic replacement, the composite promise term $\omega$ defined in (\ref{omega}) contains more than the committed type's promised $a$, because the expected inflation by private agents also depends on their perceived inflation $\alpha $ intended by the opportunistic
+type and their nowcast of inflation $z$ in a new regime.\footnote{Note $\omega=a$ when $q=0$, $\beta_a=\beta$, and $\rho=1$. This is a textbook NK policy problem in recursive form. Appendix \ref{specialcase} provides a fuller discussion.} 
+The weight $(1-\rho)/\rho$ attached to $[(1-q)\alpha+qz(\varsigma,\rho)]$ reflects the divergent probability beliefs about inflation $\pi$ held by the committed policymaker and private agents. Appendix \ref{appsec:recursive9} explains how we eliminate the likelihood ratio $\lambda$ from the state space.
+
+\subsection{The outer loop fixed point requirement}\label{sec:z}
+
+In a PBE, the nowcast of inflation $z^*(\varsigma ,\rho )$ in a new regime must satisfy
+\begin{equation}
+z^*(\varsigma ,\rho) =\int [\rho _{0}a^*( \varsigma ,\rho
+_{0},0;z^*(\varsigma ,\rho)) +( 1-\rho _{0}) \alpha ^*( \varsigma
+,\rho _{0},0;z^*(\varsigma ,\rho))]d\Xi(\rho_0|\rho)
+\label{z}
+\end{equation}%
+$a^{\ast }(.)$ and $\alpha ^{\ast }(.)$ are the within-regime equilibrium strategies obtained in the recursive program (\ref{W}) given $z^{\ast
+}(\varsigma ,\rho )$. The pseudo-state $\mu_0$ in the new regime is zero as a new policymaker is not held accountable for prior commitments made by his predecessor.\footnote{\cite{schaumburg_investigation_2007} impose a similar fixed point requirement in constructing an equilibrium in which a committed policymaker is randomly replaced.}
+
+
+\subsection{Managing expectations}
+The recursive formulation simplifies the committed policymaker’s management of expectations by reducing the problem to the choice of just two variables: the contemporaneous policy difference $\delta \equiv a-\alpha $, and the future pseudo-state
+variable $\mu ^{\prime }$.\footnote{Appendix \ref{appsec:consolidate2} contains the proof of the lemma.}
+
+\begin{lem}\label{lem:eApp}%
+Given $\left( \varsigma ,\rho \right) $ and future equilibrium strategies $a^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $, $%
+\alpha ^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $ and $z^{\ast }\left(
+\varsigma' ,\rho' \right) $, rationally expected inflation is uniquely
+determined by $\delta$ and $\mu'$;%
+\begin{eqnarray}
+e =e\left( \delta ,\mu ^{\prime };\varsigma ,\rho \right) &=&\beta \rho \textstyle\int 
+M_{a}(\varsigma ,b\left( v_\pi,v_\pi +\delta ,\rho \right) ,\mu ^{\prime })g(v_\pi)
+dv_\pi+  \label{eq:RE} \\
+&&\beta (1-\rho )\textstyle\int M_{\alpha}(\varsigma ,b\left(v_\pi -\delta ,v_\pi ,\rho \right) ,\mu ^{\prime })g(
+v_\pi) dv_\pi; \notag\\
+\text{where } b(\pi-a,\pi-\alpha,\rho) &\equiv&\frac{g(\pi-a)\rho}{g(\pi-a)\rho+g(\pi-\alpha)(1-\rho)}; \notag \\
+M_{a}\left( \varsigma ,\rho ^{\prime },\mu ^{\prime }\right)
+&\equiv&\textstyle\sum_{\varsigma ^{\prime }}\varphi \left( \varsigma ^{\prime };\varsigma
+\right) \left[ \left( 1-q\right) a^{\ast }\left( \varsigma ^{\prime },\rho
+^{\prime },\mu ^{\prime }\right) +qz^{\ast }\left( \varsigma ^{\prime },\rho
+^{\prime }\right) \right] ;  \notag\\
+M_{\alpha}\left( \varsigma ,\rho ^{\prime },\mu ^{\prime }\right)
+&\equiv&\textstyle\sum_{\varsigma ^{\prime }}\varphi \left( \varsigma ^{\prime };\varsigma
+\right) \left[ \left( 1-q\right) \alpha ^{\ast }\left( \varsigma ^{\prime
+},\rho ^{\prime },\mu ^{\prime }\right) +qz^{\ast }\left( \varsigma ^{\prime
+},\rho ^{\prime }\right) \right] .  \notag
+\end{eqnarray}%
+\end{lem}%
+The policy difference $\delta$ enters the function $b(\cdot)$ -- the Bayesian learning rule (\ref{BL2}) that describes how $\rho'$ updates in response to the observed inflation outcome $\pi$. The distribution of $\pi$ depends on the policymaker type: $\pi = a + v_\pi$ if the policymaker is committed, and $\pi = \alpha + v_\pi$ if opportunistic. A larger policy difference speeds up private-sector learning about the policymaker’s type by increasing the informativeness of inflation outcomes and sharpening the direction of $\rho'$ adjustment, given the actual type.
+
+The future pseudo-state variable $\mu'$ enters the rationally expected future equilibrium policies and thus serves to anchor expectations. The committed policymaker sets $\mu'$ through the choice of $\gamma$, which represents the shadow value of promising $a'$. The effect of $\gamma$ on $\mu'$ depends on the current reputation state $\rho$, which reflects the private sector’s skepticism about the likelihood that $a'$ will be delivered.
+
+\paragraph{From expectations to policies:} Managing expectations $e$ through the choice of the pair $(\delta, \mu')$ shapes the inflation policies: $\alpha = Ae + B(\varsigma)$ and $a = \alpha + \delta$. Together, expectations and policies determine the momentary objective function $\uline{u}(\cdot)$ and the composite promise term $\omega(\cdot)$, allowing us to simplify the recursive program (\ref{W}) from a choice over $(\gamma, a, \alpha, e)$ to a choice over just $(\delta, \mu')$:\footnote{Appendix \ref{app:W2} provides the proof.} 
+\begin{prop}\label{prop:W2}%
+Given $e =e\left( \delta ,\mu ^{\prime };\varsigma ,\rho \right)$ and $U^*\left( \varsigma ,\rho ,\mu \right)=W(\varsigma,\rho,\mu)+\mu\omega^*(\varsigma,\rho,\mu)$, 
+\begin{align}
+W(\varsigma,\rho,\mu) =\max_{\delta,\mu^{\prime}}&\left[\uuline{u}(
+\delta ,\mu ^{\prime };\varsigma,\rho) -\mu \uuline{\omega}(\delta,\mu^{\prime
+};\varsigma,\rho)+\beta_{a}\left( 1-q\right) \Omega( \delta ,\mu ^{\prime
+};\varsigma,\rho) \right] \label{eq:W2} \\
+\text{with }\uuline{u}(\delta,\mu';\varsigma,\rho) &\equiv \uline{u}(Ae+B(\varsigma)+\delta,e,\varsigma) \notag \\
+\uuline{\omega}(\delta,\mu';\varsigma,\rho) &\equiv \frac{1}{\rho }\left[
+\left( 1-q\right) \left( Ae+B(\varsigma )\right) +qz^{\ast }\left( \varsigma
+,\rho \right) \right] +\left( 1-q\right) \delta \notag  \\
+\Omega( \delta ,\mu ^{\prime} ;\varsigma,\rho )  &\equiv \textstyle\int \textstyle\sum_{\varsigma^{\prime
+}}\varphi( \varsigma ^{\prime };\varsigma ) U^*\left( \varsigma
+^{\prime },b( v_\pi ,v_\pi+\delta ,\rho) ,\mu ^{\prime }\right) g (v_\pi )dv_\pi \notag 
+\end{align}
+\end{prop}
+Let $s = [\varsigma, \rho, \mu]$ denote the state vector. The optimal choices $\delta^*(s)$ and $\mu'^* = m(s)$ determine the equilibrium objects $\omega^*(s)$, $W(s)$, $a^*(s)$, and $\alpha^*(s)$, which in turn serve as inputs to the rationally expected inflation function $e(\delta, \mu'; \varsigma, \rho)$ in (\ref{eq:RE}) and the value function $U^*(s)$. The program (\ref{eq:W2}) thus defines the inner-loop fixed point problem that solves for the within-regime equilibrium. Combined with the outer-loop fixed point problem (\ref{z}), the two fixed point problems jointly characterize the Public PBE.
+
+\section{Building the Quantitative Model}
+\label{sec:buildingmodel}
+
+In this section, we transform the model into a quantitative framework suitable for time series analysis. We begin by converting the within-regime recursive solution into a recursion over calendar time that accommodates random regime switches. After calibrating the model parameters, we implement a state extraction strategy that jointly identifies the latent states and structural shocks by targeting time series data from the Survey of Professional Forecasters (SPF). Finally, using the identified states and shocks, we construct model-implied variables that were not targeted in estimation and compare them to observed data for validation.
+
+\subsection{Time series implications of the Public PBE}\label{sec:tsrecursion}
+This juncture marks a shift in how we use $t$: up to this point, it has served as a regime clock, but from now on it will denote calendar time in the time series analysis. According to Propositions \ref{prop:W} and \ref{prop:W2}, the state vector $s = [\varsigma, \rho, \mu]$ determines the intended inflation policies, $a(s)$ and $\alpha(s)$, as well as private agents’ expected inflation $e(s)$.\footnote{We drop the superscript $*$, as we now focus exclusively on equilibrium behavior.} At the end of each period, inflation is realized as a random variable: $\pi = \tau a(s) + (1 - \tau) \alpha(s) + v_{\pi}$, where $\tau = 1$ indicates a committed regime and $\tau = 0$ an opportunistic regime.
+
+At the start of the next period, a new cost-push shock $\varsigma'$ is drawn from the distribution $\varphi(\varsigma'; \varsigma)$. The evolution of the reputation state $\rho'$ and the pseudo-state $\mu'$ depends on two sources of randomness. If no policymaker replacement occurs ($\theta' = 0$), reputation updates via Bayes’ rule: $\rho' = b(\pi-a(s), \pi-\alpha(s), \rho)$. Since $a$ and $\alpha$ are equilibrium functions of $s$, we write $\rho' = b(s, \pi)$ for notational convenience. The pseudo-state evolves deterministically as $\mu' = m(s)$. If a replacement occurs ($\theta' = 1$), the pseudo-state resets to $\mu' = 0$, and reputation is subject to \textit{partial inheritance}. Specifically, inheritance is complete with probability $\zeta_\rho$, and otherwise $\rho'$ is drawn from a Beta distribution with mean $\overline{\rho}$ and standard deviation $\sigma_\rho$. Formally, letting $\phi' \sim \text{Bernoulli}(\zeta_\rho)$, reputation evolves according to $\rho' = \phi' b(s, \pi) + (1 - \phi') v'_\rho$.
+
+
+Thus, we can construct an augmented state vector $S = [s, \pi]$ that evolves recursively over time, conditional on the realizations of $\theta$, $\phi$, and $\tau$. Private agents observe the outcomes of the replacement events -- $\theta$, $\phi$, and $v_{\rho}$ -- but do not observe the policymaker type $\tau$.
+
+
+
+
+\subsection{Calibration} 
+Table \ref{tab:calib} reports the calibrated values of important model parameters. One period is a quarter. The long-run inflation target $\pi^*$ is $1.5\%$, which lies in the 1 to 2 percent range frequently cited by central bankers advocating price stability.\footnote{This value matches  \cite{Shapiro2019} estimate based on FOMC transcripts 2000-2011. }
+The private sector and the committed type share a conventional quarterly discount factor based on a 2$\%$ annual real rate. 
+
+The slope of the Phillips curve is a  central element in any study of optimal inflation policy. In our setup, the PC slope $\kappa$ relates the output gap $x$ to the quarterly inflation $\pi$, 
+%percent change in the price level over a quarter, 
+holding expected inflation fixed.
+$\kappa=.08$ implies that an output gap of 3\% leads to annualized inflation of -1\%,
+%holding expected inflation fixed: our 
+a value compatible with diverse empirical evidence.\footnote{U.S. data from the 1950s and 1960s suggests that a 1\% decrease in unemployment led to about 0.54\% - 0.65\% increase in inflation. An estimate for Okun's coefficient is about 1.67 using U.S. data prior to 2008, implying a 1\% increase in unemployment led to a 1.67\% decrease in output. In a structural NKPC, the parameter is also consistent with an adjustment hazard leading to four quarters of stickiness on average and an elasticity of marginal cost with respect to output of unity. } 
+
+\begin{table}[ht]
+\centering
+\caption{Parameters}
+% \text{Table 1: Benchmark calibration} \\
+\begin{tabular}{|l|l|l|}
+
+\hline
+$\pi^{\ast }$ & Inflation target & $1.5\%$ \\ \hline
+$\beta ,\beta_{a}$ & Discount factor (private agents, committed type) & $0.995$ \\ \hline
+$\kappa $ & PC output slope & $0.08$ \\ \hline
+$\vartheta _{x}$ & Output weight & $0.1$ \\ \hline
+$x^{\ast }$ & Output target & $1.73\%$ \\ \hline
+$q$ & Replacement probability & $0.03$ \\ \hline
+$\zeta_{\rho}$ & prob of reputation inheritance & $0.9$ \\ \hline
+$\overline{\rho}$ & mean of reputation draw& $0.1$ \\ \hline
+$\sigma _{\rho}$ & std of reputation draw & $0.05$ \\ \hline
+$\xi_\varsigma $ & Persistence of cost-push shock & $0.7$  \\ \hline
+$\sigma _{v,\varsigma}$ & Std of cost-push innovation & $0.7\%$ \\ \hline
+$\sigma _{v,\pi}$ & Std of implementation error & $1.2\%$ \\ \hline
+\end{tabular}\label{tab:calib}
+
+\begin{flushleft}
+\footnotesize{One period is a quarter. Inflation target $\pi^*$, std of cost-push innovation $\sigma _{v,\varsigma}$, and std of implementation error $\sigma _{v,\pi}$ are all annualized rates.}
+\end{flushleft}
+\end{table}
+The policymaker's preferences are another key element in the analysis of optimal inflation. We set the weight on output $\vartheta_x$ to $0.1$, which is in the middle of the range used by prominent Fed researchers.\footnote{\cite{brayton_optimal-control_2014} after translating time units and using Okun's law.} Since $A=\vartheta_{x}/(\vartheta_{x}+\kappa^2)$,  together with $\kappa=.08$, this  implies $A=.94$. 
+The target output gap $x^*$ is chosen to yield a relatively small intrinsic inflation bias $\iota=.5\%$ while yielding a NE bias large enough to capture the magnitude of the Great Inflation: $\iota/(1-A \beta)$ of around $8\%$. From above,  $\iota=A(\kappa x^*-(1-\beta)\pi^{\ast})$ so that the implied value for $x^*=1.73\%$.\footnote{$x^*=1.73\%$ is equivalent to targeting unemployment about 1\% below the natural rate, if we use an Okun's law coefficient of 1.67.}
+
+
+The replacement probability of $q=.03$ implies an average regime duration of 8 years. We have less empirical guidance about the inheritance mechanism for reputation: we choose parameters so that a new policymaker inherits his predecessor's reputation with probability .9. Otherwise, his initial reputation is random with mean .1 and standard deviation 0.05.\footnote{Formally, reputation in th event of replacement next period is governed by $\rho' =\phi'b(s,\pi) + (1-\phi')v_{\rho}'$ with $\phi' \sim \text{Bernoulli}(\zeta_\rho)$ and $v_{\rho}' \sim \text{Beta}(\overline{\rho},\sigma_{\rho})$. We set $\zeta_\rho=0.9$, $\overline{\rho}=0.1$, and $\sigma_{\rho}=0.05$.} But our equilibrium policy functions are not sensitive to these choices due to the small replacement probability $q$.
+
+
+
+Beginning in the 1970s, many studies of inflation use an observable ``Food and Energy price shock"(FE shock hereafter).\footnote{See \citetalias{Gordon2013} and \cite{watson_inflation_2014}. It is constructed as the difference between the growth rate of the overall personal consumption deflator and its counterpart excluding food and energy.} We use the FE shock's serial correlation and its standard deviation as the cost-push shock's persistence $\xi_\varsigma$ and innovation volatility $\sigma _{v,\varsigma}$. The transition probability matrix $\varphi(\varsigma';\varsigma)$ is calibrated to approximate  $\varsigma'=\xi_{\varsigma}\varsigma + v_{\varsigma}$ where $v_{\varsigma}\sim N(0,\sigma^2_{v,\varsigma})$.\footnote{We use the \cite{rouwenhorst_asset_1995} method.} To calibrate the standard deviation of implementation errors, we combined the FE shock and the SPF one-quarter-ahead inflation forecast in an initial approximation to opportunistic intended inflation $\alpha$, estimating the standard deviation of $(\pi-\alpha)$ over 1964Q4-1979Q2.
+
+
+\subsection{State extraction strategy}
+The model features three structural shocks: to the cost-push process ($v_\varsigma$), to inflation ($v_\pi$), and to reputation in the event of policymaker replacement ($v_\rho$). It also includes three binary states: policymaker replacement ($\theta$), reputation inheritance ($\phi$), and policymaker type ($\tau$). These are supplemented by three continuous state variables in the Public PBE: the highly persistent reputation $\rho$, the transitory cost-push shock $\varsigma$, and the predetermined pseudo-state $\mu$. Although unobserved by an outside observer (econometrician), these states and shocks are linked to observable macroeconomic variables through the model’s equilibrium functions.
+
+
+The state extraction strategy uses the term structure of SPF inflation forecasts to identify the latent states. The model implies that longer-term forecasts depend more on the persistent reputation variable $\rho_t$, while shorter-term forecasts are more responsive to the transitory cost-push shock $\varsigma_t$. Figure \ref{fig:SPF} plots the SPF’s three-quarter-ahead forecast (SPF3Q) alongside the one-quarter-ahead forecast (SPF1Q), illustrating the smoother behavior of SPF3Q.\footnote{Elmar Mertens pointed us to the use of SPF term structure, as in \cite{mertens_inflation_2020}. We do not use SPF4Q due to missing observations, particularly in 1975.} Drawing from the term structure literature in interest rates, we construct an SPF spread as SPF1Q minus SPF3Q (plotted as a dashed black line). The spread rises notably during the two major oil price shocks of the 1970s (1974–75 and 1978–80), as well as during the recent COVID-19 shock (2021-22).
+
+
+Given a set of calibrated parameters, the model delivers a function $f(s, j)$ representing private agents’ expectations at each horizon $j$.\footnote{Appendix \ref{app:forecast} provides derivations.} Let $f_{t+j|t}$ denote the SPF forecast at horizon $j$, assumed to differ from the model-implied expectation by a Gaussian observation error: $f_{t+j|t}=f(s_t,j)+\varepsilon_{jt}$.\footnote{If the timing of policymaker replacements were known and model and data expectations were assumed to match exactly, the state variables $\varsigma_t$ and $\rho_t$ could be recovered by inverting the theoretical relationships, since $\mu_t$ evolves deterministically. An earlier version of this research, \cite{king_evolving_2022}, used this approach, which \cite{kollmann_tractable_2017} refers to as an “inversion filter” (see also \cite{drautzburg_filtering_2022}).}
+
+Following the Markov switching literature (\cite{hamilton_new_1989}, \cite{kim_dynamic_1994}), the model is cast into a state-space form using the time-series recursion of $S = [s, \pi]$, while the three binary state variables $(\theta, \phi, \tau)$ are treated as the outcomes of an unobserved discrete-state Markov process $\Theta$. Six discrete states are defined for $\Theta$: states $\{1, 3, 5\}$ represent a continuing committed policymaker ($\theta = 0, \tau = 1$), a newly appointed committed policymaker with complete reputation inheritance ($\theta = 1, \phi = 1, \tau = 1$), and a new committed policymaker with randomly drawn reputation $v_\rho$ ($\theta = 1, \phi = 0, \tau = 1$); states $\{2, 4, 6\}$ represent the corresponding cases for an opportunistic policymaker. The transition probability matrix for these six states is restricted to reflect the structure of the model -- for example, the policymaker type $\tau$ can change only when a replacement event occurs. The matrix is presented in Appendix \ref{app:extractstate}.
+
+\subsection{The state space model with Markov-switching}\label{sec:stateextraction}
+We now detail the evolution of continuous state variables $S_{t}=[\varsigma_{t}, \rho_{t},\mu_{t}, \pi_{t}]$ resulting from $v_t =[v_{\varsigma,t}, v_{\rho,t}, v_{\pi,t}]$, taking as given the discrete state $\Theta_t \in \{1,2,...,6\}$ defined above. 
+\begin{align*}
+S_{t}  &  =\left[
+\begin{array}
+[c]{c}%
+\xi_\varsigma\varsigma_{t-1}+v_{\varsigma,t}\\
+(1-\theta_{t}+\theta_{t}\phi_{t})b(s_{t-1},\pi_{t-1}
+)+\theta_{t}(1-\phi_{t})v_{\rho,t}\\
+(1-\theta_{t})m(s_{t-1})\\
+\tau_{t}a(s_t)+(1-\tau_{t})\alpha(s_t)+v_{\pi,t}%
+\end{array}
+\right] =F(S_{t-1},v_{t}|\Theta_{t})
+\end{align*}
+The first entry specifies the process for the cost push shock $\varsigma$. The second entry specifies that $\rho_{t}$ is determined by the Bayes' rule $b(s_{t-1},\pi_{t-1})$, if there is no replacement ($\theta=0$) or if there is reputation inheritance ($\theta=1$ and $\phi=1$), while otherwise $\rho_{t}$ is a random shock $v_{\rho,t}$ with support $[0,1]$. The third entry indicates that the pseudo state variable evolves according to $\mu_{t+1}=m(s_{t})$, except if there is replacement ($\theta=1$) in which case it is set to zero. The final entry captures that inflation $\pi_{t}$ depends on the type of policymaker in place.\footnote{The final entry uses $s_t=[\varsigma_t,\rho_t,\mu_t]$ that are shown to be a function of $S_{t-1}$ by the first three entries.}
+
+
+
+The one-quarter-ahead and three-quarter-ahead SPF forecasts are taken to be the model inflation forecasts corrupted by Gaussian observation errors $\varepsilon_1$ and $\varepsilon_3$.\footnote{$\varepsilon_1$ and $\varepsilon_3$ are i.i.d. normal random variables with mean zero and standard deviation $0.5\%$ (annualized).} That is, our observation equations are:
+\begin{align*}
+Y_{t}&=\left[
+\begin{array}
+[c]{c}%
+f_{t+1|t}\\
+f_{t+3|t}\\
+\end{array}
+\right]  =\left[
+\begin{array}
+[c]{c}%
+f(\varsigma_{t},\rho_{t},\mu_{t},1)\\
+f(\varsigma_{t},\rho_{t},\mu_{t},3)\\
+\end{array}
+\right]  +\left[
+\begin{array}
+[c]{c}%
+\varepsilon_{1t}\\
+\varepsilon_{3t}\\
+\end{array}
+\right] =H(S_{t}) + \varepsilon_{t}
+\end{align*}
+
+As our model is not linear, we cannot use the standard Kalman filter. We adopt an efficient  unscented Kalman filter -- that has been shown to work well in nonlinear regime-switching models. Appendix \ref{app:extractstate} provides details on the algorithm, which also employs the collapsing approach of \cite{kim_dynamic_1994} and \cite{kim_state-space_2017}. 
+For each element of $S_{t}$ and $\Theta_{t}$, our approach produces filtered estimates (based on $Y^{t}=[Y_{1},Y_{2},...Y_{t}]$) and smoothed estimates (based on $Y^T$).
+
+
+The smoothed estimates of the cost-push shock $\widehat{\varsigma}_t$ (red) and the reputation state $\widehat{\rho}_t$ (cyan and measured on the right hand axis) are reported in Figure \ref{fig:SPF}.\footnote{The reported value is the probability-weighted average of smoothed estimates of state variables conditional on being in a discrete state: $\widehat{x}_t=\sum_{i=1}^6 E(x_t|\Theta_t=i,Y^T)Pr(\Theta_t=i|Y^T)$.}
+The estimated cost-push shock $\widehat{\varsigma}_t$ covaries positively with the SPF spread (SPF1Q-SPF3Q), consistent with our strategy of exploiting greater sensitivity of near-term forecasts to transitory shocks. The estimated reputation state $\widehat{\rho}_t$ exhibits a big swing, declining from around 0.7 in 1969 to near zero by the end of 1980 and finally climbing back to above 0.8 after 2000.\footnote{For the estimates of discrete states, please refe to Appendix \ref{app:conditionalprob}.} 
+
+\subsection{Targeted and untargeted time series}
+\label{sec:error}
+
+We now report the performance of the model-based non-linear Kalman method, in terms of fitting targeted time series, SPF1Q and SPF3Q, and matching untargeted time series.
+\subsubsection{Inflation expectations} 
+Our extraction method produces a nearly perfect match for SPF1Q and SPF3Q. Using the extracted states, we can also compute model-implied inflation forecasts at horizons 2 and 4. Appendix \ref{app:stateresult} Figure \ref{fig:multiSPF} shows that these additional forecasts lie almost entirely on top of the untargeted SPF2Q and SPF4Q, providing support for our state extraction approach. 
+
+\begin{ST}
+\begin{figure}[H]
+\begin{center}
+\caption[Caption for LOF]{Targeted SPFs, SPF spread, and estimated state variables}
+
+\includegraphics[height=3in,width=5.5in]{2025JanFig/SpreadState_slides.jpg} 
+\label{fig:SPF}
+\begin{flushleft}
+\footnotesize{This figure plots selected inputs and outputs of our nonlinear filter. The inputs are the one-quarter-ahead and three-quarter-ahead SPF inflation forecasts from 1968Q4 to 2024Q3. Appendix \ref{appsec:SPF} provides details on our SPF constructions. The SPF spread (black dashed line) is the difference between SPF1Q and SPF3Q. It rises during the first (1974-75) and the second (1978-80) inflation surges (black solid line). The outputs are smoothed estimates of reputation (cyan and measured on the right axis) and cost-push shocks (red). Consistent with our strategy of exploiting greater sensitivity of near-term forecasts to transitory shocks, the estimated cost-push shock covaries positively with the SPF spread.}
+\end{flushleft}
+\end{center}
+
+\end{figure}
+\end{ST}
+\subsubsection{Observed and estimated inflation}\label{sec:inflfit}
+The state-space model treats inflation as a latent variable and produces both filtered and smoothed estimates of $\pi_t$. Since the state extraction relies solely on SPF data, comparing the smoothed estimates $\widehat{\pi}_t$ with observed inflation provides a natural form of model validation. To assess the quality of our estimates, we benchmark them against the SPF's one-quarter-ahead forecast (SPF1Q).\footnote{Because our extraction procedure uses SPF1Q and SPF3Q data, one might argue that it is unsurprising the estimates perform well, given the SPF itself tracks observed inflation. Using SPF1Q as the performance benchmark directly addresses this concern.}
+
+Figure \ref{fig:Error} compares observed inflation (blue) with two series: the SPF’s one-quarter-ahead forecast made in the current quarter (black) and our model’s smoothed estimate (red). The dashed lines plot the deviations of each series from observed inflation, using the same respective colors. By two key metrics, our smoothed estimates outperform SPF1Q in tracking actual inflation: (1) they yield a lower mean squared error (MSE) of 1.32 compared to 1.58 for SPF1Q; and (2) their fitting errors exhibit lower persistence (0.52 versus 0.58).
+
+These results suggest that our quantitative model captures U.S. inflation dynamics well, despite inflation not being directly targeted in the estimation.\footnote{A skeptical reader may note that our smoothed estimates use the full sample, unlike real-time SPF forecasts. To address this, Appendix \ref{app:stateresult}, Figure \ref{fig:filterinflation}, shows one-sided (filtered) estimates. The close match with observed inflation persists even without a full-sample information advantage.}
+
+\begin{ST}
+\begin{figure}[H]
+\begin{center}
+\caption[Caption for LOF]{Inflation history and model-implied inflation}
+%  reduce from 4 by 10 to 4*5.5/10 by 5.5$
+% reduce from 3 by 8 to 3*5.5/8 by 5.5
+%\includegraphics[height=2.2in,width=5.5in]{CalibSPFmulti/AverageErrorYLNew.jpg}
+
+% reduce from 4 high by 6 wide to 
+% 4*(5.5/6) by 5.5
+
+\includegraphics[height=3.4in,width=5.5in]{2025AprFig/ErrorPlot_smooth_slides.jpg}
+\label{fig:Error}
+\begin{flushleft}
+\footnotesize{This figure shows that the smoothed inflation estimates (red) produced by our nonlinear filter closely track U.S. inflation data (blue), despite relying solely on SPF data. For comparison, we also plot the one-quarter-ahead SPF forecasts made in the same quarter (SPF1Q, black). The model’s fitting error (dashed red) and the SPF1Q error (dashed black) are shown as the respective gaps from observed inflation. The comparison reveals that our smoothed estimates outperform SPF1Q on two fronts: they exhibit a lower mean squared error and less persistent fitting errors.} 
+\end{flushleft}
+\end{center}
+\end{figure}
+\end{ST}
+
+\section{Strategic Reputation Management}
+A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the dynamics of the Volcker disinflation episode, and the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
+
+
+
+\begin{figure}[H]
+\begin{center}
+\caption[Caption for LOF]{Equilibrium policy functions}
+\bigskip
+\includegraphics[width=5.5in]{2025AprFig/dr_rho.jpg}
+\label{fig:policyfcn}
+\begin{flushleft}
+\footnotesize{Strategic reputation management makes committed policy less inflationary, particularly when reputation $\rho$ is low, both absolutely and relative to opportunistic policy. Each panel compares policy functions from the benchmark model with strategic reputation management (blue) and the naive model (red).}
+\end{flushleft}
+\end{center}
+\end{figure}
+
+\subsection{Equilibrium policy functions}
+
+We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
+
+Figure \ref{fig:policyfcn} shows the equilibrium policy functions for the committed policy $a$ (left panel), the opportunistic policy $\alpha$ (middle panel), and their difference $\delta = a - \alpha$ (right panel), comparing results from the benchmark model with strategic reputation management (blue) and the naive model (red).\footnote{The policy functions are conditional on the other two state variables, $\mu$ and $\varsigma$, which are held fixed for illustration. Compared to $\rho$, these states play a less significant role in shaping the policy functions. We set $\mu$ at its steady-state level under $\rho = 1$ and $\varsigma = 0$. Appendix Figure \ref{fig: delta} plots the equilibrium policy difference, $a - \alpha$, as a function of $\rho$ across various alternative values of the cost-push shock and $\mu$.} 
+
+The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. In contrast, under the naive model, the policy difference remains flat across reputation levels, even though both types optimize.
+
+To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
+
+This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for capturing the dynamics of episodes like the Volcker disinflation and for explaining the time-varying sensitivity of forecast revisions to inflation surprises.
+
+
+
+\subsection{Volcker disinflation} 
+We now use the time period between 1979Q3 and 1987Q4 to illustrate how strategic reputation management makes a difference in time series. Our quantitative results show that it is a period when a committed policy regime is more plausible but reputation starts at a low level. We construct the counterfactual dynamics of reputation, inflation, and intended inflation policies under a naive committed policymaker, using the same cost-push shocks, implementation errors, and probabilities of states as estimated in our benchmark model.\footnote{The initial values for $\rho$ and $\mu$ at 1979Q3 are set at the same level as in the benchmark model.} Figure \ref{fig:counterfactual} plot them against the benchmark case.
+
+
+\begin{figure}[htbp]
+\caption[Caption for LOF]{Counterfactual under Volcker}
+  \centering
+
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[width=\linewidth]{2025AprFig/naiveRHO_partial.jpg}
+  \end{minipage}
+  %\hfill
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[width=\linewidth]{2025AprFig/naiveINFL_partial.jpg}
+  \end{minipage}
+
+  \vspace{0.1cm}
+
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[width=\linewidth]{2025AprFig/naiveA_partial.jpg}
+  \end{minipage}
+  %\hfill
+  \begin{minipage}{0.4\textwidth}
+    \includegraphics[width=\linewidth]{2025AprFig/naiveALPHA_partial.jpg}
+  \end{minipage}
+\label{fig:counterfactual}
+\begin{flushleft}
+\footnotesize{This figure plots the time series of reputation $\rho$ (upper left panel), inflation $\pi$ (upper right panel), committed policy $a$ (lower left panel), and opportunistic policy $\alpha$ (lower right panel) from 1979Q2 to 1987Q4 when Paul Volcker was the Fed chairman. The solid lines are produced by the benchmark model and the lines with star markers are produced by the naive policy model, using the same cost-push shocks, implementation errors and probabilities of states as estimated in our benchmark model. In the benchmark model, the committed policy after 1981 is much lower than the opportunistic policy, resulting in a rapid increase in reputation. By contrast, in the naive model where the incentives to manage reputation are missing, it takes much longer for the committed policymaker to disinflate the economy after 1981, and reputation remains low for the entire period under Volcker.}
+\end{flushleft}
+\end{figure}
+
+In the benchmark model, reputation rises rapidly after 1981—from below 0.1 to over 0.4 by the end of the 1982–83 recession, and above 0.6 by 1987. Model-implied inflation closely tracks the Volcker disinflation, falling from around 10\% in 1981 to 4\% by the end of the 1982–83 recession. This rapid disinflation is driven by aggressive committed policies that remain two to three percentage points below opportunistic policies during 1981–82.
+
+In contrast, under the naive model, reputation gains little during the 1982–83 recession and stays low -- around 0.2 -- for an extended period. This is because the naive committed policymaker treats reputation as exogenous, leading to a policy path that closely mirrors the opportunistic one. Low reputation sustains high expected inflation, worsening the inflation-output trade-off. As a result, disinflation is much slower, deviating sharply from the post-1981 U.S. inflation experience.
+
+
+
+\subsection{Long-term inflation forecasts}
+In this section, we provide empirical evidence for a key implication of strategic reputation management: the sensitivity of long-term inflation forecast revisions to inflation surprises is not constant but varies over time in a manner consistent with our benchmark model. This reflects the feedback loop highlighted earlier -- where beliefs influence policy, and policy in turn shapes beliefs. To test this implication, we adopt a reduced-form approach that isolates the model’s qualitative predictions without relying on short-term SPF forecasts, which were used in the structural estimation.
+
+\subsubsection{Long-term inflation forecast proportional to reputation}
+Our theory implies that long-term inflation forecasts depend solely on reputation, not on cost-push shocks, because cost-push shocks are stationary and their influence becomes negligible at long horizons. Formally, the period-$t$ long-term inflation forecast is given by:
+\begin{equation}\label{eq:LTF}
+f_{\infty|t} = \rho_t[ (1 - q)\pi^* + qz(\varsigma = 0, \rho = 1)]+(1 - \rho_t)[(1-q)\pi^{NE}+qz(\varsigma = 0, \rho = 0)] 
+\end{equation}
+which is a weighted average of long-term inflation forecasts conditional on the policymaker’s type. With probability $\rho_t$, the policymaker is committed, and reputation converges to 1 in the long run. In this case, long-term inflation equals the target $\pi^*$ if the regime persists, or the “startup” inflation associated with a new policymaker following the committed regime. Conversely, with probability $1 - \rho_t$, the policymaker is opportunistic, and reputation converges to 0. The corresponding long-term inflation is either the Nash-equilibrium inflation bias $\pi^{NE}$ if the regime continues, or the startup level associated with a new policymaker following the opportunistic regime. Since inflation is always lower under committed regime, \eqref{eq:LTF} implies that long-term inflation forecasts move inversely with reputation. 
+
+
+\subsubsection{Dynamics of reputation}
+We now examine the dynamics of reputation. According to the Bayes' rule (\ref{BL2}), reputation is a function of observed inflation $\pi$ and evolves as a \textit{martingale} from the perspective of the private sector. This follows from the fact that the likelihood of observing $\pi_t$ is $\rho_t g(\pi_t | a_t) + (1 - \rho_t) g(\pi_t | \alpha_t)$, implying that the expected update in reputation satisfies $E_t \rho_{t+1} = \rho_t$.
+
+Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + (1 - \rho_t) \alpha_t]$, we obtain the following expression for the change in reputation:\footnote{This approximation becomes exact in continuous-time versions of imperfect public monitoring games, such as Eq (2) in \cite{faingold_reputation_2011}.}
+\begin{equation}\label{eq:rhoapprox}
+\rho_{t+1} - \rho_t \approx k \{\rho_t(1 - \rho_t)(a_t - \alpha_t)\}  \{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]\}
+\end{equation}
+where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation, as the policy difference $a_t - \alpha_t$ is always negative.
+
+Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy difference. Strategic reputation management implies that lower reputation leads to a wider policy difference. Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy difference.
+
+Finally, \eqref{eq:LTF} implies a linear relationship between reputation and long-term inflation forecasts. Consequently, revisions in long-term forecasts inherit the time-varying sensitivity of reputation changes to inflation surprises.
+
+
+
+\subsubsection{Time variation in sensitivity to inflation news}
+To study empirically how revisions in long-term inflation forecasts respond to news about inflation, we employ the SPF CPI inflation forecast data that includes both nowcast and $10$-year-ahead forecast available starting in 1991Q4. Our sample covers up to 2024Q2.
+
+To construct the ``inflation surprise", we utilize the ``backcast" estimate of the prior quarter inflation and a ``nowcast" estimate of the current quarter inflation: 
+\[
+v_{t}^{i}=f_{t|t+1}^{i}-f_{t|t}^{i}
+\]
+The ``backcast" $f_{t|t+1}^{i}$ is the realized CPI inflation in $t$ as perceived by the forecaster $i$. $f_{t|t}^{i}$ is the same forecaster's ``nowcast" of inflation of the same quarter. 
+For each forecaster, we can also construct 10-year forecast revision as
+\[
+v_{40,t}^{i}=f_{t+41|t+1}^{i}-f_{t+40|t}^{i}.
+\]
+
+We aggregate individual variables by restricting to forecasters present in both periods $t$ and $t+1$, and then take the mean as the consensus measure: $v_t$ for inflation surprise, $v_{40,t}$ for long-term forecast revision, and $f_{t+40|t}$ for the long-term inflation forecast. We then use $f_{t+40|t}$ to construct a reduced-form measure of reputation, $\widehat{\rho}_t$, based on (\ref{eq:LTF}).
+
+% The empirical counterpart of (\ref{eq:rhoapprox}) is:
+% \begin{equation}
+%     v_{40,t}=\xi_t v_t + \epsilon_t
+% \end{equation}
+% where $\xi_t$ is the effect of inflation surprise on long-term forecast revision that is time-varying and increasing in $\rho_t(1-\rho_t)^2$.
+
+% To capture the dependence of $\gamma_t$ on $\rho_t$, we employ the relation between reputation and long-term inflation forecast in (\ref{eq:LTF}) to construct , with the SPF 10-year CPI inflation forecast. We then use $\widehat{\rho}_t$ to construct weights to inflation surprise and examine if the weighted inflation surprises outperform the unweighted ones in explaining revisions of long-term inflation forecast. 
+
+We compare three regression models, each corresponding to a class of learning models with different structural features:
+\begin{align*}
+     \text{Model 1: }v_{40,t}&=\xi v_t + \epsilon_t \\
+     \text{Model 2: }v_{40,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t) v_t + \epsilon_t \\
+     \text{Model 3: }v_{40,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t)^2 v_t + \epsilon_t
+\end{align*}
+Model 1 uses unweighted inflation surprise as the regressor, which would be appropriate if belief updating did not involve learning about the policymaker’s type or policy regime. Model 2 weights the surprise by $\widehat{\rho}_t(1 - \widehat{\rho}_t)$, consistent with the idea that forecast revisions are proportional to belief updating -- beliefs respond more to shocks when uncertainty about policymaker's type or policy regime is higher. This specification assumes the policy difference across types or regimes is constant. Model 3 modifies the weight to $\widehat{\rho}_t(1 - \widehat{\rho}_t)^2$, capturing the interaction between policy and reputation: lower reputation increases the policy difference and accelerates private-sector learning -- a mechanism unique to our model with strategic reputation management.
+
+
+Table \ref{tab:regression} reports each model’s performance in terms of adjusted $R^2$ and root mean squared error (RMSE). Compared to the unweighted baseline, the weighted specifications offer substantial gains in explanatory power: adjusted $R^2$ rises from 0.163 in Model 1 to 0.193 in Model 2, and further to 0.248 in Model 3; RMSE falls from 0.117 to 0.114 and then to 0.110.
+
+Figure \ref{fig:CPI10Y} visualizes the comparison by plotting the cumulative change in long-term inflation forecasts alongside fitted values from the three models. The black dashed line shows the data; the magenta, blue, and red lines correspond to Models 1, 2, and 3, respectively. Model 3 clearly provides the best fit, especially before 2000, when long-term inflation forecasts were being revised downward—indicating rising reputation.
+
+% Table generated by Excel2LaTeX from sheet 'Sheet1'
+\begin{table}[htbp]
+  \centering
+  \caption{Comparison of three regression models}
+    \begin{tabular}{lccccc}
+    \toprule
+          & $\xi$ & p value & Adjusted $R^2$ & RMSE  & $N$ \\
+    \midrule
+    Model 1 & 0.038 & 1.13E-06 & 0.163 & 0.117 & 130 \\
+    Model 2 & 0.384 & 1.04E-07 & 0.193 & 0.114 & 130 \\
+    Model 3 & 3.078 & 1.02E-09 & 0.248 & 0.11  & 130 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:regression}%
+
+  \begin{flushleft}
+\footnotesize{OLS regressions of long-term CPI inflation forecast revision on inflation surprise. Sample period is from 1991Q4 to 2024Q2. Model 1 uses the unweighted inflation surprise. Models 2 and 3 weight inflation surprise using $\widehat{\rho}_t(1-\widehat{\rho}_t)$ and $\widehat{\rho}_t(1-\widehat{\rho}_t)^2$, respectively, where $\widehat{\rho}_t$ is constructed using the long-term inflation forecast according to (\ref{eq:LTF}). RMSE stands for Root Mean Squared Error. All regressions include a constant, but its coefficients are statistically insignificant.}
+\end{flushleft}
+\end{table}%
+
+\begin{figure}[H]
+\centering
+\caption{Cumulative change in long-term CPI inflation forecast since 1991Q4} 
+\includegraphics[width=0.75\textwidth]{2024DecFig/CPI10Y_cumuchange.jpg}
+
+\label{fig:CPI10Y}
+\begin{flushleft}
+\footnotesize{The cumulative change in the long-term CPI inflation forecast from 1991Q4 to 2024Q2 against its fitted counterparts produced by three models. The black dash line is the data, the magenta, blue, and red lines correspond to the fitted line using Models 1, 2, and 3, respectively. Model 1 uses the unweighted inflation surprise. Models 2 and 3 weight inflation surprise using $\widehat{\rho}_t(1-\widehat{\rho}_t)$ and $\widehat{\rho}_t(1-\widehat{\rho}_t)^2$, respectively, where $\widehat{\rho}_t$ is constructed using the long-term inflation forecast according to (\ref{eq:LTF}). } 
+\end{flushleft}
+\end{figure}
+
+
+
+
+
+
+\section{Summary, Conclusions and Final Remarks}
+We characterize the recursive equilibrium of a dynamic game that features two types of purposeful policymakers, a committed type which can commit and an opportunistic type which cannot, and private agents who are Bayesian learners about policymaker type and form forward-looking expectations of future policies. In the game, the committed policymaker strategically uses his policy plan to influence private agents' learning and inflation expectations, understanding that (i) private agents inflation expectations include future policy of an opportunistic type; and (ii) an opportunistic type’s optimal policy depends on private agents' inflation expectations. 
+
+Harnessing the insights of modern contract theory, we develop a computable recursive equilibrium, where the equilibrium policies of both policymaker types and the rational expectations of private agents are shown to be functions of only three state variables, including an important reputation state that captures the evolution of private agents' beliefs about the commitment capacity of current policymaker. 
+Using SPF short-term inflation forecasts data as observables, we extract latent states of the model via a nonlinear filter based on our theoretical model's dynamic system. The model-implied inflation tracks US inflation’s rise, fall, and stabilization to a surprising high degree, even though the observed inflation is not used by the nonlinear filter. 
+
+Our results reveal that evolving reputation is central to understanding the interplay between inflation expectation and policy. In particular, without the incentives of rebuilding reputation, a switch to committed policy regime in 1981 cannot account for the observed post-1981 Volcker disinflation. Moreover, long-term inflation forecasts depend on reputation that evolves through Bayesian updating of inflation forecast errors. Our model implies a nonlinear relation between reputation and the sensitivity of long-term inflation forecast to forecast errors, which is supported by empirical evidence from regressions of SPF long-term forecast revision on nowcast forecast errors. 
+
+Our model is deliberately stark. But it yields results that have surprised us and others. We believe its success in matching U.S. experience of inflation and inflation expectations indicates great promise to further research on leveraging this theory framework to guide how to manage expectations in optimal policy.
+
+
+%\newpage
+
+
+\newpage
+\baselineskip13pt 
+\bibliographystyle{aer}
+%\bibliographystyle{apalike}
+%\bibliographystyle{aea}
+\bibliography{referencesV2,Statistics,MonetaryPolicy}
+
+
+
+%\end{discuss}
+
+\newgeometry{left=1in,right=1in,bottom=1in}
+\linespread{1}
+
+\newpage 
+\appendix
+%For Online Publication
+\begin{center}
+{\Large {Appendices} }
+\setcounter{footnote}{0}
+\setcounter{page}{1}
+\end{center}
+
+\section{Recursive optimal policy design}\label{appsec:recursive}
+\numberwithin{equation}{section} \renewcommand{\theequation}{A%
+\arabic{equation}}
+
+The optimal policy problem for the committed type at the start of his tenure involves forward-looking constraints, which must
+be transformed to yield a recursive specification. Conceptually, this
+involves casting Lagrangian components in recursive form, relying on (i) application of the law of iterated expectation and
+(ii) appropriate rearrangement of expected discounted sums.
+In the current model, the transformation to recursive form must also take into account that the committed policymaker and the private sector have different discount
+factors and probability beliefs, so that the law of iterated expectation must
+be applied carefully.
+
+This appendix derives the recursive program stated in Proposition \ref{prop:W}. Key elements from the main text are repeated to ensure the appendix is self-contained. The derivation proceeds step by step, accommodating readers with varying familiarity with recursive optimal policy design. A distinctive feature of this application is the ``change of measure” in the expectations constraint faced by the committed policymaker, which arises because private agents  understand that inflation may result from an optimizing opportunistic type.  
+
+As we develop the optimal policy for the committed type, we assume that the committed type takes as given a function governing private agents' expected inflation in the event of his replacement. But in the background, there is an equilibrium requirement that private agents form rational beliefs about inflation in the event of a replacement next period. We impose this requirement in Section \ref{sec:z} of the main text.
+
+\subsection{Intended and actual inflation}
+\label{appsec:recursive1}
+
+At each date, the policymaker chooses intended inflation, denoted as $a$
+for the committed type ($\tau=1$) and $\alpha $ for the opportunistic type ($%
+\tau=0)$. Intended inflation is not observed by the private sector. Actual inflation is randomly distributed around this intention:
+\begin{equation}\label{app:pi}
+    \pi_t=\tau_t a_t + (1-\tau_t) \alpha_t + v_{\pi,t}.
+\end{equation}
+where $v_{\pi,t}$ is an i.i.d. implementation error and  $v_{\pi,t} \sim g(\cdot)$ with $g(\cdot) = N(0,\sigma_{v,\pi}^2)$. With a slight abuse of notation, we use $g(\pi|a)$ and $g(\pi|\alpha)$ to denote the density of inflation conditional on the intended inflation.
+
+\subsection{Measures of history}\label{appsec:recursive2}
+We use period $t$ as the time index within a regime, so period 0 is the date of last regime change. The committed type begins with a reputation, $\rho _{0}$, known to private agents. 
+
+Private agents at the end of period $t$ know the entire history of inflation ($\pi $), output ($x$), and inflation shocks ($\varsigma $) since period 0 (the last regime change date). After the
+next period starts, the $\varsigma $ shock is realized. The policymaker's intended inflation ($a$ or $\alpha$) and the expectations term $e$ in the output-inflation trade-off, $\pi = e + \kappa x + \varsigma$, are both conditioned on this information. We write
+the information history as 
+\begin{equation*}
+h_{t}=[\varsigma _{t},\{\varsigma _{t-s}\}_{s=1}^t,\{\pi
+_{t-s}\}_{s=1}^t]
+\end{equation*}
+After the policymaker chooses his intended inflation, actual inflation and
+output are realized. Private agents' updated belief about policymaker type, are conditioned on this extended information,  
+\begin{equation*}
+h_{t}^{+}=[\pi _{t},h_{t}].
+\end{equation*}%
+Note that 
+\begin{equation*}
+h_{t+1}=[\varsigma _{t+1},h_{t}^{+}]=[\varsigma _{t+1},\pi _{t},h_{t}]
+\end{equation*}
+
+\paragraph{A word on notation:} In the Public Perfect Bayesian Equilibrium of our 
+dynamic game, variables depend just on the relevant history (e.g., $a(h_{t})$) and not separately on the date (e.g., $a_{t}(h_{t})$). To further streamline some formulas, we will sometimes condense variables even further, writing $a(h_{t})$ as $a_{t}$.
+
+\subsection{Beliefs about current inflation}\label{appsec:recursive3}
+
+Although private agents do not know the type of policymaker that is in
+place, at the start of period $t$, they have a prior belief $\rho _{t}$ that
+there is a committed type which will choose $a_{t}$ and a complementary prior
+belief $1-\rho _{t}$ that there is an opportunistic type which will choose $%
+\alpha _{t}$. Accordingly, their rational likelihood of the outcome $\pi _{t}
+$ is
+\begin{equation}
+g(\pi _{t}|a_{t})\rho _{t}+g(\pi _{t}|\alpha _{t})(1-\rho _{t})
+\label{pub prob pi}
+\end{equation}
+
+\subsection{Beliefs about policymaker type}\label{appsec:recursive4}
+
+On observing inflation within a regime, private agents use Bayes' law to
+update their conditional probability that the current policymaker is the committed
+type 
+\begin{equation}
+\rho (h_{t}^{+}) =\frac{g(\pi _{t}|a(h_{t}))\rho (h_{t})}{g(\pi_{t}|a(h_{t}))\rho (h_{t})+g(\pi _{t}|\alpha (h_{t}))(1-\rho (h_{t}))}
+\label{rho update} 
+\end{equation}%
+As no information about type is revealed by $\varsigma
+_{t+1}$, $\rho (h_{t+1})=\rho (h_{t}^{+})$. This updating may be written as
+\begin{eqnarray}
+\rho (h_{t+1}) &=&\frac{\rho (h_{t})}{\rho (h_{t})+\lambda(\pi _{t},h_{t})(1-\rho (h_{t}))}
+\label{rho updateLR} 
+\end{eqnarray}%
+using the likelihood ratio $\lambda(\pi _{t},h_{t})\equiv\frac{g(\pi
+_{t}|\alpha(h_{t}))}{g(\pi _{t}|a(h_{t}))}$.
+\subsection{Constructing expected inflation}\label{appsec:recursive5}
+
+We now construct private agents' expected inflation, $E_t\pi _{t+1}$,
+working backwards from the start of next period to the start of this period. We take into account that there will be a regime change ($\theta_{t+1}=1$) with probability $q$ and won't ($\theta_{t+1}=0$) with probability $1-q$.
+
+If the committed type is known to be in place, with decision rule $%
+a([\varsigma _{t+1},h_{t}^{+}])$, then  
+\begin{equation*}
+E(\pi _{t+1}|h_{t+1},\tau_{t+1}=1)=a([\varsigma _{t+1},h_{t}^{+}])
+\end{equation*}%
+since intended inflation is the mean of realized inflation. Similarly,%
+\begin{equation*}
+E(\pi _{t+1}|h_{t+1},\tau_{t+1}=0)=\alpha ([\varsigma _{t+1},h_{t}^{+}])
+\end{equation*}
+Since the private sector will not know the type of policymaker in place at the start of next period, expected inflation will be 
+\begin{equation}\label{eq:ep1}
+E(\pi_{t+1}|h_{t+1},\theta_{t+1}=0)=\rho (h_{t+1})a(h_{t+1})+(1-\rho
+(h_{t+1}))\alpha (h_{t+1})
+\end{equation}% 
+if there isn't a regime change.  Without taking a stand on the details of reputation inheritance, we simply
+define 
+\begin{equation}\label{eq:ep2}
+E(\pi_{t+1}|h_{t+1},\theta_{t+1}=1)=z(h_{t+1})
+\end{equation}%
+as private agents' expectation of inflation conditional on a
+replacement. 
+
+Stepping back now to period t, expected inflation conditional on $h_{t}$ is  
+\begin{align}
+E(\pi _{t+1}&|h_{t}) =\rho (h_{t})\int \sum_{\varsigma _{t+1}}\varphi (\varsigma
+_{t+1};\varsigma _{t})\left[ \left( 1-q\right) a(h_{t+1})+qz\left(
+h_{t+1}\right) \right] g(\pi_t |a(h_{t}))d\pi_t  \label{appEpi}\\
+&+\left( 1-\rho \left( h_{t}\right) \right) \int \sum_{\varsigma
+_{t+1}}\varphi (\varsigma _{t+1};\varsigma _{t})\left[ \left( 1-q\right)
+\alpha (h_{t+1})+qz\left( h_{t+1}\right) \right] g(\pi_t |\alpha
+(h_{t}))d\pi_t \nonumber
+\end{align}
+There may appear to be a conflict between this expression and (\ref{eq:ep1}) that contains reputation at t+1. But there is not. Weighting (\ref{eq:ep1}) and (\ref{eq:ep2}) by $(1-q)$ and $q$ and then integrating over private agents' belief about inflation (\ref{pub prob pi}) leads directly to it. The simplicity arises because (\ref{pub prob pi}) also occurs in the denominator of the Bayesian updating expression (\ref{rho update}).  
+
+\subsection{Intertemporal objective}\label{appsec:recursive6}
+
+We assume that the policymaker's intertemporal objective involves
+discounting at $\beta_{a}(1-q)$, where $\beta_{a}$ is his structural
+discount factor and $(1-q)$ reflects discounting due to replacement. \
+\begin{eqnarray*}
+U_{t} = \uline{u}(a_{t},e_{t},\varsigma _{t})+(\beta_{a}(1-q))E^c_{t}U_{t+1}
+\end{eqnarray*}%
+where $\underline{u}\left (a ,e,\varsigma \right) \equiv \int u\left(
+\pi, x(\pi,e) ,\varsigma\right) g\left( \pi
+|a\right) d\pi$\ is the expected momentary objective
+with $x$ replaced by $x(\pi,e)=\left( \pi -e-\varsigma \right)/\kappa$, and the
+conditional expectation operator $E^c_t(\cdot)$ is using the committed type's probability $p(h_{t+j})$ of a specific history $h_{t+j}$ when his actions generate inflation. 
+
+More specifically, at any date $t$ given the history $h_{t}$, the intertemporal objective is
+\begin{equation}
+U_{t}=\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})%
+}{p(h_{t})}\uline{u}(a(h_{t+j}),e(h_{t+j}),\varsigma (h_{t+j}))
+\label{app:intertemporal objective}
+\end{equation}%
+Given $h_{t+j}=[\varsigma _{t+j},\pi _{t+j-1},h_{t+j-1}]$, the committed type's probability of a specific history is:
+\begin{equation}
+p(h_{t+j})=\varphi (\varsigma _{t+j};\varsigma_{t+j-1})\times g(\pi
+_{t+j-1}|a(h_{t+j-1}))\times p(h_{t+j-1})  \label{prob h evolution}
+\end{equation}%
+That is, it combines the likelihood of inflation $\pi $ given the committed type's
+decision, the likelihood of the shock $\varsigma $ and the probability of
+the previous history.\footnote{%
+We ask for the reader's patience in using a sum over histories to capture
+the joint effects of the possibly continuous distribution of $\pi $ and the
+discrete Markov chain distribution for $\varsigma $.}
+
+\subsection{Rational expectations constraint}\label{appsec:recursive7}
+
+To develop the desired recursive form, we construct the Lagrangian component using the committed type's probabilities as weights on the multipliers
+\begin{equation}
+\Psi_t=\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\gamma (h_{t+j})[e(h_{t+j})-\beta E(\pi _{t+j+1}|h_{t+j})]\label{PSI}
+\end{equation}%
+and then express it recursively. We detailed $ E(\pi _{t+1}|h_{t})$ in (\ref{appEpi}), but the expression involved the probability of inflation under the opportunistic type. So, we undertake a ``change of measure" and rewrite it as 
+\begin{align}
+&\rho (h_{t})\int \sum_{\varsigma _{t+1}}\varphi
+(\varsigma_{t+1};\varsigma_{t})
+[\beta (1-q)a(h_{t+1})+\beta qz(h_{t+1})]
+g(\pi |a(h_{t}))d\pi  \label{eq:Epi1} \\
++&(1-\rho (h_{t}))\int \sum_{\varsigma _{t+1}}\varphi (\varsigma_{t+1};\varsigma_{t})
+[\beta (1-q)\alpha (h_{t+1})+\beta qz(h_{t+1})]
+\mathbf{\lambda(h_{t+1})}g(\pi |a(h_{t}))d\pi  \nonumber
+\end{align}
+where $\lambda(h_{t+1})$ is the likelihood ratio discussed above in the context of Bayesian updating. 
+\begin{equation}
+\frac{g(\pi _{t}|\alpha (h_{t}))}{g(\pi _{t}|a(h_{t}))}=\lambda
+(h_{t}^{+})=\lambda (h_{t+1})\label{LRlambda}
+\end{equation}%
+As the notations emphasize, this is a random variable from the standpoint of $%
+h_{t}$ but it is known as of $h_{t}^{+}=[\pi _{t},h_{t}]$ and $%
+h_{t+1}=[\varsigma _{t+1},h_{t}^{+}]$. 
+
+We now return to (\ref{PSI}) and replace $ E(\pi _{t+1}|h_{t})$
+with the expression in (\ref{eq:Epi1}). Note that $a(h_{t+1}),\alpha(h_{t+1})\lambda(h_{t+1})$, and $z(h_{t+1})$ are multiplied by $\varphi(\varsigma_{t+1};\varsigma_{t}) g(\pi |a(h_{t}))p(h_t)$ and by $\gamma(h_{t})$, which is $p(h_{t+1}) \gamma(h_{t})$. So, just as in simpler models, it is possible to eliminate expectations at future dates, essentially by applying the law of iterated expectation.  Adjusting for different discount factors, we can write (\ref{PSI}) as
+\begin{equation}
+\Psi_t=E^c_t[\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\psi_{t+j}]\label{PSIagain}
+\end{equation}%
+with 
+\begin{equation}
+\psi _{t}=\gamma_t e_t-\frac{\beta }{\beta_{a}(1-q)}\gamma _{t-1}\{ \rho
+_{t-1}[(1-q)a_{t}+qz_{t}]+(1-\rho _{t-1})\lambda _{t}[(1-q)\alpha
+_{t}+qz_{t}]\} 
+\label{app:psi}
+\end{equation}%
+This latter expression captures past commitments about current state-contingent
+decisions as these were relevant to past expectations of inflation.\footnote{Our short hand notation replaces $\lambda(h_t)$ with $\lambda_t$. Given (\ref{LRlambda}), the likelihood ratio $\lambda_t$ is predetermined in period $t$ by actions and inflation outcome in period $t-1$.} Note that at the start of the regime, when $t=0$, $\gamma_{t-1}=0$ by assumption. The initial condition on reputation specifies $\rho_{0}$.
+
+\subsection{The basic recursive specification}\label{appsec:recursive8}
+
+The preceding derivations suggest a recursive version of $U_t + \Psi_t$ with states $(\varsigma _{t},\gamma _{t-1},\rho _{t-1}$,$\lambda _{t})$. For algebraic convenience, we define $\eta _{t}=\frac{\beta }{%
+\beta_{a}(1-q)}\gamma _{t-1}$. Then, the recursive form as in \citelatex{marcet_recursive_2019} is
+\begin{multline}
+W(\varsigma _{t},\eta _{t},\rho _{t-1},\lambda _{t}) =
+\min_{\gamma
+}\max_{a,\alpha ,e}\{ \uline{u}(a_{t},e_{t},\varsigma _{t})+\gamma_{t}e_{t}  \\
+-\eta_{t} [\rho
+_{t-1}((1-q)a_{t}+qz_{t})+(1-\rho _{t-1})\lambda _{t}((1-q)\alpha
+_{t}+qz_{t})] \\
++\beta_{a}(1-q)\int \sum_{\varsigma _{t+1}}\varphi (\varsigma
+_{t+1};\varsigma _{t})W(\varsigma _{t+1},\eta _{t+1},\rho _{t},\lambda
+_{t+1})g(\pi_t|a_{t})d\pi_t \}  \label{W recursion}
+\end{multline}
+subject to the IC constraint 
+\begin{equation*}
+\alpha _{t}=Ae_{t}+B(\varsigma _{t})
+\end{equation*}%
+with state dynamics (from the perspective of the committed type) 
+\begin{eqnarray*}
+\eta _{t+1} &=&\frac{\beta }{\beta_{a}(1-q)}\gamma _{t} \text{ with } \gamma_{-1}=0 \\
+\rho _{t} &=&\frac{\rho _{t-1}}{\rho _{t-1}+(1-\rho _{t-1})\lambda _{t}} \text{ given } \rho_{0}\\
+\lambda _{t+1} &=&\lambda (\pi_t ,a_t,\alpha_t )\text{ with probability } g(\pi_t |a_t)%
+\text{ }
+\end{eqnarray*}
+
+
+\subsection{State space reduction} \label{appsec:recursive9}
+For computational and analytical benefits, it is desirable to reduce the state space. We now show how to eliminate the likelihood ratio ($\lambda$) from the state vector so that we only need three state variables instead of four.
+Start by rewriting (\ref{app:psi}) as 
+\begin{equation}
+\psi _{t}=\gamma_t e_t -\frac{\beta }{\beta_{a}(1-q)}\gamma _{t-1}\rho
+_{t-1}\{[(1-q)a_{t}+qz_{t}]+\frac{(1-\rho _{t-1})\lambda _{t}}{\rho _{t-1}}%
+[(1-q)\alpha _{t}+qz_{t}]\}
+\end{equation}
+
+Then, note that $\rho _{t}=\frac{\rho _{t-1}}{\rho _{t-1}+(1-\rho
+_{t-1})\lambda _{t}}$ implies that $
+\frac{(1-\rho _{t-1})\lambda _{t}}{\rho _{t-1}}=\frac{1-\rho _{t}}{\rho _{t}}$ 
+so that Bayes' rule can be used to eliminate $\lambda _{t}$.
+Substitution of this expression into that above yields%
+\begin{equation}
+\psi _{t}=\gamma_{t}e_{t}-\frac{\beta }{\beta_{a}(1-q)}\gamma _{t-1}\rho
+_{t-1}\{[(1-q)a_{t}+qz_{t}]+\frame{$\frac{(1-\rho _{t})}{\rho _{t}}$}%
+[(1-q)\alpha _{t}+qz_{t}]\}  \label{part of w (version 2)}
+\end{equation}%
+which indicates that the states $(\varsigma _{t},\eta _{t},\rho _{t-1},\lambda
+_{t})$ can be reduced to $\varsigma _{t},$ $\mu _{t}=\frac{\beta }{\beta
+_{1}(1-q)}\gamma _{t-1}\rho _{t-1}$ and $\rho _{t}$ with the following transition rules for the endogenous states given $\rho_{0}$:
+\begin{eqnarray}
+\mu _{t+1}&=&\frac{\beta }{\beta_{a}(1-q)}\gamma _{t}\rho _{t} \text{ with } \mu_{0}=0 \label{app:mu}\\
+\rho _{t+1}&=&\frac{\rho_tg(\pi_t|a_t)}{\rho_tg(\pi_t|a_t)+(1-\rho_t)g(\pi_t|\alpha_t)} \text{ with probability $g(\pi_t |a_t)$} \label{app:rho}
+\end{eqnarray}
+The recursive optimization (\ref{W recursion}) can now be written with only three state variables $(\varsigma_t,\rho_t,\mu_t)$ as stated in Proposition \ref{prop:W}.
+\begin{appprop}\label{prop:Wapp}%
+%EndExpansion
+Given $z(\varsigma ,\rho)$, the within-regime equilibrium is the solution to:
+\begin{eqnarray}
+W\left( \varsigma ,\rho ,\mu \right) &=&\min_{\gamma }\max_{a,\alpha
+,e}\{\underline{u}\left( a,e,\varsigma \right) +\left[ \gamma e -\mu \omega(a,\alpha,\rho,\varsigma)
+\right] +  \label{app:W} \\
+&&\beta_{a}\left( 1-q\right) \int \sum_{\varsigma ^{\prime }}\varphi \left(
+\varsigma ^{\prime };\varsigma \right) W\left( \varsigma ^{\prime },\rho
+^{\prime },\mu ^{\prime }\right) g\left( \pi |a\right) d\pi \}, \notag \\
+\text{with } \omega(a,\alpha,\rho,\varsigma) &\equiv& \left( 1-q\right) a+qz(\varsigma ,\rho)+\frac{1-\rho }{%
+\rho }\left[ \left( 1-q\right) \alpha +qz (\varsigma ,\rho)\right]  \label{appomega} \\
+\alpha &=& Ae+B\left( \varsigma \right) \\
+\mu ^{\prime } &=&\frac{\beta }{\beta_{a}\left( 1-q\right) }\gamma \rho 
+\text{, given }\mu _{0}=0  \label{mup} \\
+\rho ^{\prime } &=&\frac{\rho g(\pi|a) }{\rho g(\pi|a) +\left( 1-\rho
+\right) g(\pi|\alpha)} \text{ with prob $g(\pi|a)$, given $\rho_0$}  \label{rhop}
+\end{eqnarray}
+\end{appprop}%
+
+
+\subsection{A special case}\label{specialcase}
+
+If $q=0$, $\beta_a=\beta$, and $\rho=1$ always, our recursive program collapses to a textbook NK policy problem in recursive form. For example, in \cite{clarida_science_1999}, the policymaker maximizes $E_{0}\sum_{t=0}^{\infty
+}\beta ^{t}u(\pi _{t},x_{t})$ subject to $\pi _{t}=\kappa x_{t}+\beta
+E_{t}\pi _{t+1}+\varsigma _{t}$.
+
+To create a dynamic Lagrangian one attaches   
+$ E_{0}\sum_{t=0}^{\infty }\beta ^{t}\gamma_{t}[\pi _{t}-\kappa x_{t}-\beta
+E_{t}\pi_{t+1}-\varsigma_{t}]$ 
+to the objective. The law of iterated expectation and rearrangement of terms allow this expression to be written as $E_{0}\sum_{t=0}^{\infty }\beta^{t}\{(\gamma_{t}-\gamma _{t-1})\pi
+_{t}-\gamma_{t}\kappa x_{t}-\gamma_{t}\varsigma_{t}\}$
+with $\gamma_{-1}=0$. Defining the pseudo state variable $\mu_{t}=\gamma_{t-1}$, the recursive
+optimization problem is
+\begin{equation*}
+W(\varsigma_{t},\mu_{t})=\min_{\gamma_{t}}\max_{\pi_{t},x_{t}}\{u(\pi_{t},x_{t})+\gamma_{t}(\pi_{t}-\kappa x_{t}-\varsigma_{t})-\mu_{t}\pi _{t}+\beta E_{t}W(\varsigma_{t+1},\mu_{t+1})\}
+\end{equation*}
+with $\mu_{t+1}=\gamma_{t}$ and $\mu_0=0$. 
+
+
+\begin{oldversion}
+
+\subsection{Forward-looking opportunistic type}\label{app:FL}
+Suppose that the opportunistic type of policymaker has a time discount factor $\beta_\alpha$, this section derives an extended version of Proposition \ref{prop:W} for the committed policymaker's recursive optimization.
+
+Given $h_{t+1}=[\varsigma _{t+1},h_{t}^{+}]=[\varsigma _{t+1},\pi
+_{t},h_{t}] $, the optimization problem of the opportunistic type can be
+written as%
+\begin{equation*}
+\alpha \left( h_{t}\right) =\arg \max_{\alpha _{t}}\underline{u}%
+(\alpha _{t},e_{t},\varsigma _{t}) +\beta_{\alpha}(1-q)\int \sum_{\varsigma _{t+1}}\varphi
+(\varsigma _{t+1};\varsigma _{t})V\left( \varsigma _{t+1},\pi _{t}, h_{t}\right) g\left( \pi _{t}|\alpha _{t}\right)
+d\pi _{t}
+\end{equation*}%
+where $\underline{u}(\alpha _{t},e_{t},\varsigma _{t})=\int 
+{u}(\pi _{t},e_{t},\varsigma _{t})g\left( \pi _{t}|\alpha _{t}\right) d\pi _{t}$. The FOC of $%
+\alpha $ is%
+\begin{equation}
+0=\underline{u}_{\alpha }(\alpha _{t},e_{t},\varsigma _{t})+
+\beta_{\alpha}(1-q)\int \sum_{\varsigma _{t+1}}\varphi (\varsigma
+_{t+1};\varsigma _{t})V\left( \varsigma _{t+1},\pi _{t},h%
+_{t}\right) g_{\alpha }\left( \pi _{t}|\alpha _{t}\right) d\pi
+_{t}  \label{FOCalpha}
+\end{equation}%
+when $\alpha _{t}$ is evaluated at optimal $\alpha \left( h_{t}\right) .$
+
+The implied value function is%
+\begin{equation}
+V\left( h_{t}\right) =\underline{u}(\alpha _{t},e_{t},\varsigma _{t})+\beta_{\alpha}(1-q)\int \sum_{\varsigma _{t+1}}\varphi
+(\varsigma _{t+1};\varsigma _{t})V\left( h_{t+1}\right) g%
+\left( \pi _{t}|\alpha _{t}\right) d\pi _{t}  \label{Valpha}
+\end{equation}%
+when $\alpha _{t}$ is evaluated at optimal $\alpha \left( h_{t}\right) .$
+
+\subsubsection{Recursive formulation of the sequential rationality constraints}
+The optimal path of $\left( \alpha _{t},V_{t}\right) $ chosen by the
+committed policymaker needs to satisfy the two sequential rationality
+constraints (\ref{FOCalpha}) and (\ref{Valpha}). Similar to the rational
+expectation constraint, we construct the Lagrangian components of the
+sequential rationality constraints using the committed type's probabilities
+as weights on the multipliers, where $p(h_{t+j+1})=p\left( h_{t+j}\right)
+\varphi (\varsigma _{t+j+1};\varsigma _{t+j})g(\pi _{t+j}|a_{t+j}).$
+
+The Lagrangian component for the FOC of $\alpha $ is%
+\begin{eqnarray*}
+&&\Lambda _{t} \\
+&=&\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\phi (h_{t+j})[\underline{u}_{\alpha }(\alpha _{t},e_{t},\varsigma
+_{t})] \\
+&&+\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\phi (h_{t+j})[\beta_{\alpha}(1-q)\int \sum_{\varsigma
+_{t+j+1}}\varphi (\varsigma _{t+j+1};\varsigma _{t+j})V\left(
+h_{t+j+1}\right) g_{\alpha }\left( \pi _{t+j}|\alpha
+_{t+j}\right) d\pi _{t+j}] \\
+&=&\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\phi (h_{t+j})[\underline{u}_{\alpha }(\alpha _{t},e_{t},\varsigma
+_{t})] \\
+&&+\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j+1}\sum_{h_{t+j+1}}\frac{%
+p(h_{t+j+1})}{p(h_{t})}\left[ \frac{\beta_{\alpha}}{\beta_{a}}\phi
+(h_{t+j})\frac{g_{\alpha }\left( \pi _{t+j}|\alpha
+_{t+j}\right) }{g\left( \pi _{t+j}|a_{t+j}\right) }\right] V%
+\left( h_{t+j+1}\right) \\
+&=&\phi (h_{t})\text{ }\underline{u}_{\alpha }(\alpha _{t},e_{t},\varsigma
+_{t})+\frac{\beta_{\alpha}}{\beta_{a}}\phi (h_{t-1})%
+\frac{b_{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{%
+g\left( \pi _{t-1}|a_{t-1}\right) }V\left( h_{t}\right) +\beta
+_{1}(1-q)E_{t}^{c}\Lambda _{t+1}
+\end{eqnarray*}%
+with the understanding that $\phi _{-1}=0$.
+
+Note that there are two conceptual elements of the term $\frac{\QTR{uline}{g}%
+_{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{g\left( \pi
+_{t-1}|a_{t-1}\right) }$, which we can separate by writing this term as $%
+\frac{g_{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{%
+g\left( \pi _{t-1}|\alpha _{t-1}\right) }\frac{g\left( \pi
+_{t-1}|\alpha _{t-1}\right) }{g\left( \pi _{t-1}|a_{t-1}\right) }=\kappa
+_{t}\lambda _{t}$. \ One is the change of measure necessary to transform the
+opportunistic type's probabilities into those of the committed type, i.e., $%
+\lambda _{t}$ using the notation established above. \ The other arises from
+the implication that a marginally higher $\alpha $ has on the likelihood of
+a specific inflation history, captured by $\kappa _{t}=\frac{g%
+_{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{g\left( \pi _{t-1}|\alpha
+_{t-1}\right) }$. Accordingly, we have a convenient recursive expression,
+which includes a lagged multiplier, for this Lagrangian component 
+\begin{equation}
+\Lambda _{t}=\phi _{t}\text{ }\underline{u}_{\alpha }(\alpha
+_{t},e_{t},\varsigma _{t})+\frac{\beta_{\alpha}}\beta
+_{1}\phi _{t-1}\kappa _{t}\lambda _{t}V_{t}+\beta_{a}(1-q)E_{t}^{c}\Lambda
+_{t+1}\text{.}  \label{OMrecursive}
+\end{equation}%
+The understanding is that the initial condition is $\phi _{-1}=0$.
+
+The Lagrangian component for the value function of the opportunistic type is%
+\begin{eqnarray*}
+&&\Theta _{t} \\
+&=&\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\chi (h_{t+j})\left[ \underline{u}(\alpha _{t},e_{t},\varsigma
+_{t})-V\left( h_{t+j}\right) \right] \\
+&&+\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\chi (h_{t+j})[\beta_{\alpha}(1-q)\int \sum_{\varsigma
+_{t+j+1}}\varphi (\varsigma _{t+j+1};\varsigma _{t+j})V\left(
+h_{t+j+1}\right) g\left( \pi _{t+j}|\alpha _{t+j}\right) d\pi
+_{t+j}] \\
+&=&\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})}{%
+p(h_{t})}\chi (h_{t+j})\left[ \underline{u}(\alpha _{t},e_{t},\varsigma
+_{t})-V\left( h_{t+j}\right) \right] \\
+&&+\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j+1}\sum_{h_{t+j}}\frac{%
+p(h_{t+j+1})}{p(h_{t})}\left[ \frac{\beta_{\alpha}}{%
+\beta_{a}}\chi (h_{t+j})\frac{g\left( \pi _{t+j}|\alpha
+_{t+j}\right) }{g\left( \pi _{t+j}|a_{t+j}\right) }\right] V%
+\left( h_{t+j+1}\right) \\
+&=&\chi (h_{t})\text{ }\underline{u}(\alpha _{t},e_{t},\varsigma _{t})-\chi (h_{t})V\left( h_{t}\right) +\frac{\beta_{\alpha}}{\beta
+_{1}}\chi (h_{t-1})\frac{g\left( \pi _{t-1}|\alpha
+_{t-1}\right) }{g\left( \pi _{t-1}|a_{t-1}\right) }V\left( h_{t}\right)
++\beta_{a}(1-q)E_{t}^{c}\Theta _{t+1}
+\end{eqnarray*}
+
+Note that the change of measure applies to this value recursion, so that we
+can replace $\frac{g\left( \pi _{t-1}|\alpha _{t-1}\right) }{%
+g\left( \pi _{t-1}|a_{t-1}\right) }$ with $\lambda _{t}$ using our notation
+from above. We have a convenient recursive expression for this Lagrangian
+component 
+\begin{equation}
+\Theta _{t}=\chi _{t}\text{ }\underline{u}(\alpha _{t},e_{t},\varsigma
+_{t})-\chi _{t}V_{t}+\frac{\beta_{\alpha}}{\beta_{a}}\chi
+_{t-1}\lambda _{t}V_{t}+\beta_{a}(1-q)E_{t}^{c}\Theta _{t+1}
+\label{THETArecursive}
+\end{equation}%
+which also contains a lagged multiplier. The understanding is that the
+initial condition is $\chi _{-1}=0$.
+
+\subsubsection{The basic recursive specification}
+\label{appsec:recursive8}
+
+The preceding derivations suggest a recursive
+version of $U_{t}+\Psi _{t}+\Lambda _{t}+\Theta _{t}$ with states $(\varsigma
+_{t},\gamma _{t-1},\rho _{t-1},\phi _{t-1},\chi _{t-1},\lambda _{t},\kappa
+_{t})$. This is
+
+\begin{eqnarray*}
+&&W(\varsigma _{t},\gamma _{t-1},\rho _{t-1},\phi _{t-1},\chi _{t-1},\lambda
+_{t},\kappa _{t}) \\
+&=&\min_{\gamma ,\phi ,\chi }\max_{a,\alpha ,e,V}\{ \underline{u}
+(a_{t},e_{t},\varsigma _{t}) \\
+&&+\gamma _{t}e_{t}-\frac{\beta }{\beta_{a}(1-q)}\gamma
+_{t-1}[\rho _{t-1}((1-q)a_{t}+qz_{t})+(1-\rho _{t-1})\lambda
+_{t}((1-q)\alpha _{t}+qz_{t})] \\
+&&+\phi _{t}~\underline{u}_{\alpha }(\alpha
+_{t},e_{t},\varsigma _{t})+\chi _{t}\underline{u}%
+(\alpha _{t},e_{t},\varsigma _{t})-\chi
+_{t}V_{t} \\
+&&+\frac{\beta_{\alpha}}{\beta_{a}}\left[ \phi _{t-1}\kappa
+_{t}\lambda _{t}+\chi _{t-1}\lambda _{t}\right] V_{t} \\
+&&+\beta_{a}(1-q)\int \sum_{\varsigma _{t+1}}\varphi (\varsigma
+_{t+1};\varsigma _{t})W(\varsigma _{t+1},\gamma _{t},\rho _{t},\phi
+_{t},\chi _{t},\lambda _{t+1},\kappa _{t+1})g(\pi _{t}|a_{t})d\pi _{t}\}
+\end{eqnarray*}%
+
+
+with state dynamics (from the perspective of the committed type) 
+\begin{eqnarray*}
+\rho _{t} &=&\frac{\rho _{t-1}}{\rho _{t-1}+(1-\rho _{t-1})\lambda _{t}}%
+\text{ given }\rho _{0} \\
+\lambda _{t+1} &=&\lambda (\pi _{t},a_{t},\alpha _{t})\text{ with
+probability }g(\pi _{t}|a_{t}) \\
+\kappa _{t+1} &=&\kappa (\pi _{t},a_{t},\alpha _{t})\text{ with probability }%
+g(\pi _{t}|a_{t})\text{ }
+\end{eqnarray*}%
+allowing for direct adjustment for the lagged multiplier psuedo states $%
+\gamma ,\phi ,\chi $ from initial conditions $\gamma _{-1}=0,\phi _{-1}=0$
+and $\chi _{-1}=0$.
+
+\subsubsection{State reduction}
+Using the same technique in Section \ref{appsec:recursive9}, $(\eta _{t},\rho
+_{t-1},\lambda _{t})$ can be reduced to $\mu _{t}=\frac{%
+\beta }{\beta_{a}(1-q)}\gamma _{t-1}\rho _{t-1}$ and $\rho _{t}$.
+Further note that $\phi _{t-1},\chi _{t-1}$ and $\kappa _{t}$ enter only in the
+bracketed expression on the fourth line of the basic recursive
+specification, so we can define $y_{t}=\frac{\beta_{\alpha}}{\beta
+_{1}}\left[ \phi _{t-1}\kappa _{t}\lambda _{t}+\chi _{t-1}\lambda _{t}\right]
+$ to consolidate states. 
+
+These observations establish the following extended version of our Proposition \ref{prop:W}.
+
+\begin{proposition}
+Given $z(\varsigma _{t},\rho _{t})$, the within-regime equilibrium is the
+solution to the following recursive optimization problem%
+\begin{eqnarray*}
+W(\varsigma _{t},\mu _{t},\rho _{t},y_{t}) &=&\min_{\gamma ,\phi ,\chi
+}\max_{a,\alpha ,e,V}\{ \underline{u}(a_{t},e_{t},\varsigma
+_{t}) \\
+&&+\gamma _{t}e_{t}\mu _{t}[(1-q)a_{t}+qz_{t}+\frac{(1-\rho
+_{t})}{\rho _{t}}[(1-q)\alpha _{t}+qz_{t}] \\
+&&+\phi _{t}~\underline{u}_{\alpha }(\alpha
+_{t},e_{t},\varsigma _{t})+\chi _{t}
+\underline{u}(\alpha _{t},e_{t},\varsigma _{t}
+)+(y_{t}-\chi _{t})V_{t} \\
+&&+\beta_{a}(1-q)\int \sum_{\varsigma _{t+1}}\varphi (\varsigma
+_{t+1};\varsigma _{t})W(\varsigma _{t+1},\mu _{t+1},\rho
+_{t+1},y_{t+1})g(\pi _{t}|a_{t})d\pi _{t}\}
+\end{eqnarray*}%
+having state dynamics%
+\begin{eqnarray*}
+\mu _{t+1} &=&\frac{\beta }{\beta_{a}(1-q)}\gamma _{t}\rho _{t}\text{ with }%
+\mu _{0}=0 \\
+\rho _{t+1} &=&b(\pi _{t},a_{t},\alpha _{t},\rho _{t})\text{ with
+probability $g(\pi _{t}|a_{t})$} \\
+y_{t+1} &=&\frac{\beta_{\alpha}}{\beta_{a}}\left[ \phi _{t}\frac{%
+g_{\alpha }\left( \pi _{t}|\alpha _{t}\right) }{g\left( \pi
+_{t}|a_{t}\right) }+\chi _{t}\frac{g\left( \pi _{t}|\alpha
+_{t}\right) }{g\left( \pi _{t}|a_{t}\right) }\right] \text{ with }y_{0}=0%
+\text{ and probability }g(\pi _{t}|a_{t})
+\end{eqnarray*}
+\end{proposition}
+
+\end{oldversion}
+
+\section{Consolidation}\label{appsec:consolidate}
+\numberwithin{equation}{section} \renewcommand{\theequation}{B\arabic{equation}}
+The recursive program in Proposition \ref{prop:W} is valuable, as it sheds light on the relevant state variables. But it contains many choice variables, making it inefficient for computation. This appendix explains how we consolidate choice variables by exploring the implications of private agents' rational expectation constraint. 
+
+\subsection{The rational expectation function}\label{appsec:consolidate2}
+
+We now show that imposing the rational expectation constraint (\ref{eq:Epi1}) on the choice of $e_t$ implies an operational expectation function:
+
+\begin{slem}\label{lem:eApp}%
+Given $\left( \varsigma ,\rho \right) $ and future equilibrium strategies $a^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $, $%
+\alpha ^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $ and $z^{\ast }\left(
+\varsigma' ,\rho' \right) $, rationally expected inflation is uniquely
+determined by $\delta$ and $\mu'$;%
+\begin{eqnarray}
+e =e\left( \delta ,\mu ^{\prime };\varsigma ,\rho \right) &=&\beta \rho \textstyle\int 
+M_{a}(\varsigma ,b\left( v_\pi,v_\pi +\delta ,\rho \right) ,\mu ^{\prime })g(v_\pi)
+dv_\pi+  \label{app:RE} \\
+&&\beta (1-\rho )\textstyle\int M_{\alpha}(\varsigma ,b\left(v_\pi -\delta ,v_\pi ,\rho \right) ,\mu ^{\prime })g(
+v_\pi) dv_\pi; \notag\\
+\text{where } b(\pi-a,\pi-\alpha,\rho) &\equiv&\frac{g(\pi-a)\rho}{g(\pi-a)\rho+g(\pi-\alpha)(1-\rho)}; \notag \\
+M_{a}\left( \varsigma ,\rho ^{\prime },\mu ^{\prime }\right)
+&\equiv&\textstyle\sum_{\varsigma ^{\prime }}\varphi \left( \varsigma ^{\prime };\varsigma
+\right) \left[ \left( 1-q\right) a^{\ast }\left( \varsigma ^{\prime },\rho
+^{\prime },\mu ^{\prime }\right) +qz^{\ast }\left( \varsigma ^{\prime },\rho
+^{\prime }\right) \right] ;  \notag\\
+M_{\alpha}\left( \varsigma ,\rho ^{\prime },\mu ^{\prime }\right)
+&\equiv&\textstyle\sum_{\varsigma ^{\prime }}\varphi \left( \varsigma ^{\prime };\varsigma
+\right) \left[ \left( 1-q\right) \alpha ^{\ast }\left( \varsigma ^{\prime
+},\rho ^{\prime },\mu ^{\prime }\right) +qz^{\ast }\left( \varsigma ^{\prime
+},\rho ^{\prime }\right) \right] .  \notag
+\end{eqnarray}%
+
+\end{slem}%
+\begin{proof}
+Before taking a ``change of measure", the rational expectation constraint on $e$ is:
+\begin{align}
+e &=\beta\rho\int \sum_{\varsigma'}\varphi (\varsigma';\varsigma)\left[ \left( 1-q\right) a'+qz' \right] g(\pi |a)d\pi \label{app:RE1} \\
+&+\beta\left( 1-\rho \right) \int \sum_{\varsigma
+'}\varphi (\varsigma';\varsigma)\left[ \left( 1-q\right)
+\alpha'+qz' \right] g(\pi |\alpha
+)d\pi \nonumber
+\end{align}
+with $a'$, $\alpha'$, and $z'$ determined by the three states $(\varsigma',\rho',\mu')$ through the equilibrium strategies:
+$a^*(\cdot)$, $\alpha^*(\cdot)$, and $z^*(\cdot)$. 
+
+According to the Bayes' rule (\ref{rho update}), $\rho'$ is the function of $\pi$, where $\pi =
+a+v_\pi$ under the committed type and $\pi =
+\alpha +v_\pi$ under the opportunistic type, with $v_\pi$ being zero mean random variables. We can therefore rewrite $\rho'$ as
+\begin{equation}\label{app:RHO}
+\rho' = b(\pi-a,\pi-\alpha,\rho) = \left\{
+\begin{array}{ll}
+b\left( v_\pi,v_\pi +\delta ,\rho \right) & \text{if } \tau=1 \\
+b\left( v_\pi -\delta ,v_\pi ,\rho \right) & \text{if } \tau=0
+\end{array}
+\right.  
+\end{equation}%
+
+Replacing $g(\pi|a)$ and $g(\pi|\alpha)$ in (\ref{app:RE1}) with $g(v_\pi)$, $\rho'$ with (\ref{app:RHO}), and realizing choosing $\gamma$ is equivalent to choosing $\mu'$ due to $\mu'=\frac{\beta }{\beta_{a}(1-q)}\gamma\rho$, we obtain the rational expectation function in (\ref{app:RE}).
+\end{proof}
+
+
+\subsection{Relation between W and U}
+We now show that the committed policymaker’s value function equals his optimized intertemporal objective minus the cost of honoring past promises, captured by the term $\mu \omega^*$.
+
+\begin{slem}\label{lem:WandU}
+Let $U^*(s)$ and $\omega^*(s)$ be the intertemporal objective (\ref{app:intertemporal objective}) and the composite promise term in (\ref{appomega}) evaluated at optimal decision rules, then
+\begin{equation}\label{eq:WandU}
+W\left(\varsigma,\rho ,\mu \right) =U^*\left(\varsigma,\rho ,\mu \right)
+-\mu \omega^{\ast }\left(\varsigma,\rho ,\mu \right)
+\end{equation}%
+\end{slem}
+\begin{proof}
+In the recursive optimization problem (\ref{app:W}), the envelope theorem implies: 
+\begin{equation*}
+W_\mu(\varsigma,\rho,\mu)=-\{[(1-q)a+qz]+\frame{$\frac{(1-\rho)}{\rho
+}$}[(1-q)\alpha+qz]\}=-\omega
+\end{equation*}
+The first order necessary condition for $\gamma$ is 
+\begin{eqnarray*}
+0 &=&e+\beta_{a}(1-q)\sum_{\varsigma '}\varphi (\varsigma
+';\varsigma)\int W_{\mu }(\varsigma ',\rho ',\mu
+')\frac{\partial \mu '}{\partial \gamma}g(\pi |a)d\pi \\
+&=&e+\beta \sum_{\varsigma '}\varphi (\varsigma ';\varsigma
+)\int W_{\mu }(\varsigma ',\rho ',\mu
+')\rho g(\pi|a)d\pi
+\end{eqnarray*}
+where the state evolution equation (\ref{app:mu}) implies $\partial \mu '/\partial \gamma=\rho \beta/(\beta_a(1-q))$.
+
+When combined with an updated version of the envelope theorem implication, this FOC recovers private agents' rational expectation constraint as in (\ref{eq:Epi1}):%
+\begin{equation*} 
+e=\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma
+)\left[ [(1-q)a'+qz']+\frame{$\frac{(1-\rho ')}{%
+\rho '}$}[(1-q)\alpha '+qz']\right] \rho g(\pi|a)d\pi
+\end{equation*}%
+where%
+\begin{equation*} 
+\frac{1-\rho '}{\rho '}=\frac{\left( 1-\rho\right)
+\lambda '}{\rho}.
+\end{equation*}
+
+Hence, in equilibrium where the rational expectation constraint must hold, we obtain 
+\begin{equation*}
+e^*=\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)\omega^*'\rho g(\pi|a^*)d\pi
+\end{equation*}
+Utilizing this equilibrium condition, we now show by ``guess and verify" that in equilibrium: $W(\varsigma,\rho,\mu) = U^*(\varsigma,\rho,\mu) - \mu\omega^{\ast }$.
+The following recursion must hold:
+\begin{align}
+W(\varsigma,\rho,\mu)+\mu\omega^{\ast } &= \uline{u}(a^{\ast }, e^*,\varsigma) + \gamma e^* \label{eq:WU} \\
+&+ \beta_{a}(1-q)\int
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)W(\varsigma
+',\rho ',\mu ')g(\pi|a^*)d\pi  \notag
+\end{align}
+Suppose $W(\varsigma',\rho ',\mu ')=-\mu'\omega^*' + U^*(\varsigma
+',\rho ',\mu ')$, the right hand side can be written as
+\begin{align}
+&\uline{u}(a^{\ast }, e^*,\varsigma) + \gamma e^* -  \beta_{a}(1-q)\int
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)[\frac{\beta}{\beta_a(1-q)}\gamma \rho \omega^*']g(\pi|a^*)d\pi\notag \\
+&+ \beta_{a}(1-q)\int
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)U^*(\varsigma
+',\rho ',\mu ')g(\pi|a^*)d\pi  \notag\\
+=& \uline{u}(a^{\ast }, e^{\ast },\varsigma) + \gamma[e^*-\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)\omega^*'\rho g(\pi|a^*)d\pi] \notag \\
+&+ \beta_{a}(1-q)\int
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)U^*(\varsigma
+',\rho ',\mu ')g(\pi|a^*)d\pi  \notag \\
+=& \uline{u}(a^{\ast }, e^{\ast },\varsigma) + \beta_{a}(1-q)\int
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)U^*(\varsigma
+',\rho ',\mu ')g(\pi|a^*)d\pi  \notag \\
+=&U^*(\varsigma,\rho
+,\mu) \notag
+\end{align}
+which implies $W(\varsigma,\rho
+,\mu) = U^*(\varsigma,\rho
+,\mu) - \mu\omega^{\ast }$.\end{proof}
+
+
+
+\subsection{Simplified recursive program}\label{app:W2}
+Using Lemma \ref{lem:eApp} and \ref{lem:WandU}, we simplify the recursive program (\ref{app:W}), moving from choosing $(\gamma
+,a,\alpha ,e)$ to  choosing $(\delta ,\mu ^{\prime
+})$:
+\begin{appprop}\label{appprop:W2}%
+Given $e =e\left( \delta ,\mu ^{\prime };\varsigma ,\rho \right)$ and $U^*\left( \varsigma ,\rho ,\mu \right)=W(\varsigma,\rho,\mu)+\mu\omega^*(\varsigma,\rho,\mu)$, 
+\begin{align}
+W(\varsigma,\rho,\mu) =\max_{\delta,\mu^{\prime}}&\left[\uuline{u}(
+\delta ,\mu ^{\prime };\varsigma,\rho) -\mu \uuline{\omega}(\delta,\mu^{\prime
+};\varsigma,\rho)+\beta_{a}\left( 1-q\right) \Omega( \delta ,\mu ^{\prime
+};\varsigma,\rho) \right] \label{app:W2} \\
+\text{with }\uuline{u}(\delta,\mu';\varsigma,\rho) &\equiv \uline{u}(Ae+B(\varsigma)+\delta,e,\varsigma) \notag \\
+\uuline{\omega}(\delta,\mu';\varsigma,\rho) &\equiv \frac{1}{\rho }\left[
+\left( 1-q\right) \left( Ae+B(\varsigma )\right) +qz^{\ast }\left( \varsigma
+,\rho \right) \right] +\left( 1-q\right) \delta \notag  \\
+\Omega( \delta ,\mu ^{\prime} ;\varsigma,\rho )  &\equiv \textstyle\int \textstyle\sum_{\varsigma^{\prime
+}}\varphi( \varsigma ^{\prime };\varsigma ) U^*\left( \varsigma
+^{\prime },b( v_\pi ,v_\pi+\delta ,\rho) ,\mu ^{\prime }\right) g (v_\pi )dv_\pi \notag 
+\end{align}
+\end{appprop}
+\begin{proof}
+Lemma \ref{lem:WandU} implies that the objective of the recursive optimization (\ref{app:W}) can be reduced to
+\begin{equation*}
+\uline{u}(a,e,\varsigma) - \mu\omega(a,\alpha,\rho,\varsigma) + \beta_a(1-q)\int\sum_{\varsigma'}\varphi(\varsigma';\varsigma)U^*(\varsigma',\rho',\mu')g(\pi|a)d\pi
+\end{equation*}
+Lemma \ref{lem:eApp} implies that $(\delta ,\mu ^{\prime})$ determines $e=e(\delta ,\mu ^{\prime };\varsigma ,\rho )$, $\alpha=Ae+B(\varsigma )$, and $a=\alpha +\delta$.
+Because $\uline{u}(\cdot)$ and $\omega(\cdot)$ are functions of $(e,\alpha,a)$, they can be written as functions of $(\delta,\mu')$:
+\begin{align}
+\uuline{u}(\delta,\mu') &\equiv \uline{u}(Ae+B(\varsigma)+\delta,e,\varsigma) \\
+\uuline{\omega}(\delta,\mu') &\equiv \frac{1}{\rho }\left[
+\left( 1-q\right) \left( Ae+B(\varsigma )\right) +qz^{\ast }\left( \varsigma
+,\rho \right) \right] +\left( 1-q\right) \delta 
+\end{align}
+The optimization is from the perspective of the committed policymaker so that $\pi=a+v_{\pi}$. Therefore, $\rho'=b\left( v_\pi,v_\pi +\delta ,\rho \right) $ as defined in (\ref{app:RHO}) and $g(\pi|a)=g(v_\pi)$. We then obtain the simplified program.
+\end{proof}
+
+\paragraph{Computation:} Lemma \ref{lem:eApp} and Proposition \ref{prop:W2} facilitate our computation. With a guessed function $z\left(
+\varsigma ,\rho \right) $ specified in the outer loop, we can (i) use $a(\varsigma ,\rho ,\mu ),\alpha (\varsigma ,\rho
+,\mu )$ and $U(\varsigma,\rho,\eta)$ functions to obtain $e(\delta ,\mu ^{\prime };\varsigma ,\rho )$ and $\Omega(\delta,\mu^{\prime};\varsigma, \rho)$; (ii) optimize over $(\delta ,\mu ^{\prime })$; (iii) construct new $a$ and $\alpha$ functions from optimal $e$ and $\delta$; and (iv) construct a new $U$ function. Within the inner loop, we iterate until the policy functions converge.\footnote{Bayesian learning makes this not a linear-quadratic problem. In view of Proposition \ref{prop:W2}, we use direct maximization as part of a projection method to obtain a global solution. Overall, we employ a variant of the ``dynamic programming with a rational expectations constraint" as sometimes advocated for calculating optimal policy under commitment.}
+We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the outer loop has reached a fixed point in $z$.
+
+
+
+
+
+
+
+
+
+
+\section{Forecasting Functions and Matching the SPF}\label{appsec:SPF}
+
+\numberwithin{equation}{section} 
+\renewcommand{\theequation}{C\arabic{equation}}
+
+
+\subsection{SPF Data}
+We construct the SPF inflation data from ``individual responses" file for the \textit{level} of the GDP deflator available at https://www.philadelphiafed.org/surveys-and-data/pgdp. The sample starts from the fourth quarter of 1968.
+
+In the middle of each quarter, each survey participant submits a forecast for the price level in that quarter and the next four. We first calculate inflation forecasts for each individual forecaster j, using the continuously compounded growth rate: $400\times\ln(P^j_{t+k|t}/P^j_{t+k-1|t})$. We then take the median of these inflation forecasts.
+
+Alternatively, one can use the summary data files constructed by the Federal Reserve Bank of Philadelphia, particularly the ``annualized percent change of median responses" file from https://www.philadelphiafed.org/surveys-and-data/pgdp, as a measure for the SPF inflation data. This file includes an inflation ``nowcast" and forecasts at the 1,2,3, and 4 quarter horizons. The nature of these inflation series is explained by \citelatex{stark_realistic_2010}. The FRBP first constructs a median price level for each horizon from ``individual responses", say $P_{t+k|t}$ for k=0,1,...4. It then constructs an annualized percentage growth rate using the formula $100\times([P_{t+k|t}/P_{t+k-1|t}]^4 -1)$. 
+
+
+Our procedure yields time series that are less prone to transitory outliers than the standard FRBP constructions. Each difference matters, i.e., (i) the median of the inflation rates is less prone than is the change in the median price level; and (ii) the continuously compounded inflation rate is less prone than is the FRBP inflation rate.
+
+Figure \ref{fig:SPFconstruct} contrasts the two measures. 
+\begin{figure}[h]
+\caption[Caption ]{Contrasting median inflation and change in median price}
+\label{fig:SPFconstruct}
+\begin{center}
+% resize to 5.5 wide from 3 by 6.5
+\includegraphics[height=3in,width=6in]{Appendix/SPFconstruct.jpg} 
+\begin{flushleft}
+\footnotesize{This figure compares two measures of the median SPF inflation forecast for the GDP deflator. The red line, from the summary data file (“annualized percent change of median response”) constructed by the FRBP, is obtained by first finding the median price forecast at each horizon and then computing the annualized inflation rate from these median price forecasts. The blue line, based on the individual responses file, calculates annualized inflation for each individual forecast and then takes the median across individuals. We adopt the latter measure in the paper as it is less prone to transitory outliers.}
+\end{flushleft}
+\end{center}
+\end{figure}
+
+% At some point, we plan to investigate these differences in more detail, as well as looking into the behavior of mean and trimmed mean inflation rates, but the time series employed seemed to us to be the best combination of conventional practice and attention to the underlying survey data.  As our theory does not start with microfoundations, it is silent on the best manner to undertake such constructions. 
+
+\subsection{Recursive forecasting in our theory}\label{app:forecast}
+This appendix describes the calculation of private agents' expectations of inflation at each horizon $j$: $E(\pi_{t+j}|h_t)$.
+
+The information set is assumed to be the start of period information of the
+private sector, $s_t=(\varsigma _{t},\rho _{t},\mu_{t})$. We denote the forecast function using $f(s_t,j)=E(\pi_{t+j}|s_t)$.
+
+Given $s_t$, private agents know the intended inflation policies of the committed and the opportunistic policymakers: $a(\varsigma _{t},\rho _{t},\mu_{t})$ and $\alpha (\varsigma _{t},\rho _{t},\mu_{t})$.
+Because implementation errors have mean zero, the private agents' ``nowcast" of inflation is 
+\[
+f(\varsigma _{t},\rho _{t},\mu_{t},0) =\rho _{t}a(\varsigma _{t},\rho _{t},\mu_{t})+(1-\rho _{t})\alpha (\varsigma _{t},\rho _{t},\mu_{t})
+\]
+
+
+Utilizing the law of iterated expectation, today's forecast of $\pi_{t+j}$ is today's forecast of tomorrow's forecast of $\pi_{t+j}$. 
+We can compute multistep forecasts of inflation recursively:
+\begin{equation}\label{recursive computation}
+E(\pi_{t+j}|s_t)=f(\varsigma _{t},\rho _{t},\mu_{t},j)=E[E(\pi_{t+j}|s_{t+1})|s_t]=E[f(\varsigma _{t+1},\rho _{t+1},\mu_{t+1},j-1)|s_t]
+\end{equation}
+The pseudo state variable $\mu_{t+1}$ evolves according to: 
+\begin{equation*}
+\mu_{t+1} = 
+\begin{cases}
+    \mu'^*(\varsigma_{t},\rho_{t},\mu_{t}) & \text{with prob $1-q$ }  \\
+    0 & \text{with prob $q$ }
+\end{cases}    
+\end{equation*}
+The reputation state variable $\rho_{t+1}$ evolves according to:
+\begin{equation*}
+\rho_{t+1}=
+\begin{cases}
+b(v_\pi,v_\pi+\delta,\rho_{t}) & \text{with prob $(1-q)\rho_t$ } \\
+b(v_\pi-\delta,v_\pi,\rho_{t}) & \text{with prob $(1-q)(1-\rho_t)$ } \\
+\phi_{t+1}b(v_\pi,v_\pi+\delta,\rho_{t})+(1-\phi_{t+1})v_{\rho,t+1} & \text{with prob $q\rho_t$ } \\
+\phi_{t+1}b(v_\pi-\delta,v_\pi,\rho_{t})+(1-\phi_{t+1})v_{\rho,t+1} & \text{with prob $q(1-\rho_t)$ }
+\end{cases}
+\end{equation*}
+where $\phi_{t+1} \sim \text{Bernoulli}(\zeta_\rho)$ and $v_{\rho,t+1} \sim \text{Beta}(\overline{\rho},\sigma_{\rho})$.
+Therefore: 
+\begin{eqnarray*}
+&&f(\varsigma_{t},\rho_{t},\mu_t,j)=\sum \varphi (\varsigma_{t+1};\varsigma_{t})\Big\{  q(1-\zeta_\rho)\int f(\varsigma_{t+1},v_\rho,0,j-1)d\text{Beta}(v_\rho|\overline{\rho},\sigma_{\rho})
+%%\nonumber 
+\\
+&&(1-q)\rho_{t}\int f\big(\varsigma_{t+1},b(v_\pi,v_\pi+\delta,\rho
+_{t}),\mu'^*(\varsigma_{t},\rho_{t},\mu_{t}),j-1\big)g(v_\pi)dv_\pi   \nonumber
+\\
+&&+(1-q)(1-\rho_{t})\int f\big(\varsigma_{t+1},b(v_\pi-\delta,v_\pi,\rho_{t}),\mu'^*(\varsigma_{t},\rho_{t},\mu_{t}),j-1\big)g(v_\pi)dv_\pi \nonumber \\
+&&+q\rho_{t}\zeta_\rho\int  f\big(\varsigma_{t+1},b(v_\pi,v_\pi+\delta,\rho
+_{t}),0,j-1\big)g(v_\pi)dv_\pi  \nonumber \\
+&&+q(1-\rho_{t})\zeta_\rho \int  f\big(\varsigma_{t+1},b(v_\pi-\delta,v_\pi,\rho
+_{t}),0,j-1\big)g(v_\pi)dv_\pi \Big\} 
+\nonumber
+\end{eqnarray*}
+
+
+
+\subsection{Matching the SPF: motivation and mechanics}\label{app:extractstate}
+
+From the standpoint of modern econometrics, our theory is a very simple one
+that is easily rejected: conditional on the dates of policymaker replacement and the
+policymaker type within each regime: we have just three
+random inputs -- cost-push shocks $\varsigma _{t}$, implementation errors $v_{\pi,t}$, and reputation shocks $v_{\rho,t}$ -- that drive many observable macro time series, including the policies $a_{t}$ and $\alpha _{t}$, inflation $\pi _{t}$, and, as we just discussed, expectations at various horizons $E_t(\pi_{t+j})$.
+
+Our work in this paper is quantitative theory and, following early RBC
+analyses, we fix model parameters and use a transparent strategy for
+extracting the unobserved states. Then, with the states in hand, we
+calculate the historical behavior of observables.\footnote{%
+Prescott (1986) constructs Solow residuals as productivity indicators and
+then calculates moment implications for many variables of a model with
+calibrated parameters. Our work is closer to Plosser (1989), who uses the
+Solow residual time series and a basic calibrated model to construct time
+series of many variables, including consumption, investment and so on.} But
+the literature has stressed that one of the difficulties with this RBC
+strategy is that the technology state is measured by the Solow residual,
+which is based on observable variables (output, capital, and labor) whose
+behavior is ultimately to be explored. 
+
+We therefore develop a strategy for extracting state information that does
+not use the behavior of the GDP deflator.
+% \footnote{%
+% An alternative strategy uses the ``Food and Energy price shock" constructed
+% in Section \ref{sec:calib} as the measure for $\varsigma_{t}$, and extracts $%
+% \rho_t$ from any element of the SPF term structure. Appendix E discusses
+% this strategy in detail.} 
+It relies on the fact that our model provides a
+mapping between states and private agents' inflation expectations at various horizons, the latter of which are measured by the SPF.
+
+The state-space representation of our model can be written as follows
+\begin{align}
+S_{t}  & =\left[ \varsigma_{t}, \rho_{t}, \mu_{t}, \pi_{t} \right]' =F(S_{t-1},v_{t}|\theta_t,\phi_t,\tau_t) \label{appS}\\
+& =\left[
+\begin{array}
+[c]{c}%
+\xi_\varsigma\varsigma_{t-1}+v_{\varsigma,t}\\
+(1-\theta_{t}+\theta_{t}\phi_{t})b(\varsigma_{t-1,}\rho_{t-1},\mu_{t-1},\pi_{t-1}
+)+\theta_{t}(1-\phi_{t})v_{\rho,t}\\
+(1-\theta_{t})m(\varsigma_{t-1,}\rho_{t-1},\mu_{t-1})\\
+\tau_{t}a(\varsigma_{t},\rho_{t},\mu_{t})+(1-\tau_{t})\alpha(\varsigma
+_{t},\rho_{t},\mu_{t})+v_{\pi,t}%
+\end{array}
+\right] \nonumber\\
+\nonumber\\
+Y_{t}&=\left[
+\begin{array}
+[c]{c}%
+f_{t+1|t}\\
+f_{t+3|t}\\
+\end{array}
+\right]  =\left[
+\begin{array}
+[c]{c}%
+f(\varsigma_{t},\rho_{t},\mu_{t},1)\\
+f(\varsigma_{t},\rho_{t},\mu_{t},3)\\
+\end{array}
+\right]  +\left[
+\begin{array}
+[c]{c}%
+\varepsilon_{1t}\\
+\varepsilon_{3t}\\
+\end{array}
+\right] =H(S_{t}) + \varepsilon_{t} \label{appY}
+\end{align}
+The state vector collects the three state variables 
+$(\varsigma _{t},\rho _{t},\mu _{t})$ identified in Proposition \ref{prop:W} and inflation $\pi_t$. The state evolution equations are the stochastic processes of shocks and the equilibrium policy functions, conditional on $(\theta_t,\phi_t,\tau_t)$, representing the event of policymaker replacement ($\theta_t=1$), continuing type in a new regime ($\phi_t=1$), and committed type in place ($\tau_t=1$). 
+
+The observable vector consists of the SPF at one quarter and three quarter horizons ($f_{t+j|t}$, j=1,3). The measurement equations are model-implied one-period and three-period ahead inflation forecasts by private agents. $\varepsilon_{j,t}$ is the normal measurement error with mean zero and standard deviation $0.5\%$ at annualized rate. 
+
+We model $(\theta_t,\phi_t,\tau_t)$ as the outcome of an unobserved discrete-state Markov process $\Theta_{t}$, with six discrete states:\footnote{In general, there will be eight discrete states constructed from combinations of three binary variables. In this case, the state $\phi_t$ is only relevant in a new regime, i.e., $\theta_t=1$.} $\{(\theta_t=0,\tau_t=1), (\theta_t=0,\tau_t=0), (\theta_t=1,\phi_t=1,\tau_t=1),$
+$(\theta_t=1,\phi_t=1,\tau_t=0),(\theta_t=1,\phi_t=0,\tau_t=1),(\theta_t=1,\phi_t=0,\tau_t=0)\}$. The transitional probability matrix $T_{i,j} = Pr(\Theta_t=j|\Theta_{t-1}=i)$ is determined by the structure of our model: 1) when $\theta_t=0$, i.e., no replacement of policymaker, the policymaker type remains the same in period $t-1$ and $t$; 2) when $\theta_t=1$ and $\phi_t=1$, i.e., there is a new policymaker whose type is the same as his predecessor, the probability that a committed type will be in place in period $t$ is the private agents' posterior belief at the end of period $t-1$, $b_{t-1}^{i}\equiv b(s_{t-1},\pi_{t-1}|\Theta_{t-1}=i)$; 3) when $\theta_t=1$ and $\phi_t=0$, i.e., there is a new policymaker whose type is a random draw, the probability that a committed type will be in place in period $t$ is the unconditional mean $\overline{\rho}$ of the reputation shock $v_{\rho}$. 
+\begin{equation}\label{app:transmatrix}
+T=
+\begin{bmatrix}
+1-q & 0 & \zeta_\rho b_{t-1}^{i=1} q & \zeta_\rho(1-b_{t-1}^{i=1})q & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q\\
+0 & (1-q) & \zeta_\rho b_{t-1}^{i=2} q & \zeta_\rho(1-b_{t-1}^{i=2})q  & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q \\
+1-q & 0 & \zeta_\rho b_{t-1}^{i=3} q & \zeta_\rho(1-b_{t-1}^{i=3})q  & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q \\
+0 & (1-q) & \zeta_\rho b_{t-1}^{i=4} q & \zeta_\rho(1-b_{t-1}^{i=4})q  & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q \\
+1-q & 0 & \zeta_\rho b_{t-1}^{i=5} q & \zeta_\rho(1-b_{t-1}^{i=5})q  & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q \\
+0 & (1-q) & \zeta_\rho b_{t-1}^{i=6} q & \zeta_\rho(1-b_{t-1}^{i=6})q  & (1-\zeta_\rho)\overline{\rho}q & (1-\zeta_\rho)(1-\overline{\rho})q \\
+\end{bmatrix}
+\end{equation}
+
+\subsection{Unscented Kalman filter with Markov-switching}
+This subsection describes the detailed algorithm we employ to obtain filtered and smoothed estimates of latent states in the state space model (\ref{appS}) and (\ref{appY}). Relative to a standard nonlinear system with additive Gaussian errors, our model has three complications.
+
+First, the shocks $v_\varsigma$ and $v_\rho$ enter the evolution equation of $\pi$ nonlinearly because the policy function $a(\cdot)$ and $\alpha(\cdot)$ are nonlinear functions of $\varsigma$ and $\rho$. Moreover, the shock $v_\rho$ follows a Beta distribution instead of a Gaussian one. Following \citelatex{sarkka_bayesian_2023}, this complication can be dealt with by: 1) approximating the Beta random variable $v_\rho$ using a nonlinear transformation of a Gaussian random variable $\tilde{v}_\rho$: \[ v_\rho = R(\tilde{v}_\rho)=\frac{exp(\tilde{v}_\rho)}{1+exp(\tilde{v}_\rho)}\]
+2) forming sigma points for the state vector augmented by $v_\varsigma$ and $\tilde{v}_\rho$. 
+
+
+Second, the reputation state $\rho$ is bounded between 0 and 1. To enforce the boundary condition, we use ``constrained unscented Kalman filter" (\citelatex{kandepu_constrained_2008}, \citelatex{rouhani_constrained_2018}) that projects the sigma points outside the feasible region to the nearest points within the region.
+
+Third, the state evolution equations depend on the outcome of an unobserved discrete-state Markov process $\Theta_t$. We follow \citelatex{kim_dynamic_1994} and \citelatex{kim_state-space_2017} to obtain the conditional probability of $\Theta_t$ being in each discrete state and to collapse state estimate and covariance.
+
+To ease the notation, we rewrite the state space model (\ref{appS}) and (\ref{appY}) as follows:
+\begin{align*}
+S_t &= F_{\Theta_t}\big(S_{t-1},[v_{\varsigma,t},\tilde{v}_{\rho,t}]\big) + [0,0,0,v_{\pi,t}]' \\
+Y_t &= H(S_t) + \varepsilon_t
+\end{align*}
+where $\Theta_t \in \{1,...,6\}$ corresponding to $\{(\theta_t=0,\tau_t=1), (\theta_t=0,\tau_t=0), (\theta_t=1,\phi_t=1,\tau_t=1), (\theta_t=1,\phi_t=1,\tau_t=0),(\theta_t=1,\phi_t=0,\tau_t=1),(\theta_t=1,\phi_t=0,\tau_t=0)\}$ with transitional probability matrix $T_{i,j} = Pr(\Theta_t=j|\Theta_{t-1}=i)$ defined in (\ref{app:transmatrix}). 
+
+
+\paragraph{Notation:}
+\begin{itemize}
+\item Covariance of $[0,0,0,v_{\pi,t}]'$: $Q$
+\item Covariance of measurement noise $\varepsilon$: $R$
+\item Mean of the shock vector $[v_{\varsigma,t},\tilde{v}_{\rho,t}]'$: $\hat{v}=[0,\tilde{\rho}]'$
+\item Covariance of the shock vector $[v_{\varsigma,t},\tilde{v}_{\rho,t}]'$: $V=diag(\sigma_\varsigma^2,\tilde{\sigma}_\rho^2)$
+\item Initial state estimate: $\hat{s}_0^j$, $j=1,2,...,6$
+\item Initial state covariance: $P_0^j$, $j=1,2,...,6$
+\end{itemize}
+
+\paragraph{Parameters related to sigma points}
+\begin{itemize}
+\item Number parameter: $L$
+\item Scaling parameters: $\alpha$, $\beta$, $\kappa$
+\item Weight parameter: $\lambda = \alpha^2(L+\kappa)-L$
+\item $w_{m,0}=\frac{\lambda}{L+\lambda}$, $w_{m(n)}=\frac{1}{2(L+\lambda)}$, $n=1,...,2L$
+\item $w_{c,0}=\frac{\lambda}{L+\lambda}+(1-\alpha^2+\beta)$, $w_{c(n)}=\frac{1}{2(L+\lambda)}$, $n=1,...,2L$
+\end{itemize}
+\paragraph{Prediction Step:}
+$L=6$, conditional on $\Theta_{t-1}=i$, $\Theta_t=j$:
+\begin{itemize}
+\item Augment the state vector:
+\begin{equation*}
+  \begin{split}
+    \hat{x}_{t-1}^i =  \left[
+                    \begin{array}[c]{c}%
+                        \hat{s}_{t-1}^i\\
+                        \hat{v}
+                    \end{array} \right]  &   
+    \end{split}
+    ;\quad
+    \begin{split}
+    \tilde{P}^i_{t-1} = 
+            \begin{bmatrix}
+                P_{t-1}^i & 0 \\
+                  0 & V
+            \end{bmatrix}
+    \end{split}
+\end{equation*}
+
+\item Generate $2L+1$ sigma points:
+\begin{itemize}
+\item $X_{t-1,(0)}^i =\hat{x}_{t-1}^i$
+\item $X_{t-1,(n)}^i =\hat{x}_{t-1}^i + \sqrt{(L+\lambda)}\big[\sqrt{\tilde{P}_{t-1}^i}\big]_n$
+\item $X_{t-1,(n+L)}^i =\hat{x}_{t-1}^i - \sqrt{(L+\lambda)}\big[\sqrt{\tilde{P}_{t-1}^i}\big]_n$, $\quad  n=1,...,L$
+\end{itemize}
+\item Propagate sigma points through the state transition function:
+\begin{itemize}
+\item $S_{t(n)}'^{(i,j)} = F_j(X_{t-1,(n)}^i)$, $\quad  n=0,...,2L$
+\end{itemize}
+\item Compute the predicted state estimate:
+\begin{itemize}
+\item $\hat{s}_t^{-(i,j)} = \sum_{n=0}^{2L} w_{m(n)} S_{t(n)}'^{(i,j)}$
+\end{itemize}
+\item Compute the predicted state covariance:
+\begin{itemize}
+\item $P_t^{-(i,j)} = \sum_{n=0}^{2L} w_{c(n)} (S_{t(n)}'^{(i,j)} - \hat{s}_t^{-(i,j)})(S_{t(n)}'^{(i,j)} - \hat{s}_t^{-(i,j)})^\top + Q$
+\end{itemize}
+\end{itemize}
+
+\paragraph{Update Step:}
+$L=4$, conditional on $\Theta_{t-1}=i$, $\Theta_t=j$:
+\begin{itemize}
+\item Generate sigma points: 
+\begin{itemize}
+\item $S_{t,(0)}^{-(i,j)}  =\hat{s}_t^{-(i,j)}$
+\item $S_{t,(n)}^{-(i,j)}  =\hat{s}_t^{-(i,j)} + \sqrt{(L+\lambda)}\big[\sqrt{P_t^{-(i,j)}}\big]_n$
+\item $S_{t,(n+L)}^{-(i,j)}  =\hat{s}_t^{-(i,j)} - \sqrt{(L+\lambda)}\big[\sqrt{P_t^{-(i,j)}}\big]_n$, $\quad  n=1,...,L$
+\end{itemize}
+
+\item Propagate sigma points through the measurement function:
+\begin{itemize}
+\item $Y_{t(n)}^{-(i,j)} = H(S_{t(n)}^{-(i,j)})$, $\quad  n=0,...,2L$
+\end{itemize}
+\item Compute the predicted measurement mean and covariance:
+\begin{itemize}
+\item $\hat{y}_t^{-(i,j)} = \sum_{n=0}^{2L} w_{m(n)} Y_{t(n)}^{-(i,j)}$
+\item $P_{yy,t}^{-(i,j)} = \sum_{n=0}^{2L} w_{c(n)} (Y_{t(n)}^{-(i,j)} - \hat{y}_t^{-(i,j)})(Y_{t(n)}^{-(i,j)} - \hat{y}_t^{-(i,j)})^\top + R$
+\end{itemize}
+\item Compute the cross-covariance between state and measurement:
+\begin{itemize}
+\item $P_{sy,t}^{-(i,j)} = \sum_{n=0}^{2L} w_{c(n)} (S_{t(n)}^{-(i,j)} - \hat{s}_t^{-(i,j)})(Y_{t(n)}^{(i,j)} - \hat{y}_t^{-(i,j)})^\top$
+\end{itemize}
+\item Compute the Kalman gain:
+\begin{itemize}
+\item $K_t^{(i,j)} = P_{sy,t}^{-(i,j)} (P_{yy,t}^{-(i,j)})^{-1}$
+\end{itemize}
+\item Update the state estimate:
+\begin{itemize}
+\item $\hat{s}_t^{(i,j)} = \hat{s}_t^{-(i,j)} + K_t^{(i,j)}(Y_t - \hat{y}_t^{-(i,j)})$
+\end{itemize}
+\item Update the state covariance:
+\begin{itemize}
+\item $P_t^{(i,j)} = P_t^{-(i,j)} - K_t^{(i,j)}P_{yy,t}^{-(i,j)}(K_t^{(i,j)})^\top$
+\end{itemize}
+
+\end{itemize}
+
+\paragraph{Conditional Probability Step:} 
+\begin{itemize}
+\item Start from $Pr(\Theta_{t-1}=i|Y^{t-1})$
+\begin{itemize}
+    \item $Pr(\Theta_{t-1}=i,\Theta_t=j|Y^{t-1}) = Pr(\Theta_t=j|\Theta_{t-1}=i)Pr(\Theta_{t-1}=i|Y^{t-1})$
+\end{itemize}
+\smallskip
+\item Update using Bayes' rule
+\begin{equation*}
+    Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)=\frac{f(Y_t|\Theta_{t-1}=i,\Theta_t=j,Y^{t-1})Pr(\Theta_{t-1}=i,\Theta_t=j|Y^{t-1})}{\sum_{j=1}^6 \sum_{i=1}^6 f(Y_t,\Theta_{t-1}=i,\Theta_t=j|Y^{t-1})}
+\end{equation*}
+\item[] where $f(Y_t|\Theta_{t-1}=i,\Theta_t=j,Y^{t-1}) \sim N(\hat{y}_t^{-(i,j)},P_{yy,t}^{-(i,j)}) $
+\smallskip
+\item Collapse $Pr(\Theta_t=j|Y^t)=\sum_{i=1}^6 Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)$
+\end{itemize}
+
+\paragraph{Collapse Step:}
+\begin{equation*}
+  \hat{s}_t^{j} = \frac{\sum_{i=1}^6 Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)\hat{s}_t^{(i,j)}}{Pr(\Theta_t=j|Y^t)}
+\end{equation*}
+\begin{equation*}
+  P_t^{j} = \frac{\sum_{i=1}^6 Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)\{P_t^{(i,j)}+(\hat{s}_t^{j}-\hat{s}_t^{(i,j)})(\hat{s}_t^{j}-\hat{s}_t^{(i,j)})^\top\}}{Pr(\Theta_t=j|Y^t)}
+\end{equation*}
+
+\paragraph{Smooth Step:}
+\begin{itemize}
+\item Initialize the smoothed state estimate and covariance at the last time step:
+\begin{itemize}
+\item \( \hat{s}_T^{s,j} = \hat{s}_T^j \)
+\item \( P_T^{s,j} = P_T^j \)
+\item $Pr(\Theta_T=j|Y^T)$
+\end{itemize}
+
+\item Smooth probability for $\Theta_t=j$ and $\Theta_{t+1}=k$ from \(t= T-1,..., 1 \):
+\begin{align*}
+Pr&(\Theta_t=j,\Theta_{t+1}=k|Y^T) \\
+&=Pr(\Theta_{t+1}=k|Y^T)Pr(\Theta_t=j|\Theta_{t+1}=k,Y^T) \\
+&\approx Pr(\Theta_{t+1}=k|Y^T)Pr(\Theta_t=j|\Theta_{t+1}=k,Y^t) \\
+&=\frac{Pr(\Theta_{t+1}=k|Y^T)Pr(\Theta_t=j,\Theta_{t+1}=k|Y^t)}{Pr(\Theta_{t+1}=k|Y^t)}\\
+&=Pr(\Theta_{t+1}=k|Y^T)\frac{Pr(\Theta_t=j|Y^t)Pr(\Theta_{t+1}=k|\Theta_t=j)}{\sum_{j=1}^6 Pr(\Theta_t=j|Y^t)Pr(\Theta_{t+1}=k|\Theta_t=j)}
+\end{align*}
+
+\item Smooth probability for $\Theta_t=j$ for \(t= T-1,..., 1 \):
+\begin{equation*}
+Pr(\Theta_t=j|Y^T) = \sum_{k=1}^6 Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T)
+\end{equation*}
+
+\item Perform the smoothing recursion from \(t= T-1,..., 1 \), conditional on $\Theta_t=j,\Theta_{t+1}=k$:
+\begin{itemize}
+\item Augment the state vector:
+\begin{equation*}
+  \begin{split}
+    \hat{x}_{t}^j =  \left[
+                    \begin{array}[c]{c}%
+                        \hat{s}_{t}^j\\
+                        \hat{v}
+                    \end{array} \right]  &   
+    \end{split}
+    ;\quad
+    \begin{split}
+    \tilde{P}^j_{t} = 
+            \begin{bmatrix}
+                P_{t}^j & 0 \\
+                  0 & V
+            \end{bmatrix}
+    \end{split}
+\end{equation*}
+
+\item Generate $2L+1$ sigma points given $L=6$:
+\begin{itemize}
+\item $X_{t,(0)}^j =\hat{x}_{t}^j$
+\item $X_{t,(n)}^j =\hat{x}_{t}^j + \sqrt{(L+\lambda)}\big[\sqrt{\tilde{P}_{t}^j}\big]_n$
+\item $X_{t,(n+L)}^j =\hat{x}_{t}^j - \sqrt{(L+\lambda)}\big[\sqrt{\tilde{P}_{t}^j}\big]_n$, $\quad  n=1,...,L$
+\end{itemize}
+
+
+\item Propagate sigma points through the state transition function:
+\begin{itemize}
+\item \( S_{t+1,(n)}'^{(j,k)} = F_k(X_{t,(n)}^j) \)
+\end{itemize}
+\item Compute the predicted state mean and covariance:
+\begin{itemize}
+\item $\hat{s}_{t+1}^{-(j,k)} = \sum_{n=0}^{2L} w_{m(n)}  S_{t+1,(n)}'^{(j,k)}$
+\item $P_{t+1}^{-(j,k)} = \sum_{n=0}^{2L} w_{c(n)} (S_{t+1,(n)}'^{(j,k)} - \hat{s}_{t+1}^{-(j,k)})(S_{t+1,(n)}'^{(j,k)} - \hat{s}_{t+1}^{-(j,k)})^\top + Q$
+\end{itemize}
+\item Compute the cross-covariance:
+\begin{itemize}
+\item $D_{t+1}^{-(j,k)} = \sum_{n=0}^{2L} w_{c(n)} (X_{t,(n)}^{j,S} - \hat{s}_t^j)(S_{t+1,(n)}'^{(j,k)} - \hat{s}_{t+1}^{-(j,k)})^\top$
+\item where $X_{t,(n)}^{j,S}$ denotes the part of sigma point $n$ which corresponds to $S_t$
+\end{itemize}
+\item Compute the smoothed state gain:
+\begin{itemize}
+\item \( K_t^{s,(j,k)} = D_{t+1}^{-(j,k)} (P_{t+1}^{-(j,k)})^{-1} \)
+\end{itemize}
+\item Compute the smoothed state estimate:
+\begin{itemize}
+\item \( \hat{s}_t^{s,(j,k)} = \hat{x}_t^j + K_t^{s,(j,k)}(\hat{s}_{t+1}^{s,k} - \hat{s}_{t+1}^{-(j,k)}) \)
+\end{itemize}
+\item Compute the smoothed state covariance:
+\begin{itemize}
+\item \( P_t^{s,(j,k)} = P_t^j + K_t^{s,(j,k)}(P_{t+1}^{s,k} - P_{t+1}^{-(j,k)})(K_t^{s,(j,k)})^\top \)
+\end{itemize}
+\item Collapse the smoothed state estimate and covariance
+\begin{equation*}
+   \hat{s}_t^{s,j} = \frac{\sum_{k=1}^6 Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T)\hat{s}_t^{s,(j,k)}}{Pr(\Theta_t=j|Y^T)}
+\end{equation*}
+\begin{equation*}
+   P_t^{s,j} = \frac{\sum_{k=1}^6 Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T)\{P_t^{s,(j,k)}+(\hat{s}_t^{s,j}-\hat{s}_t^{s,(j,k)})(\hat{s}_t^{s,j}-\hat{s}_t^{s,(j,k)})^\top\}}{Pr(\Theta_t=j|Y^T)}
+\end{equation*}
+\end{itemize}
+\end{itemize}
+
+\paragraph{Filtered and smoothed estimates of states and observables:}
+\begin{itemize}
+\item Filtered estimates for states conditional on $\Theta_{t-1}=i,\Theta_{t}=j$
+\begin{equation*}
+\hat{s}_t=\sum_{j=1}^6 Pr(\Theta_t=j|Y^t)\hat{s}_t^{j}
+\end{equation*}
+\begin{equation*}
+P_t=\sum_{j=1}^6 Pr(\Theta_t=j|Y^t)\{P_t^{j}+(\hat{s}_t-\hat{s}_t^{j})(\hat{s}_t-\hat{s}_t^{j})^\top \}
+\end{equation*}
+
+\item Filtered estimates for observables
+\begin{itemize}
+\item Generate sigma points, $L=4$: 
+\begin{itemize}
+\item $S_{t,(0)}^{(i,j)}  =\hat{s}_t^{(i,j)}$
+\item $S_{t,(n)}^{(i,j)}  =\hat{s}_t^{(i,j)} + \sqrt{(L+\lambda)}\big[\sqrt{P_t^{(i,j)}}\big]_n$
+\item $S_{t,(n+L)}^{(i,j)}  =\hat{s}_t^{(i,j)} - \sqrt{(L+\lambda)}\big[\sqrt{P_t^{(i,j)}}\big]_n$, $\quad  n=1,...,L$
+\end{itemize}
+
+\item Propagate sigma points through the measurement function:
+\begin{itemize}
+\item $Y_{t(n)}^{(i,j)} = H(S_{t(n)}^{(i,j)})$, $\quad  n=0,...,2L$
+\end{itemize}
+\item Compute the predicted measurement mean and covariance:
+\begin{itemize}
+\item $\hat{y}_t^{(i,j)} = \sum_{n=0}^{2L} w_{m(n)} Y_{t(n)}^{(i,j)}$
+\item $P_{yy,t}^{(i,j)} = \sum_{n=0}^{2L} w_{c(n)} (Y_{t(n)}^{(i,j)} - \hat{y}_t^{(i,j)})(Y_{t(n)}^{(i,j)} - \hat{y}_t^{(i,j)})^\top + R$
+\end{itemize}
+
+\item Collapse 
+\begin{equation*}
+\hat{y}_t=\sum_{i=1}^6\sum_{j=1}^6 Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)\hat{y}_t^{(i,j)}
+\end{equation*}
+\begin{equation*}
+P_{yy,t}=\sum_{i=1}^6\sum_{j=1}^6 Pr(\Theta_{t-1}=i,\Theta_t=j|Y^t)\{P_{yy,t}^{(i,j)}+(\hat{y}_t-\hat{y}_t^{(i,j)})(\hat{y}_t-\hat{y}_t^{(i,j)})^\top \}
+\end{equation*}
+\end{itemize}
+
+\item Smoothed estimates for states
+\begin{equation*}
+\hat{s}_t^{s}=\sum_{j=1}^6 Pr(\Theta_t=j|Y^T)\hat{s}_t^{s,j}
+\end{equation*}
+\begin{equation*}
+P_t^{s}=\sum_{j=1}^6 Pr(\Theta_t=j|Y^T)\{P_t^{s,j}+(\hat{s}_t^{s}-\hat{s}_t^{s,j})(\hat{s}_t^{s}-\hat{s}_t^{s,j})^\top \}
+\end{equation*}
+
+\item Smoothed estimates for observables conditional on $\Theta_t=j,\Theta_{t+1}=k$
+\begin{itemize}
+\item Generate sigma points, $L=4$: 
+\begin{itemize}
+\item $S_{t,(0)}^{s,(j,k)}  =\hat{s}_t^{s,(j,k)}$
+\item $S_{t,(n)}^{s,(j,k)}  =\hat{s}_t^{s,(j,k)} + \sqrt{(L+\lambda)}\big[\sqrt{P_t^{s,(j,k)}}\big]_n$
+\item $S_{t,(n+L)}^{s,(j,k)}  =\hat{s}_t^{s,(j,k)} - \sqrt{(L+\lambda)}\big[\sqrt{P_t^{s,(j,k)}}\big]_n$, $\quad  n=1,...,L$
+\end{itemize}
+
+\item Propagate sigma points through the measurement function:
+\begin{itemize}
+\item $Y_{t(n)}^{(i,j)} = H(S_{t(n)}^{s,(j,k)})$, $\quad  n=0,...,2L$
+\end{itemize}
+\item Compute the predicted measurement mean and covariance:
+\begin{itemize}
+\item $\hat{y}_t^{s,(j,k)} = \sum_{n=0}^{2L} w_{m(n)} Y_{t(n)}^{s,(j,k)}$
+\item $P_{yy,t}^{s,(j,k)} = \sum_{n=0}^{2L} w_{c(n)} (Y_{t(n)}^{s,(j,k)} - \hat{y}_t^{s,(j,k)})(Y_{t(n)}^{s,(j,k)} - \hat{y}_t^{s,(j,k)})^\top + R$
+\end{itemize}
+
+\item Collapse 
+\begin{equation*}
+\hat{y}_t^s=\sum_{j=1}^6\sum_{k=1}^6  Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T) \hat{y}_t^{s,(j,k)}
+\end{equation*}
+\begin{equation*}
+P_{yy,t}^s=\sum_{j=1}^6\sum_{k=1}^6  Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T) \{P_{yy,t}^{s,(j,k)}+(\hat{y}_t^s-\hat{y}_t^{s,(j,k)})(\hat{y}_t^s-\hat{y}_t^{s,(j,k)})^\top \}
+\end{equation*}
+\end{itemize}
+\end{itemize}
+
+
+\subsection{Estimates of discrete states}\label{app:conditionalprob}
+As an example of estimated conditional probabilities, Figure \ref{fig:smoothprob} plots the smoothed probabilities of a committed policy regime  (blue) and of a policymaker replacement (red) in each period. The probability of a committed policy regime echos the dynamics of the estimated reputation state $\widehat{\rho}_t$ in Figure \ref{fig:SPF}.\footnote{The smoothed estimate of $\rho_t$ is different from the smoothed probability of a committed policy regime. Our filter calculates the optimal estimates of \( s_t = (\varsigma_t, \rho_t, \mu_t) \) for fitting the observed SPF data, given the assumption of being in a specific policy regime. Subsequently, it applies these regime-specific estimates to obtain the probability of that particular policy regime, taking into account the structure of shocks. The smoothed estimate of \( \rho_t \) is derived as a probability-weighted average of these regime-specific estimates.} The probability is close to zero after 1975 and sharply increases to close to one in 1981-1982, suggesting that the most likely discrete state consistent with the observed SPF data switches from $\tau=0$ (an opportunistic policy regime) to $\tau=1$ (a committed policy regime). According to the model, policymaker's type can only switch in the event of a policymaker replacement. Our estimated probability of a replacement event peaks in the first quarter of 1982. 
+
+
+
+
+
+\begin{ST}
+\begin{figure}[H]
+\begin{center}
+\caption[Caption for LOF]{Smoothed probabilities}
+\includegraphics[height=2in,width=5.5in]{2025JanFig/smoothprob2_slides.jpg} 
+\label{fig:smoothprob}
+\begin{flushleft}
+\footnotesize{The figure plots the smoothed probabilities of discrete Markov states estimated by the nonlinear filter. The smoothed probability of committed policy $Pr(\tau_t=1|Y^T)$ is the sum of three smoothed probabilities $Pr(\theta_t=0,\tau_t=1|Y^T)$ and $Pr(\theta_t=1,\phi_t=0 \text{ or } 1,\tau_t=1|Y^T)$. The smoothed probability of replacement $Pr(\theta_t=1|Y^T)$ is the sum of four smoothed probabilities $Pr(\theta_t=1,\phi_t=0\text{ or }1,\tau_t=0\text{ or }1|Y^T)$. }
+\end{flushleft}
+\end{center}
+
+\end{figure}
+\end{ST}
+
+
+
+
+\paragraph{}
+
+\subsection{Fitting performance}\label{app:stateresult}
+\paragraph{Inflation expectations:} 
+As discussed in Section \ref{sec:stateextraction} of the main text, we extract latent states by matching model-implied inflation forecasts at horizons 1 and 3 with SPF one-quarter-ahead
+and three-quarter-ahead forecasts. The left panels in Figure \ref{fig:multiSPF} shows our match is nearly perfect for SPF1Q and SPF3Q. 
+Using the extracted states, we can also compute model-implied inflation forecasts at horizons 2 and 4, and compare them with SPF two-quarter-ahead and four-quarter-ahead forecasts. The comparison is shown in the right panels of Figure \ref{fig:multiSPF}. It is notable that our model-implied forecasts lie almost entirely on top of the SPF data for both forecasting horizons, which are not explicitly targeted. We view this figure as evidence in support of our state extraction approach. 
+
+\begin{ST}
+\begin{figure}[h]
+\begin{center}
+\caption[Caption for LOF]{Model-implied and SPF forecasts of inflation}
+\includegraphics[height=4in,width=6in]{2025JanFig/SPF_combined_slides.jpg}
+\label{fig:multiSPF}
+\begin{flushleft}
+\footnotesize{This figure compares the smoothed estimates of model inflation forecast produced by our nonlinear filter with the SPF inflation forecast of the same forecasting horizon. SPF1Q and SPF3Q are targeted by our nonlinear filter; SPF2Q and SPF4Q are not targeted. }
+\end{flushleft}
+\end{center}
+\end{figure}
+\end{ST}
+
+% \paragraph{Cost-push shocks:}
+% We have explored two indicators of the cost-push shock. One is a food and and energy shock constructed along the lines of \citelatex{watson_inflation_2014}. The other is the estimated shock series from matching the SPFs. Figure \ref{fig:CompareShock} displays these two series. Note first that both measures rise during the famous ``oil price shock" of late 1973 and early 1974 and also during the late 1970s interval that preceded Volcker's appointment. Note next that the estimated shocks are more persistent. Contemporary sources, such as the January 1975 Economic Report of the President prepared by Alan Greenspan and his CEA colleagues, point to other price shocks in addition to oil during the preceding year. Econometric studies such as those of \citelatex{Gordon2013} and \citelatex{watson_inflation_2014} estimate price shocks, including those from price decontrols in the 1970s, of more lasting form. Our estimated shock series echo their findings. 
+% \begin{figure}[h]
+% \begin{center}
+% \caption[Caption for LOF]{Untargeted cost-push shocks}
+% \includegraphics[height=2in,width=5.5in]{2025JanFig/squig_slides.jpg}
+% \includegraphics[height=2in,width=5.5in]{2025JanFig/squigMA_slides.jpg}
+% \label{fig:CompareShock}
+% \begin{flushleft}
+% \footnotesize{This figure shows that the smoothed estimates of cost-push shock $\widehat{\varsigma}$ from our nonlinear filter covaries positively with  the FEshock -- ``Food and Energy price shock,"
+% constructed as the difference between the growth rate of the overall
+% personal consumption deflator and its counterpart excluding food and energy. The FEshock in the top panel is the raw data series. The MA smoothed FEshock in the bottom panel is the three-quarter moving average of the raw data series. }
+% \end{flushleft}
+% \end{center}
+% \end{figure}
+
+\paragraph{Filtered inflation}
+Section \ref{sec:inflfit} demonstrates that the smoothed estimates of inflation by our state-space model fit the observed U.S. inflation well without explicitly targeting it. The benchmark we use to measure the fitting performance is to compare the smoothed estimates with the SPF1Q, as shown in Figure \ref{fig:Error}. A skeptical reader may concern that our smoothed measure performs better simply because it is based on the full sample of SPF, while the SPF1Q is prepared with information up to the period $t$. We therefore provide a filtered version Figure \ref{fig:filterinflation}, where no information after the period $t$ is used to obtain the period-$t$ filtered measure. Our filtered estimates for inflation continue to outperform SPF1Q in both measures of fit: lower persistence of fitting error and lower mean-squared error.
+
+
+\begin{figure}[h]
+\begin{center}
+\caption[Caption for LOF]{Untargeted inflation: filtered result}
+\includegraphics[width=5.5in]{2025AprFig/ErrorPlot_filter_slides.jpg}
+\label{fig:filterinflation}
+\begin{flushleft}
+\footnotesize{This figure is the counterpart of Figure \ref{fig:Error} except that we replace the smoothed estimates for inflation with the filtered estimates that only use information up to period $t$. Our filtered estimates for inflation continue to outperform SPF1Q with lower persistence of fitting error and lower mean-squared error.}
+\end{flushleft}
+\end{center}
+\end{figure}
+
+
+\section{Counterfactual with Naive Committed Policy}\label{app:counter}
+\subsection{Optimization of a naive committed policymaker}
+The key departure from the benchmark model is that the committed type
+optimizes as if the reputation is a given parameter $\rho $. When the
+reputation is no longer a function of the inflation shock $\pi $ (at least
+in the committed type's optimization), there is no channel for the current $%
+\pi _{t}$ to affect future state variables.\footnote{Recall that the lagrangian
+multiplier $\gamma _{t}$ is chosen before the realization of $\pi _{t}$ and
+it will determine the next-period pseudo state variable.}
+
+This observation helps us to reduce the forwarding expectation constraint
+to:  
+\[
+e_{t}=\beta E_{t}\pi _{t+1}=\beta \left( 1-q\right) \sum_{\varsigma
+_{t+1}}\varphi \left( \varsigma _{t+1};\varsigma _{t}\right) \left[ \rho
+a\left( h_{t+1}\right) +\left( 1-\rho \right) \alpha \left( h_{t+1}\right) %
+\right] +\beta q\sum_{\varsigma _{t+1}}\varphi \left( \varsigma
+_{t+1};\varsigma _{t}\right) z\left( h_{t+1}\right) 
+\]%
+because $a_{t+1}$, $\alpha _{t+1}$, and $z_{t+1}$  are independent of $\pi
+_{t}$. As a result, we avoid carrying the likelihood ratio $\lambda \left(
+h_{t+1}\right) \equiv\frac{g\left( \pi _{t}|\alpha _{t}\right) }{g\left( \pi
+_{t}|a_{t}\right) }$ as a state variable.
+
+The recursive form of the naive optimization of the committed policymaker is%
+\begin{eqnarray*}
+W\left( \varsigma _{t},\eta _{t};\rho \right)  &=&\min_{\gamma }\max_{a,e}%
+\underline{u}(a_{t},e_{t},\varsigma _{t})+\gamma _{t}e_{t}-\left( 1-q\right)
+\eta _{t}\left[ \rho a_{t}+\left( 1-\rho \right) \alpha _{t}\right] -q\eta
+_{t}z\left( \varsigma _{t},\rho \right)  \\
+&&+\beta _{a}\left( 1-q\right) \sum_{\varsigma _{t+1}}\varphi \left(
+\varsigma _{t+1};\varsigma _{t}\right) W\left( \varsigma _{t+1},\eta
+_{t+1};\rho \right) 
+\end{eqnarray*}%
+subject to%
+\[
+\alpha _{t}=Ae_{t}+B\left( \varsigma _{t}\right) 
+\]%
+with%
+\[
+\eta _{t+1}=\frac{\beta }{\beta _{a}\left( 1-q\right) }\gamma _{t}\text{
+with }\gamma _{-1}=0.
+\]
+
+\bigskip 
+
+Given $z\left( \varsigma _{t},\rho \right) $, the optimization yields the
+following policy rules: $a\left( \varsigma _{t},\eta _{t};\rho \right)$, $e\left( \varsigma _{t},\eta _{t};\rho \right)$, and $\gamma\left( \varsigma _{t},\eta _{t};\rho \right)$. The fixed point requires
+\[
+z\left( \varsigma _{t},\rho \right) =\rho a\left( \varsigma _{t},0;\rho
+\right) +\left( 1-\rho \right) \left[ Ae\left( \varsigma _{t},0;\rho \right)
++B\left( \varsigma _{t}\right) \right] 
+\]
+
+
+The policy function under the setup of naive committed policymaker are denoted by
+\begin{align*}
+& a^N(\varsigma,\rho,\mu) \\
+& \alpha^N(\varsigma,\rho,\mu) \\
+& \mu'^N(\varsigma,\rho,\mu)
+\end{align*}
+
+
+\subsection{Constructing counterfactual time series}
+Initialization step for $t=1$: $\rho_1^{N,j}=\hat{\rho}_1^j$ and $\mu_1^{N,j}=\hat{\mu}_1^j$ for $\Theta_1=j$. $\{\hat{\varsigma}^j_t\}_{t=1}^T$, $\{\hat{v}_{\pi,t}^j\}_{t=1}^T$, and $\{Pr(\Theta_t=j|Y^T)\}_{t=1}^T$ are smoothed estimates of cost-push shocks, implementation errors, and smoothed probabilities of $\Theta_t=j$ obtained from the benchmark model. 
+
+Conditional on $\Theta_t=j$ and $\Theta_{t+1}=k$, we obtain
+\begin{align*}
+ a^{N,j}_t&=a^{N}(\hat{\varsigma}^j_t,\rho^{N,j}_t,\mu^{N,j}_t) \\
+\alpha^{N,j}_t&=\alpha^{N}(\hat{\varsigma}^j_t,\rho^{N,j}_t,\mu^{N,j}_t)) \\
+\rho^{N,(j,k)}_{t+1} &=\left\{ 
+\begin{array}{cc}
+b(\pi_t^{j};a^{N,j}_t,\alpha^{N,j}_t,\rho^{N,j}_t) & \text{if } k=1,2,3,4  \\ 
+\hat{\rho}^k_{t+1} & \text{if } k=5,6%
+\end{array}%
+\right.   \\
+\mu^{N,(j,k)}_{t+1} &=\left\{ 
+\begin{array}{cc}
+\mu'^{N}(\hat{\varsigma}^j_t,\rho^{N,j}_t,\mu^{N,j}_t) & \text{if } k=1,2  \\ 
+0 & \text{if } k=3,4,5,6%
+\end{array}%
+\right.   
+\end{align*}
+where $\pi_t^{j}=a^{N,j}_t+\hat{v}_{\pi,t}^j$ if $j=1, 3, 5$ and $\pi_t^{j}=\alpha^{N,j}_t+\hat{v}_{\pi,t}^j$ if $j=2,4,6$. 
+
+We then perform the collapsing step:
+\begin{align*}
+\rho^{N,k}_{t+1} &= \sum_{j=1}^6 \rho^{N,(j,k)}_{t+1} Pr(\Theta_t=j|\Theta_{t+1}=k,Y^T) \\
+\mu^{N,k}_{t+1} &= \sum_{j=1}^6 \mu^{N,(j,k)}_{t+1} Pr(\Theta_t=j|\Theta_{t+1}=k,Y^T)
+\end{align*}
+where
+\begin{align*}
+Pr(\Theta_t=j|\Theta_{t+1}=k,Y^T) &= \frac{Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T)}{\sum_{j=1}^6 Pr(\Theta_t=j,\Theta_{t+1}=k|Y^T) } \\
+&=\frac{Pr(\Theta_{t+1}=k|\Theta_t=j)Pr(\Theta_t=j|Y^T)}{\sum_{j=1}^6 Pr(\Theta_{t+1}=k|\Theta_t=j)Pr(\Theta_t=j|Y^T) }
+\end{align*}
+The transitional probability $Pr(\Theta_{t+1}=k|\Theta_t=j)$ are the same as the one in the benchmark model (\ref{app:transmatrix}) except that $b_{t-1}^i$ is replaced with the naive-policy version $b(\pi_t^{j};a^{N,j}_t,\alpha^{N,j}_t,\rho^{N,j}_t)$.
+
+The reported counterfactual time series t=1,...T are constructed as follows:
+\begin{align*}
+\rho^N_{t} &= \sum_{j=1}^6 \rho^{N,j}_{t}Pr(\Theta_{t}=j|Y^T) \\
+a^N_{t} &= \sum_{j=1}^6 a^{N,j}_{t}Pr(\Theta_{t}=j|Y^T)\\
+\alpha^N_{t} &= \sum_{j=1}^6 \alpha^{N,j}_{t}Pr(\Theta_{t}=j|Y^T)
+\end{align*}
+
+
+\begin{figure}[H]
+\centering
+\caption{Policy Difference} 
+\includegraphics[width=0.85\textwidth]{2024DecFig/delta_rho.jpg}
+
+\label{fig: delta}
+\begin{flushleft}
+\footnotesize{Difference between equilibrium committed policy and opportunistic policy is larger at lower levels of reputation. This property holds for various levels of cost push shock and pseudo state $\mu$. The two values of $\mu$ are representative as they correspond to the steady state $\mu$ when $\rho=0$ and $\rho=1$, respectively. } 
+\end{flushleft}
+    \end{figure}
+
+
+%\newpage
+
+\bibliographystylelatex{aer}
+%\bibliographystyle{apalike}
+%\bibliographystyle{aea}
+\bibliographylatex{referencesV2,Statistics}
+
+
+\end{document}
