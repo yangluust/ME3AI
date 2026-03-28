@@ -3,5 +3,6 @@
     "sample_start_quarter": 4,
     "sample_end_year": 2024,
     "sample_end_quarter": 2,
-    "x_definitions": ["raw_cpi10", "adjusted_cpi10"]
+    "x_definitions": ["raw_cpi10", "adjusted_cpi10"],
+    "forecast_revision_output_dir": "data-pipeline/output/forecast_revision"
 }

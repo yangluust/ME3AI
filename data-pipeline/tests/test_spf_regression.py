@@ -4,17 +4,24 @@ import sys
 from typing import Dict
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 import pytest
 
 sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str((Path(__file__).parent.parent / "scripts")))
 
 from src.spf_regression import (
     build_specification_comparison_panel,
     plot_cumulative_forecast_revision_comparison,
     plot_specification_comparison,
     run_forecast_revision_regressions,
+)
+from run_spf_forecast_revision_regressions import (
+    _intercept_results_to_latex,
+    _regression_results_to_latex,
 )
 
 
@@ -112,6 +119,18 @@ def test_run_forecast_revision_regressions_returns_statistics_and_fitted_values(
     )
 
     assert list(regression_statistics["model"]) == ["model_1", "model_2", "model_3", "model_P"]
+    assert list(regression_statistics.columns) == [
+        "model",
+        "regressor",
+        "intercept",
+        "intercept_se",
+        "intercept_p_value",
+        "estimate",
+        "p_value",
+        "adjusted_r_squared",
+        "rmse",
+        "sample_size",
+    ]
     assert list(fitted_values.columns) == [
         "survey_year",
         "survey_quarter",
@@ -138,6 +157,9 @@ def test_run_forecast_revision_regressions_matches_exact_linear_fit():
         "model_P": 16.0,
     }
     for row in regression_statistics.itertuples(index=False):
+        assert float(row.intercept) == pytest.approx(1.0)
+        assert float(row.intercept_se) == pytest.approx(0.0)
+        assert float(row.intercept_p_value) == pytest.approx(0.0)
         assert float(row.estimate) == pytest.approx(expected_estimates[str(row.model)])
         assert float(row.rmse) == pytest.approx(0.0)
         assert int(row.sample_size) == 4
@@ -244,3 +266,25 @@ def test_plot_specification_comparison_draws_two_specification_lines():
 
     assert len(figure.axes[0].lines) == 2
     plt.close(figure)
+
+
+def test_regression_latex_outputs_include_intercept_table():
+    """LaTeX outputs should include the baseline table and intercept table."""
+    regression_dataset = _sample_regression_dataset()
+    regression_statistics, _ = run_forecast_revision_regressions(
+        regression_dataset=regression_dataset,
+        config=_sample_regression_config(),
+    )
+    slope_table = _regression_results_to_latex(
+        regression_results=regression_statistics,
+        x_definition="raw_cpi10",
+        sample_window="1991:Q4 to 2024:Q2",
+    )
+    intercept_table = _intercept_results_to_latex(
+        regression_results=regression_statistics,
+        x_definition="raw_cpi10",
+        sample_window="1991:Q4 to 2024:Q2",
+    )
+    assert "Model & Regressor & Estimate & p value" in slope_table
+    assert "Model & Intercept & Intercept SE & Intercept p value" in intercept_table
+    assert "Intercept inference using Raw CPI10" in intercept_table

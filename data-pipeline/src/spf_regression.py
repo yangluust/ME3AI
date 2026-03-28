@@ -134,16 +134,27 @@ def _fit_ols_with_constant(
         adjusted_r_squared = 1.0 - ((sample_size - 1.0) / degrees_of_freedom) * (1.0 - rsquared)
 
     if ssr == 0.0:
+        standard_error = 0.0
         p_value = 0.0
+        intercept_standard_error = 0.0
+        intercept_p_value = 0.0
     else:
         variance = ssr / degrees_of_freedom
         xtx_inverse = np.linalg.inv(design_matrix.T @ design_matrix)
         standard_error = math.sqrt(float(variance * xtx_inverse[1, 1]))
+        intercept_standard_error = math.sqrt(float(variance * xtx_inverse[0, 0]))
         if standard_error == 0.0:
             p_value = 0.0
         else:
             t_statistic = estimate / standard_error
             p_value = float(2.0 * stats.t.sf(abs(t_statistic), df=degrees_of_freedom))
+        if intercept_standard_error == 0.0:
+            intercept_p_value = 0.0
+        else:
+            intercept_t_statistic = intercept / intercept_standard_error
+            intercept_p_value = float(
+                2.0 * stats.t.sf(abs(intercept_t_statistic), df=degrees_of_freedom)
+            )
 
     fitted_values = working.loc[:, ["survey_year", "survey_quarter"]].copy()
     fitted_values[f"fitted_{model_label}"] = fitted
@@ -151,6 +162,9 @@ def _fit_ols_with_constant(
     statistics_row = {
         "model": model_label,
         "regressor": regressor_column,
+        "intercept": intercept,
+        "intercept_se": intercept_standard_error,
+        "intercept_p_value": intercept_p_value,
         "estimate": estimate,
         "p_value": p_value,
         "adjusted_r_squared": adjusted_r_squared,

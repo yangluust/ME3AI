@@ -34,6 +34,24 @@ def _sample_window_label(regression_config: Dict[str, object]) -> str:
     )
 
 
+def _resolve_worktree_relative_path(
+    *,
+    worktree_root: Path,
+    relative_path: str,
+) -> Path:
+    """Resolve a path specified relative to the worktree root."""
+    return worktree_root / relative_path
+
+
+def _preflight_dependency_check() -> None:
+    """Fail fast when required runtime dependencies are unavailable."""
+    import matplotlib  # noqa: F401
+    import openpyxl  # noqa: F401
+    import pandas  # noqa: F401
+    import scipy  # noqa: F401
+    import tabulate  # noqa: F401
+
+
 def _regression_results_to_latex(
     regression_results: pd.DataFrame,
     *,
@@ -87,11 +105,57 @@ def _regression_results_to_latex(
     return "\n".join(lines) + "\n"
 
 
+def _intercept_results_to_latex(
+    regression_results: pd.DataFrame,
+    *,
+    x_definition: str,
+    sample_window: str,
+) -> str:
+    """Render one intercept-inference table as LaTeX."""
+    model_labels = {
+        "model_1": "Model 1",
+        "model_2": "Model 2",
+        "model_3": "Model 3",
+        "model_P": "Model P",
+    }
+    lines = [
+        r"\begin{table}[h]",
+        r"\centering",
+        (
+            r"\caption{Intercept inference using "
+            + format_x_definition_label(x_definition)
+            + " ("
+            + sample_window
+            + ").}"
+        ),
+        r"\begin{tabular}{@{}llll@{}}",
+        r"\toprule",
+        r"Model & Intercept & Intercept SE & Intercept p value \\",
+        r"\midrule",
+    ]
+    for row in regression_results.itertuples(index=False):
+        lines.append(
+            " & ".join(
+                [
+                    model_labels[str(row.model)],
+                    f"{float(row.intercept):.6f}",
+                    f"{float(row.intercept_se):.6f}",
+                    f"{float(row.intercept_p_value):.3e}",
+                ]
+            )
+            + r" \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}"])
+    return "\n".join(lines) + "\n"
+
+
 def main(
     clean_config_path: str | None = None,
     regression_config_path: str | None = None,
 ) -> None:
     """Load regression dataset, run regressions, and write outputs."""
+    _preflight_dependency_check()
+
     if clean_config_path is None:
         clean_config_path = Path(__file__).parent.parent / "config" / "spf_clean.json"
     else:
@@ -105,10 +169,20 @@ def main(
         config = json.load(file)
     with open(regression_config_path) as file:
         regression_config = json.load(file)
+    output_dir_config_key = "forecast_revision_output_dir"
+    if output_dir_config_key not in regression_config:
+        raise KeyError(
+            "Missing required config value: forecast_revision_output_dir "
+            "(worktree-relative path)."
+        )
 
     repo_root = Path(__file__).parent.parent
+    worktree_root = repo_root.parent
     cleaned_dir = repo_root / config["cleaned_dir"]
-    output_dir = repo_root / "output" / "forecast_revision"
+    output_dir = _resolve_worktree_relative_path(
+        worktree_root=worktree_root,
+        relative_path=str(regression_config[output_dir_config_key]),
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
 
     x_definitions = get_configured_x_definitions(config=regression_config)
@@ -151,6 +225,12 @@ def main(
         regression_results.to_csv(table_output_path, index=False)
         table_tex_output_path.write_text(
             _regression_results_to_latex(
+                regression_results=regression_results,
+                x_definition=x_definition,
+                sample_window=sample_window,
+            )
+            + "\n"
+            + _intercept_results_to_latex(
                 regression_results=regression_results,
                 x_definition=x_definition,
                 sample_window=sample_window,

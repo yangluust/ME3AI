@@ -35,8 +35,17 @@ data-pipeline/
 |------|------|
 | `config/spf_download.json` | SPF variables (e.g. CPI, CPI10), file types, `input/` output |
 | `config/spf_clean.json` | `input_dir`, `cleaned_dir` for cleaning and downstream scripts |
-| `config/forecast_revision.json` | Sample window, `x_definitions` (e.g. `raw_cpi10`, `adjusted_cpi10`) |
+| `config/forecast_revision.json` | Sample window, `x_definitions`, and worktree-relative `forecast_revision_output_dir` |
 | `config/reputation_measure.json` | Parameters for reputation construction |
+
+## Environment setup (required)
+
+Run setup once from `data-pipeline/` before any script or test:
+
+1. `uv sync`
+2. `uv run python -c "import pandas, openpyxl, matplotlib, scipy, tabulate"`
+
+Use `uv run ...` for all commands so scripts always execute in the managed environment defined by `pyproject.toml`.
 
 ## SPF run order
 
@@ -48,7 +57,7 @@ Run from `data-pipeline/` (or pass absolute paths where scripts accept overrides
 4. `uv run python scripts/construct_spf_inflation_news.py` — writes `cleaned/inflation_news.csv`.
 5. `uv run python scripts/construct_spf_reputation_measure.py` — for each `x_definition`, writes under `cleaned/forecast_revision/<x_definition>/` (e.g. `reputation_measure.csv`).
 6. `uv run python scripts/construct_spf_regression_dataset.py` — writes `cleaned/forecast_revision/<x_definition>/regression_dataset.csv`.
-7. `uv run python scripts/run_spf_forecast_revision_regressions.py` — reads those datasets, writes `output/forecast_revision/<x_definition>/` (CSV, LaTeX, figures). The comparison workflow in this script expects `x_definitions` to include both raw and adjusted CPI10 sources as configured in `forecast_revision.json`.
+7. `uv run python scripts/run_spf_forecast_revision_regressions.py` — reads those datasets, writes to `<forecast_revision_output_dir>/<x_definition>/` (CSV, LaTeX, figures), where `forecast_revision_output_dir` is specified relative to the worktree root in `forecast_revision.json`. The comparison workflow in this script expects `x_definitions` to include both raw and adjusted CPI10 sources as configured in `forecast_revision.json`.
 
 ## Codebook
 
