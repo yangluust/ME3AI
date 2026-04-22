@@ -1,6 +1,6 @@
 %2multibyte Version: 5.50.0.2890 CodePage: 65001
 %\usepackage[letterpaper,top=1.5in,bottom=1.5in,left=1.5in,right=1.5in]{geometry}
-%\input{tcilatex}
+%\input{tcilatex} 
 
 
 \documentclass[12pt,letter,leqno]{article}
@@ -11,8 +11,6 @@
 \usepackage{setspace}
 \usepackage{graphicx}
 \usepackage[round]{natbib}
-\usepackage{multibib}
-\newcites{latex}{Appendix References}%  \citelatex, \nocitelatex, ...
 \usepackage{bbm}
 \usepackage{ulem}
 \usepackage[letterpaper,top=1.5in,bottom=1.5in,left=1.0in,right=1.0in]{geometry}
@@ -1146,7 +1144,7 @@ decisions as these were relevant to past expectations of inflation.\footnote{Our
 \subsection{The basic recursive specification}\label{appsec:recursive8}
 
 The preceding derivations suggest a recursive version of $U_t + \Psi_t$ with states $(\varsigma _{t},\gamma _{t-1},\rho _{t-1}$,$\lambda _{t})$. For algebraic convenience, we define $\eta _{t}=\frac{\beta }{%
-\beta_{a}(1-q)}\gamma _{t-1}$. Then, the recursive form as in \citelatex{marcet_recursive_2019} is
+\beta_{a}(1-q)}\gamma _{t-1}$. Then, the recursive form as in \cite{marcet_recursive_2019} is
 \begin{multline}
 W(\varsigma _{t},\eta _{t},\rho _{t-1},\lambda _{t}) =
 \min_{\gamma
@@ -1652,7 +1650,7 @@ We construct the SPF inflation data from ``individual responses" file for the \t
 
 In the middle of each quarter, each survey participant submits a forecast for the price level in that quarter and the next four. We first calculate inflation forecasts for each individual forecaster j, using the continuously compounded growth rate: $400\times\ln(P^j_{t+k|t}/P^j_{t+k-1|t})$. We then take the median of these inflation forecasts.
 
-Alternatively, one can use the summary data files constructed by the Federal Reserve Bank of Philadelphia, particularly the ``annualized percent change of median responses" file from https://www.philadelphiafed.org/surveys-and-data/pgdp, as a measure for the SPF inflation data. This file includes an inflation ``nowcast" and forecasts at the 1,2,3, and 4 quarter horizons. The nature of these inflation series is explained by \citelatex{stark_realistic_2010}. The FRBP first constructs a median price level for each horizon from ``individual responses", say $P_{t+k|t}$ for k=0,1,...4. It then constructs an annualized percentage growth rate using the formula $100\times([P_{t+k|t}/P_{t+k-1|t}]^4 -1)$. 
+Alternatively, one can use the summary data files constructed by the Federal Reserve Bank of Philadelphia, particularly the ``annualized percent change of median responses" file from https://www.philadelphiafed.org/surveys-and-data/pgdp, as a measure for the SPF inflation data. This file includes an inflation ``nowcast" and forecasts at the 1,2,3, and 4 quarter horizons. The nature of these inflation series is explained by \cite{stark_realistic_2010}. The FRBP first constructs a median price level for each horizon from ``individual responses", say $P_{t+k|t}$ for k=0,1,...4. It then constructs an annualized percentage growth rate using the formula $100\times([P_{t+k|t}/P_{t+k-1|t}]^4 -1)$.
 
 
 Our procedure yields time series that are less prone to transitory outliers than the standard FRBP constructions. Each difference matters, i.e., (i) the median of the inflation rates is less prone than is the change in the median price level; and (ii) the continuously compounded inflation rate is less prone than is the FRBP inflation rate.
@@ -1815,13 +1813,13 @@ T=
 \subsection{Unscented Kalman filter with Markov-switching}
 This subsection describes the detailed algorithm we employ to obtain filtered and smoothed estimates of latent states in the state space model (\ref{appS}) and (\ref{appY}). Relative to a standard nonlinear system with additive Gaussian errors, our model has three complications.
 
-First, the shocks $v_\varsigma$ and $v_\rho$ enter the evolution equation of $\pi$ nonlinearly because the policy function $a(\cdot)$ and $\alpha(\cdot)$ are nonlinear functions of $\varsigma$ and $\rho$. Moreover, the shock $v_\rho$ follows a Beta distribution instead of a Gaussian one. Following \citelatex{sarkka_bayesian_2023}, this complication can be dealt with by: 1) approximating the Beta random variable $v_\rho$ using a nonlinear transformation of a Gaussian random variable $\tilde{v}_\rho$: \[ v_\rho = R(\tilde{v}_\rho)=\frac{exp(\tilde{v}_\rho)}{1+exp(\tilde{v}_\rho)}\]
+First, the shocks $v_\varsigma$ and $v_\rho$ enter the evolution equation of $\pi$ nonlinearly because the policy function $a(\cdot)$ and $\alpha(\cdot)$ are nonlinear functions of $\varsigma$ and $\rho$. Moreover, the shock $v_\rho$ follows a Beta distribution instead of a Gaussian one. Following \cite{sarkka_bayesian_2023}, this complication can be dealt with by: 1) approximating the Beta random variable $v_\rho$ using a nonlinear transformation of a Gaussian random variable $\tilde{v}_\rho$: \[ v_\rho = R(\tilde{v}_\rho)=\frac{exp(\tilde{v}_\rho)}{1+exp(\tilde{v}_\rho)}\]
 2) forming sigma points for the state vector augmented by $v_\varsigma$ and $\tilde{v}_\rho$. 
 
 
-Second, the reputation state $\rho$ is bounded between 0 and 1. To enforce the boundary condition, we use ``constrained unscented Kalman filter" (\citelatex{kandepu_constrained_2008}, \citelatex{rouhani_constrained_2018}) that projects the sigma points outside the feasible region to the nearest points within the region.
+Second, the reputation state $\rho$ is bounded between 0 and 1. To enforce the boundary condition, we use ``constrained unscented Kalman filter" (\cite{kandepu_constrained_2008}, \cite{rouhani_constrained_2018}) that projects the sigma points outside the feasible region to the nearest points within the region.
 
-Third, the state evolution equations depend on the outcome of an unobserved discrete-state Markov process $\Theta_t$. We follow \citelatex{kim_dynamic_1994} and \citelatex{kim_state-space_2017} to obtain the conditional probability of $\Theta_t$ being in each discrete state and to collapse state estimate and covariance.
+Third, the state evolution equations depend on the outcome of an unobserved discrete-state Markov process $\Theta_t$. We follow \cite{kim_dynamic_1994} and \cite{kim_state-space_2017} to obtain the conditional probability of $\Theta_t$ being in each discrete state and to collapse state estimate and covariance.
 
 To ease the notation, we rewrite the state space model (\ref{appS}) and (\ref{appY}) as follows:
 \begin{align*}
@@ -2351,10 +2349,6 @@ f_{t+10y|t}^{i} \equiv x_{i,(y, q)} \quad \text{where } t = (y, q).
 
 %\newpage
 
-\bibliographystylelatex{aer}
-%\bibliographystyle{apalike}
-%\bibliographystyle{aea}
-\bibliographylatex{ME}
 
 
 \end{document}
