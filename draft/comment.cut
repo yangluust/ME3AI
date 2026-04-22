@@ -1,0 +1,10 @@
+\begin{figure}[h]
+\begin{center}
+\caption[Caption for LOF]{Model-implied and SPF forecasts of inflation}
+\includegraphics[height=4in,width=6in]{2025JanFig/SPF_combined_slides.jpg}
+\label{fig:multiSPF}
+\begin{flushleft}
+\footnotesize{This figure compares the smoothed estimates of model inflation forecast produced by our nonlinear filter with the SPF inflation forecast of the same forecasting horizon. SPF1Q and SPF3Q are targeted by our nonlinear filter; SPF2Q and SPF4Q are not targeted. }
+\end{flushleft}
+\end{center}
+\end{figure}

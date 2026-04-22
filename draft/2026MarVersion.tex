@@ -155,7 +155,7 @@
 \makeatother
 
 
-\input{tcilatex}
+%\input{tcilatex}
 \begin{document}
 
 \title{\textbf{Evolving Reputation for Commitment:\\ Understanding Inflation and Inflation Expectations}\thanks{
@@ -1308,7 +1308,7 @@ _{1}(1-q)E_{t}^{c}\Lambda _{t+1}
 \end{eqnarray*}%
 with the understanding that $\phi _{-1}=0$.
 
-Note that there are two conceptual elements of the term $\frac{\QTR{uline}{g}%
+Note that there are two conceptual elements of the term $\frac{\uline{g}%
 _{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{g\left( \pi
 _{t-1}|a_{t-1}\right) }$, which we can separate by writing this term as $%
 \frac{g_{\alpha }\left( \pi _{t-1}|\alpha _{t-1}\right) }{%
@@ -1557,7 +1557,7 @@ where%
 
 Hence, in equilibrium where the rational expectation constraint must hold, we obtain 
 \begin{equation*}
-e^*=\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)\omega^*'\rho g(\pi|a^*)d\pi
+e^*=\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)(\omega^*)'\rho g(\pi|a^*)d\pi
 \end{equation*}
 Utilizing this equilibrium condition, we now show by ``guess and verify" that in equilibrium: $W(\varsigma,\rho,\mu) = U^*(\varsigma,\rho,\mu) - \mu\omega^{\ast }$.
 The following recursion must hold:
@@ -1567,15 +1567,15 @@ W(\varsigma,\rho,\mu)+\mu\omega^{\ast } &= \uline{u}(a^{\ast }, e^*,\varsigma) +
 \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)W(\varsigma
 ',\rho ',\mu ')g(\pi|a^*)d\pi  \notag
 \end{align}
-Suppose $W(\varsigma',\rho ',\mu ')=-\mu'\omega^*' + U^*(\varsigma
+Suppose $W(\varsigma',\rho ',\mu ')=-\mu'(\omega^*)' + U^*(\varsigma
 ',\rho ',\mu ')$, the right hand side can be written as
 \begin{align}
 &\uline{u}(a^{\ast }, e^*,\varsigma) + \gamma e^* -  \beta_{a}(1-q)\int
-\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)[\frac{\beta}{\beta_a(1-q)}\gamma \rho \omega^*']g(\pi|a^*)d\pi\notag \\
+\sum_{\varsigma '}\varphi (\varsigma ';\varsigma)[\frac{\beta}{\beta_a(1-q)}\gamma \rho (\omega^*)']g(\pi|a^*)d\pi\notag \\
 &+ \beta_{a}(1-q)\int
 \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)U^*(\varsigma
 ',\rho ',\mu ')g(\pi|a^*)d\pi  \notag\\
-=& \uline{u}(a^{\ast }, e^{\ast },\varsigma) + \gamma[e^*-\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)\omega^*'\rho g(\pi|a^*)d\pi] \notag \\
+=& \uline{u}(a^{\ast }, e^{\ast },\varsigma) + \gamma[e^*-\beta \int \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)(\omega^*)'\rho g(\pi|a^*)d\pi] \notag \\
 &+ \beta_{a}(1-q)\int
 \sum_{\varsigma '}\varphi (\varsigma ';\varsigma)U^*(\varsigma
 ',\rho ',\mu ')g(\pi|a^*)d\pi  \notag \\
