@@ -573,7 +573,7 @@ The policy difference $\delta$ enters the function $b(\cdot)$ -- the Bayesian le
 
 The future pseudo-state variable $\mu'$ enters the rationally expected future equilibrium policies and thus serves to anchor expectations. The committed policymaker sets $\mu'$ through the choice of $\gamma$, which represents the shadow value of promising $a'$. The effect of $\gamma$ on $\mu'$ depends on the current reputation state $\rho$, which reflects the private sector’s skepticism about the likelihood that $a'$ will be delivered.
 
-\paragraph{From expectations to policies:} Managing expectations $e$ through the choice of the pair $(\delta, \mu')$ shapes the inflation policies: $\alpha = Ae + B(\varsigma)$ and $a = \alpha + \delta$. Together, expectations and policies determine the momentary objective function $\uline{u}(\cdot)$ and the composite promise term $\omega(\cdot)$, allowing us to simplify the recursive program (\ref{W}) from a choice over $(\gamma, a, \alpha, e)$ to a choice over just $(\delta, \mu')$:\footnote{Appendix \ref{app:W2} provides the proof.} 
+\paragraph{From expectations to policies:} Managing expectations $e$ through the choice of the pair $(\delta, \mu')$ shapes the inflation policies: $\alpha = Ae + B(\varsigma)$ and $a = \alpha + \delta$. Together, expectations and policies determine the momentary objective function $\uline{u}(\cdot)$ and the composite promise term $\omega(\cdot)$, allowing us to simplify the recursive program (\ref{W}) from a choice over $(\gamma, a, \alpha, e)$ to a choice over just $(\delta, \mu')$:\footnote{Appendix \ref{appsec:W2} provides the proof.}
 \begin{prop}\label{prop:W2}%
 Given $e =e\left( \delta ,\mu ^{\prime };\varsigma ,\rho \right)$ and $U^*\left( \varsigma ,\rho ,\mu \right)=W(\varsigma,\rho,\mu)+\mu\omega^*(\varsigma,\rho,\mu)$, 
 \begin{align}
@@ -591,6 +591,116 @@ W(\varsigma,\rho,\mu) =\max_{\delta,\mu^{\prime}}&\left[\uuline{u}(
 \end{align}
 \end{prop}
 Let $s = [\varsigma, \rho, \mu]$ denote the state vector. The optimal choices $\delta^*(s)$ and $\mu'^* = m(s)$ determine the equilibrium objects $\omega^*(s)$, $W(s)$, $a^*(s)$, and $\alpha^*(s)$, which in turn serve as inputs to the rationally expected inflation function $e(\delta, \mu'; \varsigma, \rho)$ in (\ref{eq:RE}) and the value function $U^*(s)$. The program (\ref{eq:W2}) thus defines the inner-loop fixed point problem that solves for the within-regime equilibrium. Combined with the outer-loop fixed point problem (\ref{z}), the two fixed point problems jointly characterize the Public PBE.
+
+
+\section{Strategic Reputation Management}
+A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the dynamics of the Volcker disinflation episode, and the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
+
+
+
+\begin{figure}[H]
+\begin{center}
+\caption[Caption for LOF]{Equilibrium policy functions}
+\bigskip
+\includegraphics[width=5.5in]{2025AprFig/dr_rho.jpg}
+\label{fig:policyfcn}
+\begin{flushleft}
+\footnotesize{Strategic reputation management makes committed policy less inflationary, particularly when reputation $\rho$ is low, both absolutely and relative to opportunistic policy. Each panel compares policy functions from the benchmark model with strategic reputation management (blue) and the naive model (red).}
+\end{flushleft}
+\end{center}
+\end{figure}
+
+\subsection{Equilibrium policy functions}
+
+We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
+
+Figure \ref{fig:policyfcn} shows the equilibrium policy functions for the committed policy $a$ (left panel), the opportunistic policy $\alpha$ (middle panel), and their difference $\delta = a - \alpha$ (right panel), comparing results from the benchmark model with strategic reputation management (blue) and the naive model (red).\footnote{The policy functions are conditional on the other two state variables, $\mu$ and $\varsigma$, which are held fixed for illustration. Compared to $\rho$, these states play a less significant role in shaping the policy functions. We set $\mu$ at its steady-state level under $\rho = 1$ and $\varsigma = 0$. Appendix Figure \ref{fig: delta} plots the equilibrium policy difference, $a - \alpha$, as a function of $\rho$ across various alternative values of the cost-push shock and $\mu$.} 
+
+The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. In contrast, under the naive model, the policy difference remains flat across reputation levels, even though both types optimize.
+
+To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
+
+This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for capturing the dynamics of episodes like the Volcker disinflation and for explaining the time-varying sensitivity of forecast revisions to inflation surprises.
+
+
+\subsection{Long-term inflation forecasts}
+In this section, we provide empirical evidence for a key implication of strategic reputation management: the sensitivity of long-term inflation forecast revisions to inflation surprises is not constant but varies over time in a manner consistent with our benchmark model. This reflects the feedback loop highlighted earlier -- where beliefs influence policy, and policy in turn shapes beliefs. To test this implication, we adopt a reduced-form approach that isolates the model’s qualitative predictions without relying on short-term SPF forecasts, which were used in the structural estimation.
+
+\subsubsection{Long-term inflation forecast proportional to reputation}
+Our theory implies that long-term inflation forecasts depend solely on reputation, not on cost-push shocks, because cost-push shocks are stationary and their influence becomes negligible at long horizons. Formally, the period-$t$ long-term inflation forecast is given by:
+\begin{equation}\label{eq:LTF}
+f_{\infty|t} = \rho_t[ (1 - q)\pi^* + qz(\varsigma = 0, \rho = 1)]+(1 - \rho_t)[(1-q)\pi^{NE}+qz(\varsigma = 0, \rho = 0)] 
+\end{equation}
+which is a weighted average of long-term inflation forecasts conditional on the policymaker’s type. With probability $\rho_t$, the policymaker is committed, and reputation converges to 1 in the long run. In this case, long-term inflation equals the target $\pi^*$ if the regime persists, or the “startup” inflation associated with a new policymaker following the committed regime. Conversely, with probability $1 - \rho_t$, the policymaker is opportunistic, and reputation converges to 0. The corresponding long-term inflation is either the Nash-equilibrium inflation bias $\pi^{NE}$ if the regime continues, or the startup level associated with a new policymaker following the opportunistic regime. Since inflation is always lower under committed regime, \eqref{eq:LTF} implies that long-term inflation forecasts move inversely with reputation. 
+
+
+\subsubsection{Dynamics of reputation}
+We now examine the dynamics of reputation. According to the Bayes' rule (\ref{BL2}), reputation is a function of observed inflation $\pi$ and evolves as a \textit{martingale} from the perspective of the private sector. This follows from the fact that the likelihood of observing $\pi_t$ is $\rho_t g(\pi_t | a_t) + (1 - \rho_t) g(\pi_t | \alpha_t)$, implying that the expected update in reputation satisfies $E_t \rho_{t+1} = \rho_t$.
+
+Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + (1 - \rho_t) \alpha_t]$, we obtain the following expression for the change in reputation:\footnote{This approximation becomes exact in continuous-time versions of imperfect public monitoring games, such as Eq (2) in \cite{faingold_reputation_2011}.}
+\begin{equation}\label{eq:rhoapprox}
+\rho_{t+1} - \rho_t \approx k \{\rho_t(1 - \rho_t)(a_t - \alpha_t)\}  \{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]\}
+\end{equation}
+where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation, as the policy difference $a_t - \alpha_t$ is always negative.
+
+Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy difference. Strategic reputation management implies that lower reputation leads to a wider policy difference. Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy difference.
+
+Finally, \eqref{eq:LTF} implies a linear relationship between reputation and long-term inflation forecasts. Consequently, revisions in long-term forecasts inherit the time-varying sensitivity of reputation changes to inflation surprises.
+
+
+
+\subsubsection{Time variation in sensitivity to inflation news}
+To study empirically how revisions in long-term inflation forecasts respond to news about inflation, we employ the SPF CPI inflation forecast data that includes both nowcast and $10$-year-ahead forecast available starting in 1991Q4. Our sample covers up to 2024Q2.
+
+To construct the ``inflation surprise", we utilize the ``backcast" estimate of the prior quarter inflation and a ``nowcast" estimate of the current quarter inflation: 
+\[
+v_{t}^{i}=f_{t|t+1}^{i}-f_{t|t}^{i}
+\]
+The ``backcast" $f_{t|t+1}^{i}$ is the realized CPI inflation in $t$ as perceived by the forecaster $i$. $f_{t|t}^{i}$ is the same forecaster's ``nowcast" of inflation of the same quarter. 
+For each forecaster, we can also construct the 10-year forecast revision:\footnote{The SPF 10-year CPI forecast is a fixed-event measure (inflation over the 10 years starting from the previous year’s Q4). Hence part of the reported object is already realized by the survey date, we therefore remove the realized portion to obtain a purely forward-looking adjusted 10-year forecast. Appendix \ref{sec:adjustedCPI10} reports the details of such adjustments.}
+\[
+v_{10y,t}^{i}=f_{t+10y|t+1}^{i}-f_{t+10y|t}^{i}.
+\]
+
+We aggregate individual variables by restricting to forecasters present in both periods $t$ and $t+1$, and then take the mean as the consensus measure: $v_t$ for inflation surprise, $v_{10y,t}$ for long-term forecast revision, and $f_{t+10y|t}$ for the long-term inflation forecast. We then use $f_{t+10y|t}$ to construct a reduced-form measure of reputation, $\widehat{\rho}_t$, based on (\ref{eq:LTF}).
+
+We compare three regression models, each corresponding to a class of learning models with different structural features:
+\begin{align*}
+     \text{Model 1: }v_{10y,t}&=\xi v_t + \epsilon_t \\
+     \text{Model 2: }v_{10y,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t) v_t + \epsilon_t \\
+     \text{Model 3: }v_{10y,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t)^2 v_t + \epsilon_t
+\end{align*}
+Model 1 uses unweighted inflation surprise as the regressor, which would be appropriate if belief updating did not involve learning about the policymaker’s type or policy regime. Model 2 weights the surprise by $\widehat{\rho}_t(1 - \widehat{\rho}_t)$, consistent with the idea that forecast revisions are proportional to belief updating -- beliefs respond more to shocks when uncertainty about policymaker's type or policy regime is higher. This specification assumes the policy difference across types or regimes is constant. Model 3 modifies the weight to $\widehat{\rho}_t(1 - \widehat{\rho}_t)^2$, capturing the \textit{interaction between policy and reputation}: lower reputation increases the policy difference and accelerates private-sector learning -- a mechanism unique to our model with strategic reputation management. 
+
+
+Table \ref{tab:regression} presents the adjusted $R^2$ for each specification, highlighting the dramatic improvement in model fit as we incorporate theory-motivated weighting schemes. The baseline Model 1, which regresses long-term forecast revisions on the unweighted inflation surprise, offers a very poor fit: the adjusted $R^2$ is just 0.015, indicating that the unweighted inflation surprise explains almost none of the variation in long-term forecast revisions. Introducing the theory-driven weight in Model 2, adjusted $R^2$ jumps to 0.034, reflecting a notable increase in explanatory power. Most strikingly, Model 3, which further refines the weighting by including the impact of reputation on policy differences, achieves an adjusted $R^2$ of 0.086 -- almost six times higher than the baseline. This substantial improvement underscores the critical importance of accounting for the nonlinear interaction between reputation and forecast responsiveness.
+
+To ensure that the gains of Model 3 are not merely the result of introducing additional nonlinearity, we estimate a placebo regression (Model P):
+\begin{equation}
+\text{Model P: }v_{10y,t} = \xi\, \widehat{\rho}_t^2 (1-\widehat{\rho}_t) v_t + \epsilon_t
+\end{equation}
+Here, the regressor is weighted by $\widehat{\rho}_t^2(1-\widehat{\rho}_t)$, a formulation that is similarly nonlinear but lacks theoretical grounding. The results show that simply adding nonlinear terms does not improve model fit—if anything, Model P's adjusted $R^2$ drops to 0.027, lower than Model 2 and far below Model 3. Thus, the superior performance of Model 3 is driven by its foundation in theory, not just by increased nonlinearity.
+
+\begin{table}[htbp]
+  \centering
+  \caption{Forecast revision regression results (1991:Q4 to 2024:Q2).}
+  \begin{tabular}{@{}llllll@{}}
+  \toprule
+  Model & Regressor & Estimate & p value & Adjusted $R^2$ & Sample size \\
+  \midrule
+  Model 1 & $v_t$ & 0.010526 & 8.649e-02 & 0.015149 & 130 \\
+  Model 2 & $\widehat{\rho}_t(1-\widehat{\rho}_t) v_t$ & 0.143589 & 1.989e-02 & 0.034144 & 130 \\
+  Model 3 & $\widehat{\rho}_t(1-\widehat{\rho}_t)^2 v_t$ & 1.604054 & 4.225e-04 & 0.085798 & 130 \\
+  Model P & $\widehat{\rho}^2_t(1-\widehat{\rho}_t) v_t$ & 0.149861 & 3.365e-02 & 0.027230 & 130 \\
+  \bottomrule
+  \end{tabular}
+  \label{tab:regression}%
+
+\begin{flushleft}
+\footnotesize{OLS regressions of long-term CPI inflation forecast revision on inflation surprise. Sample period is from 1991Q4 to 2024Q2. Model 1 uses the unweighted inflation surprise. Models 2, 3, and P weight inflation surprise using reputation measure $\widehat{\rho}_t$ constructed using the long-term inflation forecast according to (\ref{eq:LTF}). All regressions include a constant.}
+\end{flushleft}
+  \end{table}
+
 
 \section{Building the Quantitative Model}
 \label{sec:buildingmodel}
@@ -762,35 +872,6 @@ These results suggest that our quantitative model captures U.S. inflation dynami
 \end{figure}
 \end{ST}
 
-\section{Strategic Reputation Management}
-A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the dynamics of the Volcker disinflation episode, and the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
-
-
-
-\begin{figure}[H]
-\begin{center}
-\caption[Caption for LOF]{Equilibrium policy functions}
-\bigskip
-\includegraphics[width=5.5in]{2025AprFig/dr_rho.jpg}
-\label{fig:policyfcn}
-\begin{flushleft}
-\footnotesize{Strategic reputation management makes committed policy less inflationary, particularly when reputation $\rho$ is low, both absolutely and relative to opportunistic policy. Each panel compares policy functions from the benchmark model with strategic reputation management (blue) and the naive model (red).}
-\end{flushleft}
-\end{center}
-\end{figure}
-
-\subsection{Equilibrium policy functions}
-
-We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
-
-Figure \ref{fig:policyfcn} shows the equilibrium policy functions for the committed policy $a$ (left panel), the opportunistic policy $\alpha$ (middle panel), and their difference $\delta = a - \alpha$ (right panel), comparing results from the benchmark model with strategic reputation management (blue) and the naive model (red).\footnote{The policy functions are conditional on the other two state variables, $\mu$ and $\varsigma$, which are held fixed for illustration. Compared to $\rho$, these states play a less significant role in shaping the policy functions. We set $\mu$ at its steady-state level under $\rho = 1$ and $\varsigma = 0$. Appendix Figure \ref{fig: delta} plots the equilibrium policy difference, $a - \alpha$, as a function of $\rho$ across various alternative values of the cost-push shock and $\mu$.} 
-
-The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. In contrast, under the naive model, the policy difference remains flat across reputation levels, even though both types optimize.
-
-To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
-
-This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for capturing the dynamics of episodes like the Volcker disinflation and for explaining the time-varying sensitivity of forecast revisions to inflation surprises.
-
 
 
 \subsection{Volcker disinflation} 
@@ -829,84 +910,6 @@ In the benchmark model, reputation rises rapidly after 1981—from below 0.1 to 
 In contrast, under the naive model, reputation gains little during the 1982–83 recession and stays low -- around 0.2 -- for an extended period. This is because the naive committed policymaker treats reputation as exogenous, leading to a policy path that closely mirrors the opportunistic one. Low reputation sustains high expected inflation, worsening the inflation-output trade-off. As a result, disinflation is much slower, deviating sharply from the post-1981 U.S. inflation experience.
 
 
-
-\subsection{Long-term inflation forecasts}
-In this section, we provide empirical evidence for a key implication of strategic reputation management: the sensitivity of long-term inflation forecast revisions to inflation surprises is not constant but varies over time in a manner consistent with our benchmark model. This reflects the feedback loop highlighted earlier -- where beliefs influence policy, and policy in turn shapes beliefs. To test this implication, we adopt a reduced-form approach that isolates the model’s qualitative predictions without relying on short-term SPF forecasts, which were used in the structural estimation.
-
-\subsubsection{Long-term inflation forecast proportional to reputation}
-Our theory implies that long-term inflation forecasts depend solely on reputation, not on cost-push shocks, because cost-push shocks are stationary and their influence becomes negligible at long horizons. Formally, the period-$t$ long-term inflation forecast is given by:
-\begin{equation}\label{eq:LTF}
-f_{\infty|t} = \rho_t[ (1 - q)\pi^* + qz(\varsigma = 0, \rho = 1)]+(1 - \rho_t)[(1-q)\pi^{NE}+qz(\varsigma = 0, \rho = 0)] 
-\end{equation}
-which is a weighted average of long-term inflation forecasts conditional on the policymaker’s type. With probability $\rho_t$, the policymaker is committed, and reputation converges to 1 in the long run. In this case, long-term inflation equals the target $\pi^*$ if the regime persists, or the “startup” inflation associated with a new policymaker following the committed regime. Conversely, with probability $1 - \rho_t$, the policymaker is opportunistic, and reputation converges to 0. The corresponding long-term inflation is either the Nash-equilibrium inflation bias $\pi^{NE}$ if the regime continues, or the startup level associated with a new policymaker following the opportunistic regime. Since inflation is always lower under committed regime, \eqref{eq:LTF} implies that long-term inflation forecasts move inversely with reputation. 
-
-
-\subsubsection{Dynamics of reputation}
-We now examine the dynamics of reputation. According to the Bayes' rule (\ref{BL2}), reputation is a function of observed inflation $\pi$ and evolves as a \textit{martingale} from the perspective of the private sector. This follows from the fact that the likelihood of observing $\pi_t$ is $\rho_t g(\pi_t | a_t) + (1 - \rho_t) g(\pi_t | \alpha_t)$, implying that the expected update in reputation satisfies $E_t \rho_{t+1} = \rho_t$.
-
-Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + (1 - \rho_t) \alpha_t]$, we obtain the following expression for the change in reputation:\footnote{This approximation becomes exact in continuous-time versions of imperfect public monitoring games, such as Eq (2) in \cite{faingold_reputation_2011}.}
-\begin{equation}\label{eq:rhoapprox}
-\rho_{t+1} - \rho_t \approx k \{\rho_t(1 - \rho_t)(a_t - \alpha_t)\}  \{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]\}
-\end{equation}
-where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation, as the policy difference $a_t - \alpha_t$ is always negative.
-
-Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy difference. Strategic reputation management implies that lower reputation leads to a wider policy difference. Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy difference.
-
-Finally, \eqref{eq:LTF} implies a linear relationship between reputation and long-term inflation forecasts. Consequently, revisions in long-term forecasts inherit the time-varying sensitivity of reputation changes to inflation surprises.
-
-
-
-\subsubsection{Time variation in sensitivity to inflation news}
-To study empirically how revisions in long-term inflation forecasts respond to news about inflation, we employ the SPF CPI inflation forecast data that includes both nowcast and $10$-year-ahead forecast available starting in 1991Q4. Our sample covers up to 2024Q2.
-
-To construct the ``inflation surprise", we utilize the ``backcast" estimate of the prior quarter inflation and a ``nowcast" estimate of the current quarter inflation: 
-\[
-v_{t}^{i}=f_{t|t+1}^{i}-f_{t|t}^{i}
-\]
-The ``backcast" $f_{t|t+1}^{i}$ is the realized CPI inflation in $t$ as perceived by the forecaster $i$. $f_{t|t}^{i}$ is the same forecaster's ``nowcast" of inflation of the same quarter. 
-For each forecaster, we can also construct the 10-year forecast revision:\footnote{The SPF 10-year CPI forecast is a fixed-event measure (inflation over the 10 years starting from the previous year’s Q4). Hence part of the reported object is already realized by the survey date, we therefore remove the realized portion to obtain a purely forward-looking adjusted 10-year forecast. Appendix \ref{sec:adjustedCPI10} reports the details of such adjustments.}
-\[
-v_{10y,t}^{i}=f_{t+10y|t+1}^{i}-f_{t+10y|t}^{i}.
-\]
-
-We aggregate individual variables by restricting to forecasters present in both periods $t$ and $t+1$, and then take the mean as the consensus measure: $v_t$ for inflation surprise, $v_{10y,t}$ for long-term forecast revision, and $f_{t+10y|t}$ for the long-term inflation forecast. We then use $f_{t+10y|t}$ to construct a reduced-form measure of reputation, $\widehat{\rho}_t$, based on (\ref{eq:LTF}).
-
-We compare three regression models, each corresponding to a class of learning models with different structural features:
-\begin{align*}
-     \text{Model 1: }v_{10y,t}&=\xi v_t + \epsilon_t \\
-     \text{Model 2: }v_{10y,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t) v_t + \epsilon_t \\
-     \text{Model 3: }v_{10y,t}&=\xi \widehat{\rho}_t(1-\widehat{\rho}_t)^2 v_t + \epsilon_t
-\end{align*}
-Model 1 uses unweighted inflation surprise as the regressor, which would be appropriate if belief updating did not involve learning about the policymaker’s type or policy regime. Model 2 weights the surprise by $\widehat{\rho}_t(1 - \widehat{\rho}_t)$, consistent with the idea that forecast revisions are proportional to belief updating -- beliefs respond more to shocks when uncertainty about policymaker's type or policy regime is higher. This specification assumes the policy difference across types or regimes is constant. Model 3 modifies the weight to $\widehat{\rho}_t(1 - \widehat{\rho}_t)^2$, capturing the \textit{interaction between policy and reputation}: lower reputation increases the policy difference and accelerates private-sector learning -- a mechanism unique to our model with strategic reputation management. 
-
-
-Table \ref{tab:regression} presents the adjusted $R^2$ for each specification, highlighting the dramatic improvement in model fit as we incorporate theory-motivated weighting schemes. The baseline Model 1, which regresses long-term forecast revisions on the unweighted inflation surprise, offers a very poor fit: the adjusted $R^2$ is just 0.015, indicating that the unweighted inflation surprise explains almost none of the variation in long-term forecast revisions. Introducing the theory-driven weight in Model 2, adjusted $R^2$ jumps to 0.034, reflecting a notable increase in explanatory power. Most strikingly, Model 3, which further refines the weighting by including the impact of reputation on policy differences, achieves an adjusted $R^2$ of 0.086 -- almost six times higher than the baseline. This substantial improvement underscores the critical importance of accounting for the nonlinear interaction between reputation and forecast responsiveness.
-
-To ensure that the gains of Model 3 are not merely the result of introducing additional nonlinearity, we estimate a placebo regression (Model P):
-\begin{equation}
-\text{Model P: }v_{10y,t} = \xi\, \widehat{\rho}_t^2 (1-\widehat{\rho}_t) v_t + \epsilon_t
-\end{equation}
-Here, the regressor is weighted by $\widehat{\rho}_t^2(1-\widehat{\rho}_t)$, a formulation that is similarly nonlinear but lacks theoretical grounding. The results show that simply adding nonlinear terms does not improve model fit—if anything, Model P's adjusted $R^2$ drops to 0.027, lower than Model 2 and far below Model 3. Thus, the superior performance of Model 3 is driven by its foundation in theory, not just by increased nonlinearity.
-
-\begin{table}[htbp]
-  \centering
-  \caption{Forecast revision regression results (1991:Q4 to 2024:Q2).}
-  \begin{tabular}{@{}llllll@{}}
-  \toprule
-  Model & Regressor & Estimate & p value & Adjusted $R^2$ & Sample size \\
-  \midrule
-  Model 1 & $v_t$ & 0.010526 & 8.649e-02 & 0.015149 & 130 \\
-  Model 2 & $\widehat{\rho}_t(1-\widehat{\rho}_t) v_t$ & 0.143589 & 1.989e-02 & 0.034144 & 130 \\
-  Model 3 & $\widehat{\rho}_t(1-\widehat{\rho}_t)^2 v_t$ & 1.604054 & 4.225e-04 & 0.085798 & 130 \\
-  Model P & $\widehat{\rho}^2_t(1-\widehat{\rho}_t) v_t$ & 0.149861 & 3.365e-02 & 0.027230 & 130 \\
-  \bottomrule
-  \end{tabular}
-  \label{tab:regression}%
-
-\begin{flushleft}
-\footnotesize{OLS regressions of long-term CPI inflation forecast revision on inflation surprise. Sample period is from 1991Q4 to 2024Q2. Model 1 uses the unweighted inflation surprise. Models 2, 3, and P weight inflation surprise using reputation measure $\widehat{\rho}_t$ constructed using the long-term inflation forecast according to (\ref{eq:LTF}). All regressions include a constant.}
-\end{flushleft}
-  \end{table}
 
 
 
@@ -1091,7 +1094,7 @@ U_{t}=\sum_{j=0}^{\infty }(\beta_{a}(1-q))^{j}\sum_{h_{t+j}}\frac{p(h_{t+j})%
 Given $h_{t+j}=[\varsigma _{t+j},\pi _{t+j-1},h_{t+j-1}]$, the committed type's probability of a specific history is:
 \begin{equation}
 p(h_{t+j})=\varphi (\varsigma _{t+j};\varsigma_{t+j-1})\times g(\pi
-_{t+j-1}|a(h_{t+j-1}))\times p(h_{t+j-1})  \label{prob h evolution}
+_{t+j-1}|a(h_{t+j-1}))\times p(h_{t+j-1})  \label{app:prob h evolution}
 \end{equation}%
 That is, it combines the likelihood of inflation $\pi $ given the committed type's
 decision, the likelihood of the shock $\varsigma $ and the probability of
@@ -1210,9 +1213,9 @@ W\left( \varsigma ,\rho ,\mu \right) &=&\min_{\gamma }\max_{a,\alpha
 \rho }\left[ \left( 1-q\right) \alpha +qz (\varsigma ,\rho)\right]  \label{appomega} \\
 \alpha &=& Ae+B\left( \varsigma \right) \\
 \mu ^{\prime } &=&\frac{\beta }{\beta_{a}\left( 1-q\right) }\gamma \rho 
-\text{, given }\mu _{0}=0  \label{mup} \\
+\text{, given }\mu _{0}=0  \label{app:mup} \\
 \rho ^{\prime } &=&\frac{\rho g(\pi|a) }{\rho g(\pi|a) +\left( 1-\rho
-\right) g(\pi|\alpha)} \text{ with prob $g(\pi|a)$, given $\rho_0$}  \label{rhop}
+\right) g(\pi|\alpha)} \text{ with prob $g(\pi|a)$, given $\rho_0$}  \label{app:rhop}
 \end{eqnarray}
 \end{appprop}%
 
@@ -1368,7 +1371,7 @@ which also contains a lagged multiplier. The understanding is that the
 initial condition is $\chi _{-1}=0$.
 
 \subsubsection{The basic recursive specification}
-\label{appsec:recursive8}
+\label{appsec:recursive8ext}
 
 The preceding derivations suggest a recursive
 version of $U_{t}+\Psi _{t}+\Lambda _{t}+\Theta _{t}$ with states $(\varsigma
@@ -1461,7 +1464,7 @@ The recursive program in Proposition \ref{prop:W} is valuable, as it sheds light
 
 We now show that imposing the rational expectation constraint (\ref{eq:Epi1}) on the choice of $e_t$ implies an operational expectation function:
 
-\begin{slem}\label{lem:eApp}%
+\begin{slem}\label{lem:eAppApp}%
 Given $\left( \varsigma ,\rho \right) $ and future equilibrium strategies $a^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $, $%
 \alpha ^{\ast }\left( \varsigma' ,\rho' ,\mu' \right) $ and $z^{\ast }\left(
 \varsigma' ,\rho' \right) $, rationally expected inflation is uniquely
@@ -1589,8 +1592,8 @@ which implies $W(\varsigma,\rho
 
 
 
-\subsection{Simplified recursive program}\label{app:W2}
-Using Lemma \ref{lem:eApp} and \ref{lem:WandU}, we simplify the recursive program (\ref{app:W}), moving from choosing $(\gamma
+\subsection{Simplified recursive program}\label{appsec:W2}
+Using Lemma \ref{lem:eAppApp} and \ref{lem:WandU}, we simplify the recursive program (\ref{app:W}), moving from choosing $(\gamma
 ,a,\alpha ,e)$ to  choosing $(\delta ,\mu ^{\prime
 })$:
 \begin{appprop}\label{appprop:W2}%
@@ -1614,7 +1617,7 @@ Lemma \ref{lem:WandU} implies that the objective of the recursive optimization (
 \begin{equation*}
 \uline{u}(a,e,\varsigma) - \mu\omega(a,\alpha,\rho,\varsigma) + \beta_a(1-q)\int\sum_{\varsigma'}\varphi(\varsigma';\varsigma)U^*(\varsigma',\rho',\mu')g(\pi|a)d\pi
 \end{equation*}
-Lemma \ref{lem:eApp} implies that $(\delta ,\mu ^{\prime})$ determines $e=e(\delta ,\mu ^{\prime };\varsigma ,\rho )$, $\alpha=Ae+B(\varsigma )$, and $a=\alpha +\delta$.
+Lemma \ref{lem:eAppApp} implies that $(\delta ,\mu ^{\prime})$ determines $e=e(\delta ,\mu ^{\prime };\varsigma ,\rho )$, $\alpha=Ae+B(\varsigma )$, and $a=\alpha +\delta$.
 Because $\uline{u}(\cdot)$ and $\omega(\cdot)$ are functions of $(e,\alpha,a)$, they can be written as functions of $(\delta,\mu')$:
 \begin{align}
 \uuline{u}(\delta,\mu') &\equiv \uline{u}(Ae+B(\varsigma)+\delta,e,\varsigma) \\
@@ -1625,7 +1628,7 @@ Because $\uline{u}(\cdot)$ and $\omega(\cdot)$ are functions of $(e,\alpha,a)$, 
 The optimization is from the perspective of the committed policymaker so that $\pi=a+v_{\pi}$. Therefore, $\rho'=b\left( v_\pi,v_\pi +\delta ,\rho \right) $ as defined in (\ref{app:RHO}) and $g(\pi|a)=g(v_\pi)$. We then obtain the simplified program.
 \end{proof}
 
-\paragraph{Computation:} Lemma \ref{lem:eApp} and Proposition \ref{prop:W2} facilitate our computation. With a guessed function $z\left(
+\paragraph{Computation:} Lemma \ref{lem:eAppApp} and Proposition \ref{prop:W2} facilitate our computation. With a guessed function $z\left(
 \varsigma ,\rho \right) $ specified in the outer loop, we can (i) use $a(\varsigma ,\rho ,\mu ),\alpha (\varsigma ,\rho
 ,\mu )$ and $U(\varsigma,\rho,\eta)$ functions to obtain $e(\delta ,\mu ^{\prime };\varsigma ,\rho )$ and $\Omega(\delta,\mu^{\prime};\varsigma, \rho)$; (ii) optimize over $(\delta ,\mu ^{\prime })$; (iii) construct new $a$ and $\alpha$ functions from optimal $e$ and $\delta$; and (iv) construct a new $U$ function. Within the inner loop, we iterate until the policy functions converge.\footnote{Bayesian learning makes this not a linear-quadratic problem. In view of Proposition \ref{prop:W2}, we use direct maximization as part of a projection method to obtain a global solution. Overall, we employ a variant of the ``dynamic programming with a rational expectations constraint" as sometimes advocated for calculating optimal policy under commitment.}
 We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the outer loop has reached a fixed point in $z$.
