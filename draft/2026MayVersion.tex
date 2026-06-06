@@ -594,7 +594,55 @@ Let $s = [\varsigma, \rho, \mu]$ denote the state vector. The optimal choices $\
 
 
 \section{Strategic Reputation Management}
-A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the dynamics of the Volcker disinflation episode, and the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
+A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
+
+\subsection{Calibration} 
+Table \ref{tab:calib} reports the calibrated values of important model parameters. One period is a quarter. The long-run inflation target $\pi^*$ is $1.5\%$, which lies in the 1 to 2 percent range frequently cited by central bankers advocating price stability.\footnote{This value matches  \cite{Shapiro2019} estimate based on FOMC transcripts 2000-2011. }
+The private sector and the committed type share a conventional quarterly discount factor based on a 2$\%$ annual real rate. 
+
+The slope of the Phillips curve is a  central element in any study of optimal inflation policy. In our setup, the PC slope $\kappa$ relates the output gap $x$ to the quarterly inflation $\pi$, 
+%percent change in the price level over a quarter, 
+holding expected inflation fixed.
+$\kappa=.08$ implies that an output gap of 3\% leads to annualized inflation of -1\%,
+%holding expected inflation fixed: our 
+a value compatible with diverse empirical evidence.\footnote{U.S. data from the 1950s and 1960s suggests that a 1\% decrease in unemployment led to about 0.54\% - 0.65\% increase in inflation. An estimate for Okun's coefficient is about 1.67 using U.S. data prior to 2008, implying a 1\% increase in unemployment led to a 1.67\% decrease in output. In a structural NKPC, the parameter is also consistent with an adjustment hazard leading to four quarters of stickiness on average and an elasticity of marginal cost with respect to output of unity. } 
+
+\begin{table}[ht]
+\centering
+\caption{Parameters}
+% \text{Table 1: Benchmark calibration} \\
+\begin{tabular}{|l|l|l|}
+
+\hline
+$\pi^{\ast }$ & Inflation target & $1.5\%$ \\ \hline
+$\beta ,\beta_{a}$ & Discount factor (private agents, committed type) & $0.995$ \\ \hline
+$\kappa $ & PC output slope & $0.08$ \\ \hline
+$\vartheta _{x}$ & Output weight & $0.1$ \\ \hline
+$x^{\ast }$ & Output target & $1.73\%$ \\ \hline
+$q$ & Replacement probability & $0.03$ \\ \hline
+$\zeta_{\rho}$ & prob of reputation inheritance & $0.9$ \\ \hline
+$\overline{\rho}$ & mean of reputation draw& $0.1$ \\ \hline
+$\sigma _{\rho}$ & std of reputation draw & $0.05$ \\ \hline
+$\xi_\varsigma $ & Persistence of cost-push shock & $0.7$  \\ \hline
+$\sigma _{v,\varsigma}$ & Std of cost-push innovation & $0.7\%$ \\ \hline
+$\sigma _{v,\pi}$ & Std of implementation error & $1.2\%$ \\ \hline
+\end{tabular}\label{tab:calib}
+
+\begin{flushleft}
+\footnotesize{One period is a quarter. Inflation target $\pi^*$, std of cost-push innovation $\sigma _{v,\varsigma}$, and std of implementation error $\sigma _{v,\pi}$ are all annualized rates.}
+\end{flushleft}
+\end{table}
+The policymaker's preferences are another key element in the analysis of optimal inflation. We set the weight on output $\vartheta_x$ to $0.1$, which is in the middle of the range used by prominent Fed researchers.\footnote{\cite{brayton_optimal-control_2014} after translating time units and using Okun's law.} Since $A=\vartheta_{x}/(\vartheta_{x}+\kappa^2)$,  together with $\kappa=.08$, this  implies $A=.94$. 
+The target output gap $x^*$ is chosen to yield a relatively small intrinsic inflation bias $\iota=.5\%$ while yielding a NE bias large enough to capture the magnitude of the Great Inflation: $\iota/(1-A \beta)$ of around $8\%$. From above,  $\iota=A(\kappa x^*-(1-\beta)\pi^{\ast})$ so that the implied value for $x^*=1.73\%$.\footnote{$x^*=1.73\%$ is equivalent to targeting unemployment about 1\% below the natural rate, if we use an Okun's law coefficient of 1.67.}
+
+
+The replacement probability of $q=.03$ implies an average regime duration of 8 years. We have less empirical guidance about the inheritance mechanism for reputation: we choose parameters so that a new policymaker inherits his predecessor's reputation with probability .9. Otherwise, his initial reputation is random with mean .1 and standard deviation 0.05.\footnote{Formally, reputation in th event of replacement next period is governed by $\rho' =\phi'b(s,\pi) + (1-\phi')v_{\rho}'$ with $\phi' \sim \text{Bernoulli}(\zeta_\rho)$ and $v_{\rho}' \sim \text{Beta}(\overline{\rho},\sigma_{\rho})$. We set $\zeta_\rho=0.9$, $\overline{\rho}=0.1$, and $\sigma_{\rho}=0.05$.} But our equilibrium policy functions are not sensitive to these choices due to the small replacement probability $q$.
+
+
+
+Beginning in the 1970s, many studies of inflation use an observable ``Food and Energy price shock"(FE shock hereafter).\footnote{See \citetalias{Gordon2013} and \cite{watson_inflation_2014}. It is constructed as the difference between the growth rate of the overall personal consumption deflator and its counterpart excluding food and energy.} We use the FE shock's serial correlation and its standard deviation as the cost-push shock's persistence $\xi_\varsigma$ and innovation volatility $\sigma _{v,\varsigma}$. The transition probability matrix $\varphi(\varsigma';\varsigma)$ is calibrated to approximate  $\varsigma'=\xi_{\varsigma}\varsigma + v_{\varsigma}$ where $v_{\varsigma}\sim N(0,\sigma^2_{v,\varsigma})$.\footnote{We use the \cite{rouwenhorst_asset_1995} method.} To calibrate the standard deviation of implementation errors, we combined the FE shock and the SPF one-quarter-ahead inflation forecast in an initial approximation to opportunistic intended inflation $\alpha$, estimating the standard deviation of $(\pi-\alpha)$ over 1964Q4-1979Q2.
+
+
 
 
 
@@ -610,6 +658,8 @@ A central contribution of this paper is to develop a solution method for models 
 \end{center}
 \end{figure}
 
+
+
 \subsection{Equilibrium policy functions}
 
 We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
@@ -620,7 +670,7 @@ The difference between the two models is most pronounced in the right panel. Und
 
 To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
 
-This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for capturing the dynamics of episodes like the Volcker disinflation and for explaining the time-varying sensitivity of forecast revisions to inflation surprises.
+This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for explaining the time-varying sensitivity of forecast revisions to inflation surprises that we now turn to, and for capturing the dynamics of episodes like the Volcker disinflation that we will study in the next section.
 
 
 \subsection{Long-term inflation forecasts}
@@ -717,52 +767,6 @@ Thus, we can construct an augmented state vector $S = [s, \pi]$ that evolves rec
 
 
 
-
-\subsection{Calibration} 
-Table \ref{tab:calib} reports the calibrated values of important model parameters. One period is a quarter. The long-run inflation target $\pi^*$ is $1.5\%$, which lies in the 1 to 2 percent range frequently cited by central bankers advocating price stability.\footnote{This value matches  \cite{Shapiro2019} estimate based on FOMC transcripts 2000-2011. }
-The private sector and the committed type share a conventional quarterly discount factor based on a 2$\%$ annual real rate. 
-
-The slope of the Phillips curve is a  central element in any study of optimal inflation policy. In our setup, the PC slope $\kappa$ relates the output gap $x$ to the quarterly inflation $\pi$, 
-%percent change in the price level over a quarter, 
-holding expected inflation fixed.
-$\kappa=.08$ implies that an output gap of 3\% leads to annualized inflation of -1\%,
-%holding expected inflation fixed: our 
-a value compatible with diverse empirical evidence.\footnote{U.S. data from the 1950s and 1960s suggests that a 1\% decrease in unemployment led to about 0.54\% - 0.65\% increase in inflation. An estimate for Okun's coefficient is about 1.67 using U.S. data prior to 2008, implying a 1\% increase in unemployment led to a 1.67\% decrease in output. In a structural NKPC, the parameter is also consistent with an adjustment hazard leading to four quarters of stickiness on average and an elasticity of marginal cost with respect to output of unity. } 
-
-\begin{table}[ht]
-\centering
-\caption{Parameters}
-% \text{Table 1: Benchmark calibration} \\
-\begin{tabular}{|l|l|l|}
-
-\hline
-$\pi^{\ast }$ & Inflation target & $1.5\%$ \\ \hline
-$\beta ,\beta_{a}$ & Discount factor (private agents, committed type) & $0.995$ \\ \hline
-$\kappa $ & PC output slope & $0.08$ \\ \hline
-$\vartheta _{x}$ & Output weight & $0.1$ \\ \hline
-$x^{\ast }$ & Output target & $1.73\%$ \\ \hline
-$q$ & Replacement probability & $0.03$ \\ \hline
-$\zeta_{\rho}$ & prob of reputation inheritance & $0.9$ \\ \hline
-$\overline{\rho}$ & mean of reputation draw& $0.1$ \\ \hline
-$\sigma _{\rho}$ & std of reputation draw & $0.05$ \\ \hline
-$\xi_\varsigma $ & Persistence of cost-push shock & $0.7$  \\ \hline
-$\sigma _{v,\varsigma}$ & Std of cost-push innovation & $0.7\%$ \\ \hline
-$\sigma _{v,\pi}$ & Std of implementation error & $1.2\%$ \\ \hline
-\end{tabular}\label{tab:calib}
-
-\begin{flushleft}
-\footnotesize{One period is a quarter. Inflation target $\pi^*$, std of cost-push innovation $\sigma _{v,\varsigma}$, and std of implementation error $\sigma _{v,\pi}$ are all annualized rates.}
-\end{flushleft}
-\end{table}
-The policymaker's preferences are another key element in the analysis of optimal inflation. We set the weight on output $\vartheta_x$ to $0.1$, which is in the middle of the range used by prominent Fed researchers.\footnote{\cite{brayton_optimal-control_2014} after translating time units and using Okun's law.} Since $A=\vartheta_{x}/(\vartheta_{x}+\kappa^2)$,  together with $\kappa=.08$, this  implies $A=.94$. 
-The target output gap $x^*$ is chosen to yield a relatively small intrinsic inflation bias $\iota=.5\%$ while yielding a NE bias large enough to capture the magnitude of the Great Inflation: $\iota/(1-A \beta)$ of around $8\%$. From above,  $\iota=A(\kappa x^*-(1-\beta)\pi^{\ast})$ so that the implied value for $x^*=1.73\%$.\footnote{$x^*=1.73\%$ is equivalent to targeting unemployment about 1\% below the natural rate, if we use an Okun's law coefficient of 1.67.}
-
-
-The replacement probability of $q=.03$ implies an average regime duration of 8 years. We have less empirical guidance about the inheritance mechanism for reputation: we choose parameters so that a new policymaker inherits his predecessor's reputation with probability .9. Otherwise, his initial reputation is random with mean .1 and standard deviation 0.05.\footnote{Formally, reputation in th event of replacement next period is governed by $\rho' =\phi'b(s,\pi) + (1-\phi')v_{\rho}'$ with $\phi' \sim \text{Bernoulli}(\zeta_\rho)$ and $v_{\rho}' \sim \text{Beta}(\overline{\rho},\sigma_{\rho})$. We set $\zeta_\rho=0.9$, $\overline{\rho}=0.1$, and $\sigma_{\rho}=0.05$.} But our equilibrium policy functions are not sensitive to these choices due to the small replacement probability $q$.
-
-
-
-Beginning in the 1970s, many studies of inflation use an observable ``Food and Energy price shock"(FE shock hereafter).\footnote{See \citetalias{Gordon2013} and \cite{watson_inflation_2014}. It is constructed as the difference between the growth rate of the overall personal consumption deflator and its counterpart excluding food and energy.} We use the FE shock's serial correlation and its standard deviation as the cost-push shock's persistence $\xi_\varsigma$ and innovation volatility $\sigma _{v,\varsigma}$. The transition probability matrix $\varphi(\varsigma';\varsigma)$ is calibrated to approximate  $\varsigma'=\xi_{\varsigma}\varsigma + v_{\varsigma}$ where $v_{\varsigma}\sim N(0,\sigma^2_{v,\varsigma})$.\footnote{We use the \cite{rouwenhorst_asset_1995} method.} To calibrate the standard deviation of implementation errors, we combined the FE shock and the SPF one-quarter-ahead inflation forecast in an initial approximation to opportunistic intended inflation $\alpha$, estimating the standard deviation of $(\pi-\alpha)$ over 1964Q4-1979Q2.
 
 
 \subsection{State extraction strategy}
