@@ -592,6 +592,70 @@ W(\varsigma,\rho,\mu) =\max_{\delta,\mu^{\prime}}&\left[\uuline{u}(
 \end{prop}
 Let $s = [\varsigma, \rho, \mu]$ denote the state vector. The optimal choices $\delta^*(s)$ and $\mu'^* = m(s)$ determine the equilibrium objects $\omega^*(s)$, $W(s)$, $a^*(s)$, and $\alpha^*(s)$, which in turn serve as inputs to the rationally expected inflation function $e(\delta, \mu'; \varsigma, \rho)$ in (\ref{eq:RE}) and the value function $U^*(s)$. The program (\ref{eq:W2}) thus defines the inner-loop fixed point problem that solves for the within-regime equilibrium. Combined with the outer-loop fixed point problem (\ref{z}), the two fixed point problems jointly characterize the Public PBE.
 
+\subsection{Endogenous policy difference}
+We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
+
+Under the naive model, the policy difference remains flat across reputation levels, even though both types optimize.
+
+To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
+
+Formally, the strength of this reputation channel is governed by how the
+Bayesian update responds to the policy difference.  Focus on the update term
+$b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}).  Because $g$ is a normal density
+with mean zero and standard deviation $\sigma_{v,\pi}$,
+\begin{align}
+\frac{\partial b(v_\pi,v_\pi+\delta,\rho)}{\partial \delta}
+&= b(v_\pi,v_\pi+\delta,\rho)
+\left[1-b(v_\pi,v_\pi+\delta,\rho)\right]
+\frac{v_\pi+\delta}{\sigma_{v,\pi}^2}. \label{eq:dbddelta}
+\end{align}
+Hence, for fixed $(v_\pi,\delta,\sigma_{v,\pi})$, the magnitude of the effect
+of $\delta$ on reputation is
+\begin{align}
+\left|\frac{\partial b(v_\pi,v_\pi+\delta,\rho)}{\partial \delta}\right|
+&=
+\frac{|v_\pi+\delta|}{\sigma_{v,\pi}^2}
+b(v_\pi,v_\pi+\delta,\rho)
+\left[1-b(v_\pi,v_\pi+\delta,\rho)\right]. \label{eq:dbddelta_abs}
+\end{align}
+The dependence on $\rho$ therefore comes through
+$b(v_\pi,v_\pi+\delta,\rho)[1-b(v_\pi,v_\pi+\delta,\rho)]$.  This term is
+decreasing in $\rho$ if and only if
+$b(v_\pi,v_\pi+\delta,\rho)>1/2$, which is equivalent to
+\begin{align}
+\rho>\rho^*(v_\pi,\delta)
+&\equiv
+\frac{g(v_\pi+\delta)}
+{g(v_\pi)+g(v_\pi+\delta)}
+=
+\frac{1}{
+1+\exp\left(
+\frac{(v_\pi+\delta)^2-v_\pi^2}{2\sigma_{v,\pi}^2}
+\right)}. \label{eq:rho_star_delta}
+\end{align}
+Since the implementation error $v_\pi$ has mean zero, the mean-realization
+benchmark gives
+\begin{align}
+\rho^*(0,\delta)
+&=
+\frac{1}{
+1+\exp\left(\frac{\delta^2}{2\sigma_{v,\pi}^2}\right)}
+< \frac{1}{2}
+\quad \text{for } \delta\neq 0. \label{eq:rho_star_mean}
+\end{align}
+Moreover, when $\delta<0$,
+\begin{align}
+\frac{\partial \rho^*(0,\delta)}{\partial \delta}
+&=
+-\rho^*(0,\delta)\left[1-\rho^*(0,\delta)\right]
+\frac{\delta}{\sigma_{v,\pi}^2}
+>0. \label{eq:rho_star_delta_derivative}
+\end{align}
+Thus, as the negative policy difference becomes larger in absolute value,
+the cutoff $\rho^*(0,\delta)$ falls further below one half.  For all reputation
+levels above this cutoff, the magnitude of the learning effect of $\delta$ is
+decreasing in $\rho$.
+
 
 \section{Strategic Reputation Management}
 A central contribution of this paper is to develop a solution method for models in which the committed policymaker takes strategic actions to influence private-sector learning, i.e., his reputation.\footnote{Many prior studies (footnote \ref{fn:learning}) examine how private agents update their beliefs about the policymaker’s type, but typically abstract from the strategic actions a policymaker might take to influence those beliefs. }  In this section, we first show how allowing for such strategic behavior makes a difference in the equilibrium policy functions. We then demonstrate why this difference is crucial for understanding the time-varying sensitivity of long-term inflation forecast revision to inflation surprises.
@@ -662,13 +726,11 @@ Beginning in the 1970s, many studies of inflation use an observable ``Food and E
 
 \subsection{Equilibrium policy functions}
 
-We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. We then contrast these policies with those from a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
+We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. 
 
 Figure \ref{fig:policyfcn} shows the equilibrium policy functions for the committed policy $a$ (left panel), the opportunistic policy $\alpha$ (middle panel), and their difference $\delta = a - \alpha$ (right panel), comparing results from the benchmark model with strategic reputation management (blue) and the naive model (red).\footnote{The policy functions are conditional on the other two state variables, $\mu$ and $\varsigma$, which are held fixed for illustration. Compared to $\rho$, these states play a less significant role in shaping the policy functions. We set $\mu$ at its steady-state level under $\rho = 1$ and $\varsigma = 0$. Appendix Figure \ref{fig: delta} plots the equilibrium policy difference, $a - \alpha$, as a function of $\rho$ across various alternative values of the cost-push shock and $\mu$.} 
 
-The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. In contrast, under the naive model, the policy difference remains flat across reputation levels, even though both types optimize.
-
-To understand why this occurs, consider the optimization problem in Proposition \ref{prop:W2}. First, the optimal $\delta$ that maximizes the momentary objective $\uuline{u}(\cdot)$ is zero, because the opportunistic policy $\alpha$ is already chosen to maximize the same objective as the committed policymaker. Second, when next-period reputation is treated as exogenous to current policies, $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. As a result, the only remaining force generating a nonzero $\delta$ is the continuation penalty term $-\mu \uuline{\omega}(\cdot)$. But since $\delta$ enters $\omega(\cdot)$ in a way that is independent of reputation $\rho$ and the cost-push shock $\varsigma$, the optimal policy difference becomes insensitive to these state variables.
+The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. 
 
 This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for explaining the time-varying sensitivity of forecast revisions to inflation surprises that we now turn to, and for capturing the dynamics of episodes like the Volcker disinflation that we will study in the next section.
 
