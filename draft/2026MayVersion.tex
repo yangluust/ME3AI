@@ -605,12 +605,12 @@ policymaker’s type, but typically abstract from the
 strategic actions a policymaker might take to influence 
 those beliefs.} while the opportunistic policymaker 
 responses optimally to private-sector expectations. 
-In this section, we first show that strategic reputation management creates \textit{an interaction between the policymaker's reputation and the policy gap between the two types.} Lower current reputation motivates a larger policy gap, which in turn speeds up private-sector learning, accelerating reputation gains for the committed policymaker and reputation losses for the opportunistic policymaker. We then demonstrate why this endogenous policy difference is central for understanding the time-varying sensitivity of long-term inflation forecast revisions to inflation surprises.
+In this section, we first show that strategic reputation management creates \textit{an interaction between the policymaker's reputation and the policy gap between the two types.} Current reputation affects the policy gap, which in turn shapes the speed of private-sector learning and, with it, the future evolution of reputation. We then explore the implications of this interaction and show that it is central to understanding the time-varying sensitivity of long-term inflation forecast revisions to inflation surprises.
 
 \subsection{Reputation-sensitive policy difference}
 The inner loop fixed point problem in Proposition \ref{prop:W2} is not only operational but also informative about three channels through which the policy gap $\delta$ affects the committed policymaker's policy objectives. First, it enters via the Bayesian learning rule $b(\cdot)$ that matters for both inflation expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. Second, it enters the momentary objective function $\uuline{u}(\cdot)$ because it determines current inflation policy. Third, it enters the continuation penalty term $-\mu\uuline{\omega}(\cdot)$ that captures the cost of honoring the promised committed policy.
 
-Among the three channels, the dependence of the policy gap $\delta$ on the reputation $\rho$ only stems from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
+Among the three channels, the dependence of the policy gap $\delta$ on the reputation $\rho$ only stems from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} details the naive optimization problem, building on \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.}
 
 \begin{prop}\label{prop:naive_delta}%
 In the naive model, the optimal policy difference is invariant to reputation and the cost-push shock: $\delta^N(\varsigma,\rho,\mu)=\delta^N(\mu)$, so $\partial\delta^N/\partial\rho=0$ and $\partial\delta^N/\partial\varsigma=0$.
@@ -773,34 +773,9 @@ toward zero as $|\delta|$ grows.
 For reputation levels above this average cutoff, the magnitude of
 the learning effect of $\delta$ is decreasing in $\rho$.
 
-
-
-
-\subsection{Equilibrium policy functions}
-
-We start by illustrating how the equilibrium inflation policies vary with reputation -- the private agents' belief -- in the calibrated benchmark model, where the committed policymaker strategically manages expectations by influencing private-sector learning. 
-
-Figure \ref{fig:policyfcn} shows the equilibrium policy functions for the committed policy $a$ (left panel), the opportunistic policy $\alpha$ (middle panel), and their difference $\delta = a - \alpha$ (right panel), comparing results from the benchmark model with strategic reputation management (blue) and the naive model (red).\footnote{The policy functions are conditional on the other two state variables, $\mu$ and $\varsigma$, which are held fixed for illustration. Compared to $\rho$, these states play a less significant role in shaping the policy functions. We set $\mu$ at its steady-state level under $\rho = 1$ and $\varsigma = 0$. Appendix Figure \ref{fig: delta} plots the equilibrium policy difference, $a - \alpha$, as a function of $\rho$ across various alternative values of the cost-push shock and $\mu$.} 
-
-The difference between the two models is most pronounced in the right panel. Under the benchmark model, the policy gap $\delta$ widens as reputation declines: a committed policymaker with low reputation adopts a more aggressive stance to distinguish himself from the opportunistic type and to accelerate reputation building. 
-
-This stark contrast highlights a key implication of strategic reputation management: while belief updating in the standard learning literature typically responds to the policy difference across regimes, here the policy difference itself responds to the private sector’s current belief. This feedback loop -- where beliefs influence policy, and policy in turn influences beliefs -- is essential for explaining the time-varying sensitivity of forecast revisions to inflation surprises that we now turn to, and for capturing the dynamics of episodes like the Volcker disinflation that we will study in the next section.
-
-\begin{figure}[H]
-  \begin{center}
-  \caption[Caption for LOF]{Equilibrium policy functions}
-  \bigskip
-  \includegraphics[width=5.5in]{2025AprFig/dr_rho.jpg}
-  \label{fig:policyfcn}
-  \begin{flushleft}
-  \footnotesize{Strategic reputation management makes committed policy less inflationary, particularly when reputation $\rho$ is low, both absolutely and relative to opportunistic policy. Each panel compares policy functions from the benchmark model with strategic reputation management (blue) and the naive model (red).}
-  \end{flushleft}
-  \end{center}
-  \end{figure}
-  
   
 \subsection{Long-term inflation forecasts}
-In this section, we provide empirical evidence for a key implication of strategic reputation management: the sensitivity of long-term inflation forecast revisions to inflation surprises is not constant but varies over time in a manner consistent with our benchmark model. This reflects the feedback loop highlighted earlier -- where beliefs influence policy, and policy in turn shapes beliefs. To test this implication, we adopt a reduced-form approach that isolates the model’s qualitative predictions without relying on short-term SPF forecasts, which were used in the structural estimation.
+We now explore the implications of the reputation-sensitive policy difference for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
 
 \subsubsection{Long-term inflation forecast proportional to reputation}
 Our theory implies that long-term inflation forecasts depend solely on reputation, not on cost-push shocks, because cost-push shocks are stationary and their influence becomes negligible at long horizons. Formally, the period-$t$ long-term inflation forecast is given by:
