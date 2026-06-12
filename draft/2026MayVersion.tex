@@ -782,7 +782,7 @@ Our theory implies that long-term inflation forecasts depend solely on reputatio
 \begin{equation}\label{eq:LTF}
 f_{\infty|t} = \rho_t[ (1 - q)\pi^* + qz(\varsigma = 0, \rho = 1)]+(1 - \rho_t)[(1-q)\pi^{NE}+qz(\varsigma = 0, \rho = 0)] 
 \end{equation}
-which is a weighted average of long-term inflation forecasts conditional on the policymaker’s type. With probability $\rho_t$, the policymaker is committed, and reputation converges to 1 in the long run. In this case, long-term inflation equals the target $\pi^*$ if the regime persists, or the “startup” inflation associated with a new policymaker following the committed regime. Conversely, with probability $1 - \rho_t$, the policymaker is opportunistic, and reputation converges to 0. The corresponding long-term inflation is either the Nash-equilibrium inflation bias $\pi^{NE}$ if the regime continues, or the startup level associated with a new policymaker following the opportunistic regime. Since inflation is always lower under committed regime, \eqref{eq:LTF} implies that long-term inflation forecasts move inversely with reputation. 
+which is a weighted average of long-term inflation forecasts conditional on the policymaker’s type. With probability $\rho_t$, the policymaker is committed, and reputation converges to 1 in the long run. In this case, long-term inflation equals the target $\pi^*$ if the regime persists, or the “startup” inflation associated with a new policymaker following the committed regime. Conversely, with probability $1 - \rho_t$, the policymaker is opportunistic, and reputation converges to 0. The corresponding long-term inflation is either the Nash-equilibrium inflation bias $\pi^{NE}$ if the regime continues, or the startup level associated with a new policymaker following the opportunistic regime. Since long-term inflation is always lower under committed regime, \eqref{eq:LTF} implies that long-term inflation forecasts move inversely with reputation. 
 
 
 \subsubsection{Dynamics of reputation}
@@ -790,7 +790,8 @@ We now examine the dynamics of reputation. According to the Bayes' rule (\ref{BL
 
 Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + (1 - \rho_t) \alpha_t]$, we obtain the following expression for the change in reputation:\footnote{This approximation becomes exact in continuous-time versions of imperfect public monitoring games, such as Eq (2) in \cite{faingold_reputation_2011}.}
 \begin{equation}\label{eq:rhoapprox}
-\rho_{t+1} - \rho_t \approx k \{\rho_t(1 - \rho_t)(a_t - \alpha_t)\}  \{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]\}
+\rho_{t+1} - \rho_t \approx k \{\underbrace{\rho_t(1 - \rho_t)(a_t - \alpha_t)}_{\text{time-varying sensitivity}}  \}
+\{\underbrace{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]}_{\text{inflation surprise}} \}
 \end{equation}
 where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation, as the policy difference $a_t - \alpha_t$ is always negative.
 
@@ -813,7 +814,7 @@ For each forecaster, we can also construct the 10-year forecast revision:\footno
 v_{10y,t}^{i}=f_{t+10y|t+1}^{i}-f_{t+10y|t}^{i}.
 \]
 
-We aggregate individual variables by restricting to forecasters present in both periods $t$ and $t+1$, and then take the mean as the consensus measure: $v_t$ for inflation surprise, $v_{10y,t}$ for long-term forecast revision, and $f_{t+10y|t}$ for the long-term inflation forecast. We then use $f_{t+10y|t}$ to construct a reduced-form measure of reputation, $\widehat{\rho}_t$, based on (\ref{eq:LTF}).
+We aggregate individual variables by restricting to forecasters present in both periods $t$ and $t+1$, and then take the mean as the consensus measure: $v_t$ for inflation surprise, $v_{10y,t}$ for long-term forecast revision, and $f_{t+10y|t}$ for the long-term inflation forecast. We then use $f_{t+10y|t}$ to construct a reduced-form measure of reputation, $\widehat{\rho}_t$, based on (\ref{eq:LTF}).\footnote{Since reputation is a linear function of long-term inflation forecast with time-invariant parameters, the exact parameters values are not relevant for forecast revision regressions as long as they deliver reputation measures that are bounded away from zero and one.}
 
 We compare three regression models, each corresponding to a class of learning models with different structural features:
 \begin{align*}
