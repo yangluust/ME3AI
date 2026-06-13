@@ -794,7 +794,7 @@ Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + 
 \rho_{t+1} - \rho_t \approx k \{\underbrace{\rho_t(1 - \rho_t)(a_t - \alpha_t)}_{\text{time-varying sensitivity}}  \}
 \{\underbrace{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]}_{\text{inflation surprise}} \}
 \end{equation}
-where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation, as the policy difference $a_t - \alpha_t$ is always negative.
+where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation if and only if the policy difference $a_t - \alpha_t$ is negative.
 
 Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy difference. Strategic reputation management implies that lower reputation leads to a wider policy difference. Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy difference.
 
