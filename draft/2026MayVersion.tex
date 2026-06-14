@@ -774,7 +774,105 @@ toward zero as $|\delta|$ grows.
 For reputation levels above this average cutoff, the magnitude of
 the learning effect of $\delta$ is decreasing in $\rho$.
 
-  
+The preceding cutoff is a marginal statement. The same force operates for a
+discrete, rather than marginal, change in the policy difference.
+
+\begin{prop}\label{prop:expected_gain_rho}
+Under the committed type, consider two policy differences $\delta_1<\delta_2<0$,
+and let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$
+denote the expected updated reputation. The expected reputation gain from the
+more negative difference,
+\[
+D(\rho)\equiv \bar b(\delta_1,\rho)-\bar b(\delta_2,\rho),
+\]
+is strictly positive, and there exists a cutoff
+$\rho^{\dagger}(\delta_1,\delta_2)\in(0,\tfrac12)$ such that $D(\rho)$ is strictly
+decreasing in $\rho$ for $\rho>\rho^{\dagger}$. Hence, above the cutoff, the
+expected effect of a more negative policy difference on reputation is larger at
+lower reputation.  For the leading-order cutoff derived below, if
+$a_i\equiv\delta_i^2/\sigma_{v,\pi}^2$ and $a_1\to a_2=a$, then
+\begin{align}
+\rho^{\dagger}
+&\to
+\frac{1}{1+\exp\left(\sqrt{a+a^2/4}\right)}.
+\label{eq:peak_cutoff_limit_statement}
+\end{align}
+Thus the cutoff approaches zero when the common signal strength $a$ becomes
+large, not when the two policy differences become close.
+\end{prop}
+
+This is the discrete, expectation-based counterpart of Proposition
+\ref{prop:b_marginal_sensitivity}: in both, the responsiveness of Bayesian
+updating to the policy difference is governed by the posterior variance
+$b(1-b)$, which declines with $\rho$ once $\rho$ is sufficiently high.
+
+\begin{proof}
+Write $\sigma\equiv\sigma_{v,\pi}$ and condition on the committed type, so
+$\pi=a+v_\pi$ with $v_\pi\sim g=N(0,\sigma^2)$.
+
+\emph{Step 1 (slope of the expected update).} Bayes' rule in odds gives
+$o'=o\,\Lambda$, with $o=\rho/(1-\rho)$ and $\Lambda=g(v_\pi)/g(v_\pi+\delta)$
+independent of $\rho$. Since $\partial_\rho\ln o'=1/[\rho(1-\rho)]$ and
+$\partial b/\partial\ln o'=b(1-b)$,
+\begin{align}
+\frac{\partial \bar b(\delta,\rho)}{\partial \rho}
+=\frac{V(\delta,\rho)}{\rho(1-\rho)},\qquad
+V(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(1-b)],
+\label{eq:slope_expected_update}
+\end{align}
+so $D'(\rho)=[V(\delta_1,\rho)-V(\delta_2,\rho)]/[\rho(1-\rho)]$ and any interior
+critical point of $D$ satisfies $V(\delta_1,\rho)=V(\delta_2,\rho)$.
+
+\emph{Step 2 (existence of the cutoff).} Let $s\equiv\ln\Lambda$. As an affine
+function of $v_\pi$, $s\sim N(a/2,a)$ with $a\equiv\delta^2/\sigma^2$. With
+$\lambda\equiv\ln[\rho/(1-\rho)]$ and $\psi(x)\equiv e^x/(1+e^x)^2$, we have
+$b(1-b)=\psi(\lambda+s)$ and
+\begin{align}
+V(\delta,\rho)=\int \psi(x)\,n\!\left(x;\lambda+\tfrac a2,a\right)dx,
+\end{align}
+where $n(\cdot;m,a)$ is the $N(m,a)$ density. As $\rho\to0$, $V\to\mathbb{E}[b]$,
+which is larger for the more informative $\delta_1$, so $D'>0$; for higher $\rho$
+the more informative signal concentrates posteriors near $\{0,1\}$, lowering $V$,
+so $D'<0$. Thus $D$ is single-peaked, with a cutoff
+$\rho^{\dagger}\in(0,\tfrac12)$ above which $D'<0$; and $D>0$ throughout because
+a larger $|\delta|$ is Blackwell-more-informative for the committed type.
+
+\emph{Step 3 (location of the cutoff).} Since $\psi\ge0$, $\int\psi=1$, and
+$\psi$ is symmetric about $0$ with $O(1)$ width while $n$ has variance $a$,
+Laplace's approximation gives, to leading order in the signal-to-noise ratio,
+$V(\delta,\rho)\approx(2\pi a)^{-1/2}\exp[-(\lambda+a/2)^2/2a]$. Equating across
+$\delta_1,\delta_2$ ($a_i=\delta_i^2/\sigma^2$) and using
+$(\lambda+a/2)^2/a=\lambda^2/a+\lambda+a/4$, the linear term in $\lambda$
+cancels, yielding
+\begin{align}
+\ln\frac{\rho^{\dagger}}{1-\rho^{\dagger}}
+=-\sqrt{\frac{a_1 a_2}{a_1-a_2}
+\left(\ln\frac{a_1}{a_2}+\frac{a_1-a_2}{4}\right)}<0 .
+\label{eq:peak_cutoff}
+\end{align}
+The limit as the two signal-to-noise ratios become close is finite.  Set
+$a_1=a+h$ and $a_2=a$, with $h\downarrow0$.  Then
+\begin{align}
+\frac{a_1a_2}{a_1-a_2}
+\left(\ln\frac{a_1}{a_2}+\frac{a_1-a_2}{4}\right)
+&=
+\frac{(a+h)a}{h}
+\left[\ln\left(1+\frac{h}{a}\right)+\frac{h}{4}\right] \notag \\
+&\to
+a\left(1+\frac{a}{4}\right)
+=a+\frac{a^2}{4}.
+\label{eq:peak_cutoff_limit}
+\end{align}
+Therefore (\ref{eq:peak_cutoff}) implies
+\begin{align}
+\rho^{\dagger}
+&\to
+\frac{1}{1+\exp\left(\sqrt{a+a^2/4}\right)}.
+\end{align}
+This limit is strictly positive for finite $a$ and converges to zero only as
+$a\to\infty$.
+\end{proof}
+
 \subsection{Long-term inflation forecasts}
 We now explore the implications of the reputation-sensitive policy difference for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
 
