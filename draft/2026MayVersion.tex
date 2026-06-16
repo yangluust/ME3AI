@@ -850,9 +850,18 @@ with $\Delta V>0$ for $\rho<\rho^{\dagger}$ and $\Delta V<0$ for $\rho>\rho^{\da
 By Step 1, $D$ is strictly increasing then strictly decreasing, so $D>0$ on
 $(0,1)$ and is single-peaked at $\rho^{\dagger}$.
 
-\emph{Step 3 (location of the cutoff).} Since $\psi\ge0$, $\int\psi=1$, and
-$\psi$ is symmetric about $0$ with $O(1)$ width while $n$ has variance $a$,
-Laplace's approximation gives, to leading order in the signal-to-noise ratio,
+\emph{Step 3 (location of the cutoff).} Equivalently, after the change of
+variables $x=\lambda+s$,
+\begin{align}
+V(\delta,\rho)
+&=
+\int \psi(x)\,n\!\left(x;\lambda+\tfrac a2,a\right)dx,
+\end{align}
+where $n(\cdot;m,a)$ is the $N(m,a)$ density.  Since $\psi$ is a probability
+density centered at zero with fixed variance $\pi^2/3$, while
+$n(\cdot;\lambda+a/2,a)$ has variance $a$, the normal density varies slowly over
+the region where $\psi$ has most of its mass when $a$ is large.  Laplace's
+approximation gives, to leading order in the signal-to-noise ratio,
 $V(\delta,\rho)\approx(2\pi a)^{-1/2}\exp[-(\lambda+a/2)^2/2a]$. Equating across
 $\delta_1,\delta_2$ ($a_i=\delta_i^2/\sigma^2$) and using
 $(\lambda+a/2)^2/a=\lambda^2/a+\lambda+a/4$, the linear term in $\lambda$
