@@ -823,19 +823,32 @@ V(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(1-b)],
 so $D'(\rho)=[V(\delta_1,\rho)-V(\delta_2,\rho)]/[\rho(1-\rho)]$ and any interior
 critical point of $D$ satisfies $V(\delta_1,\rho)=V(\delta_2,\rho)$.
 
-\emph{Step 2 (existence of the cutoff).} Let $s\equiv\ln\Lambda$. As an affine
-function of $v_\pi$, $s\sim N(a/2,a)$ with $a\equiv\delta^2/\sigma^2$. With
+\emph{Step 2 (single crossing and existence of the cutoff).} Let
+$s\equiv\ln\Lambda=[(v_\pi+\delta)^2-v_\pi^2]/2\sigma^2$. As an affine function of
+$v_\pi$, $s\sim N(a/2,a)$ with $a\equiv\delta^2/\sigma^2$ and density $f_a$. With
 $\lambda\equiv\ln[\rho/(1-\rho)]$ and $\psi(x)\equiv e^x/(1+e^x)^2$, we have
-$b(1-b)=\psi(\lambda+s)$ and
+$b(1-b)=\psi(\lambda+s)$, so, with $a_i=\delta_i^2/\sigma^2$ and $a_1>a_2$,
 \begin{align}
-V(\delta,\rho)=\int \psi(x)\,n\!\left(x;\lambda+\tfrac a2,a\right)dx,
+V(\delta,\rho)=\int \psi(\lambda+s)\,f_a(s)\,ds,\qquad
+\Delta V(\rho)\equiv V(\delta_1,\rho)-V(\delta_2,\rho)
+=\int \psi(\lambda+s)\,[f_{a_1}(s)-f_{a_2}(s)]\,ds.
 \end{align}
-where $n(\cdot;m,a)$ is the $N(m,a)$ density. As $\rho\to0$, $V\to\mathbb{E}[b]$,
-which is larger for the more informative $\delta_1$, so $D'>0$; for higher $\rho$
-the more informative signal concentrates posteriors near $\{0,1\}$, lowering $V$,
-so $D'<0$. Thus $D$ is single-peaked, with a cutoff
-$\rho^{\dagger}\in(0,\tfrac12)$ above which $D'<0$; and $D>0$ throughout because
-a larger $|\delta|$ is Blackwell-more-informative for the committed type.
+The function $\psi$ is the standard logistic density; its moment generating
+function $\pi t/\sin(\pi t)$ has reciprocal $\prod_{k\ge1}(1-t^2/k^2)$, so by
+Schoenberg's theorem $\psi$ is a P\'olya frequency function and the kernel
+$\psi(\lambda+s)$ is totally positive. Convolution against it is
+variation-diminishing, so the number of sign changes obeys
+$S^-(\Delta V)\le S^-(f_{a_1}-f_{a_2})$. Since $\ln f_{a_1}-\ln f_{a_2}$ is
+quadratic in $s$, $f_{a_1}-f_{a_2}$ has at most two sign changes, hence
+$S^-(\Delta V)\le 2$. Moreover, as $\rho\to0$,
+$b(1-b)\sim b\sim\rho\,g(v_\pi)/g(v_\pi+\delta)$ gives $V(\delta,\rho)\sim\rho\,e^{a}$,
+so $\Delta V\sim\rho(e^{a_1}-e^{a_2})>0$; as $\rho\to1$, expanding in
+$\epsilon=1-\rho$ gives $V(\delta,\rho)=\epsilon+\epsilon^2(1-2e^{a})+O(\epsilon^3)$,
+so $\Delta V\sim 2\epsilon^2(e^{a_2}-e^{a_1})<0$. The number of sign changes is thus
+odd and at most two, hence exactly one: there is a unique $\rho^{\dagger}\in(0,1)$
+with $\Delta V>0$ for $\rho<\rho^{\dagger}$ and $\Delta V<0$ for $\rho>\rho^{\dagger}$.
+By Step 1, $D$ is strictly increasing then strictly decreasing, so $D>0$ on
+$(0,1)$ and is single-peaked at $\rho^{\dagger}$.
 
 \emph{Step 3 (location of the cutoff).} Since $\psi\ge0$, $\int\psi=1$, and
 $\psi$ is symmetric about $0$ with $O(1)$ width while $n$ has variance $a$,
