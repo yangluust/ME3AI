@@ -601,16 +601,16 @@ policymaker takes strategic actions to influence
 private-sector learning, i.e., his reputation,\footnote
 {Many prior studies (footnote \ref{fn:learning}) examine 
 how private agents update their beliefs about the 
-policymaker’s type, but typically abstract from the 
+policymaker’s type, but abstract from the 
 strategic actions a policymaker might take to influence 
-those beliefs.} while the opportunistic policymaker 
+those beliefs, following the anticipated utility approach \textit{à la} \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.} Meanwhile, the opportunistic policymaker
 responses optimally to private-sector expectations. 
 In this section, we first show that strategic reputation management creates \textit{an interaction between the policymaker's reputation and the policy gap between the two types.} Current reputation affects the policy gap, which in turn shapes the speed of private-sector learning and, with it, the future evolution of reputation. We then explore the implications of this interaction and show that it is central to understanding the time-varying sensitivity of long-term inflation forecast revisions to inflation surprises.
 
 \subsection{Reputation-sensitive policy difference}
 The inner loop fixed point problem in Proposition \ref{prop:W2} is not only operational but also informative about three channels through which the policy gap $\delta$ affects the committed policymaker's policy objectives. First, it enters via the Bayesian learning rule $b(\cdot)$ that matters for both inflation expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. Second, it enters the momentary objective function $\uuline{u}(\cdot)$ because it determines current inflation policy. Third, it enters the composite promise term $-\mu\uuline{\omega}(\cdot)$ that captures the cost of honoring the promised committed policy.
 
-Among the three channels, the dependence of the policy gap $\delta$ on the reputation $\rho$ only stems from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem \textit{a la} \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}, without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
+Among the three channels, the dependence of the policy gap $\delta$ on the reputation $\rho$ only stems from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
 
 \begin{prop}\label{prop:naive_delta}%
 In the naive model, the optimal policy difference is invariant to reputation and the cost-push shock: $\delta^N(\varsigma,\rho,\mu)=\delta^N(\mu)$, so $\partial\delta^N/\partial\rho=0$ and $\partial\delta^N/\partial\varsigma=0$.
@@ -702,77 +702,77 @@ b(v_\pi,v_\pi+\delta,\rho)>\frac{1}{2}
 This proves the result.
 \end{proof}
 
-The cutoff $\rho^*(v_\pi,\delta)$ is realization-specific.  Averaging it over
-the true distribution of the implementation error, $v_\pi\sim g=N(0,\sigma_{v,\pi}^2)$,
-gives the average cutoff $\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]$.
+% The cutoff $\rho^*(v_\pi,\delta)$ is realization-specific.  Averaging it over
+% the true distribution of the implementation error, $v_\pi\sim g=N(0,\sigma_{v,\pi}^2)$,
+% gives the average cutoff $\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]$.
 
-\begin{prop}\label{prop:rho_star_mean}%
-The average cutoff satisfies the exact identity
-\begin{align}
-\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-&=
-\frac{1}{2}-\frac{1}{4}\,\Delta(\delta),
-\qquad
-\Delta(\delta)
-\equiv
-\int \frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi
-\ \ge 0,
-\label{eq:rho_star_identity}
-\end{align}
-$\mathbb{E}_{v_\pi}[\rho^*]$ is strictly decreasing
-in $|\delta|$: it equals $1/2$ at $\delta=0$ and falls toward $0$ as
-$|\delta|\to\infty$.
-\end{prop}
+% \begin{prop}\label{prop:rho_star_mean}%
+% The average cutoff satisfies the exact identity
+% \begin{align}
+% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
+% &=
+% \frac{1}{2}-\frac{1}{4}\,\Delta(\delta),
+% \qquad
+% \Delta(\delta)
+% \equiv
+% \int \frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi
+% \ \ge 0,
+% \label{eq:rho_star_identity}
+% \end{align}
+% $\mathbb{E}_{v_\pi}[\rho^*]$ is strictly decreasing
+% in $|\delta|$: it equals $1/2$ at $\delta=0$ and falls toward $0$ as
+% $|\delta|\to\infty$.
+% \end{prop}
 
-\begin{proof}
-By the definition of the cutoff in (\ref{eq:rho_star_delta}),
-\begin{align}
-\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-&=
-\int \frac{g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,g(v_\pi)\,dv_\pi
-=
-\int \frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi,
-\label{eq:rho_star_mean}
-\end{align}
-that is, one half of the harmonic mean of $g(v_\pi)$ and $g(v_\pi+\delta)$.  The
-integrand measures the overlap between the two densities: it is large only where
-both densities are large.  Using the algebraic identity
-\begin{align}
-\frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}
-&=
-\frac{g(v_\pi)+g(v_\pi+\delta)}{4}
--\frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{4\bigl[g(v_\pi)+g(v_\pi+\delta)\bigr]},
-\label{eq:triangular}
-\end{align}
-together with the normalizations $\int g(v_\pi)\,dv_\pi=\int g(v_\pi+\delta)\,dv_\pi=1$,
-integrating (\ref{eq:triangular}) yields (\ref{eq:rho_star_identity}).  Since
-$\Delta(\delta)\ge0$ with equality only at $\delta=0$, we have
-$\mathbb{E}_{v_\pi}[\rho^*]<1/2$ for $\delta\neq0$.
+% \begin{proof}
+% By the definition of the cutoff in (\ref{eq:rho_star_delta}),
+% \begin{align}
+% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
+% &=
+% \int \frac{g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,g(v_\pi)\,dv_\pi
+% =
+% \int \frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi,
+% \label{eq:rho_star_mean}
+% \end{align}
+% that is, one half of the harmonic mean of $g(v_\pi)$ and $g(v_\pi+\delta)$.  The
+% integrand measures the overlap between the two densities: it is large only where
+% both densities are large.  Using the algebraic identity
+% \begin{align}
+% \frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}
+% &=
+% \frac{g(v_\pi)+g(v_\pi+\delta)}{4}
+% -\frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{4\bigl[g(v_\pi)+g(v_\pi+\delta)\bigr]},
+% \label{eq:triangular}
+% \end{align}
+% together with the normalizations $\int g(v_\pi)\,dv_\pi=\int g(v_\pi+\delta)\,dv_\pi=1$,
+% integrating (\ref{eq:triangular}) yields (\ref{eq:rho_star_identity}).  Since
+% $\Delta(\delta)\ge0$ with equality only at $\delta=0$, we have
+% $\mathbb{E}_{v_\pi}[\rho^*]<1/2$ for $\delta\neq0$.
 
-For monotonicity, center the two density arguments around their midpoint by setting
-$m\equiv v_\pi+\delta/2$.  Using the symmetry of $g$,
-\begin{align}
-\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-&=
-\int
-\frac{g(m-\delta/2)g(m+\delta/2)}
-{g(m-\delta/2)+g(m+\delta/2)}\,dm \notag \\
-&=
-\exp\left(-\frac{\delta^2}{8\sigma_{v,\pi}^2}\right)
-\int
-\frac{g(m)}
-{\exp\left(\frac{m\delta}{2\sigma_{v,\pi}^2}\right)
-+\exp\left(-\frac{m\delta}{2\sigma_{v,\pi}^2}\right)}\,dm.
-\label{eq:rho_star_closed}
-\end{align}
-The prefactor decreases in $|\delta|$, and for each $m\neq0$ the denominator in
-the integral increases in $|\delta|$, so the integrand decreases pointwise.
-Therefore $\mathbb{E}_{v_\pi}[\rho^*]$ falls strictly from $1/2$ at $\delta=0$
-toward zero as $|\delta|$ grows.
-\end{proof}
+% For monotonicity, center the two density arguments around their midpoint by setting
+% $m\equiv v_\pi+\delta/2$.  Using the symmetry of $g$,
+% \begin{align}
+% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
+% &=
+% \int
+% \frac{g(m-\delta/2)g(m+\delta/2)}
+% {g(m-\delta/2)+g(m+\delta/2)}\,dm \notag \\
+% &=
+% \exp\left(-\frac{\delta^2}{8\sigma_{v,\pi}^2}\right)
+% \int
+% \frac{g(m)}
+% {\exp\left(\frac{m\delta}{2\sigma_{v,\pi}^2}\right)
+% +\exp\left(-\frac{m\delta}{2\sigma_{v,\pi}^2}\right)}\,dm.
+% \label{eq:rho_star_closed}
+% \end{align}
+% The prefactor decreases in $|\delta|$, and for each $m\neq0$ the denominator in
+% the integral increases in $|\delta|$, so the integrand decreases pointwise.
+% Therefore $\mathbb{E}_{v_\pi}[\rho^*]$ falls strictly from $1/2$ at $\delta=0$
+% toward zero as $|\delta|$ grows.
+% \end{proof}
 
-For reputation levels above this average cutoff, the magnitude of
-the learning effect of $\delta$ is decreasing in $\rho$.
+% For reputation levels above this average cutoff, the magnitude of
+% the learning effect of $\delta$ is decreasing in $\rho$.
 
 The preceding cutoff is a marginal statement. The same force operates for a
 discrete, rather than marginal, change in the policy difference.
@@ -894,6 +894,93 @@ Therefore (\ref{eq:peak_cutoff}) implies
 This limit is strictly positive for finite $a$ and converges to zero only as
 $a\to\infty$.
 \end{proof}
+
+\begin{prop}[Reputation dependence of the signal-strength effect]
+\label{prop:cross_partial}
+Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b]$ denote the expected posterior,
+with $v_\pi\sim g=N(0,\sigma^2)$, $\delta<0$, and $a\equiv\delta^2/\sigma^2$. A
+sharper signal raises the expected posterior, $\partial\bar b/\partial|\delta|>0$,
+and this marginal effect is \textit{larger at lower $\rho$}---equivalently, the
+cross-partial $\partial^2\bar b/(\partial|\delta|\,\partial\rho)$ is
+negative---if and only if
+\begin{align}
+\frac{\partial V}{\partial a}=\mathbb{E}_{v_\pi}\!\left[b(1-b)^2(1-3b)\right]<0,
+\label{eq:dVda_identity}
+\end{align}
+which holds if and only if $\rho>\rho^{\star}$, where, to leading order in the
+signal-to-noise ratio,
+\begin{align}
+\ln\frac{\rho^{\star}}{1-\rho^{\star}}=-\sqrt{a+\tfrac{a^2}{4}},\qquad
+\rho^{\star}=\frac{1}{1+\exp\!\sqrt{a+a^2/4}}\;<\tfrac12 .
+\label{eq:cross_cutoff}
+\end{align}
+For $\rho<\rho^{\star}$ the effect is instead larger at higher $\rho$. The
+threshold $\rho^{\star}$ coincides with the confluent limit $\delta_1\to\delta_2$
+of the peak $\rho^{\dagger}$ in (\ref{eq:peak_cutoff_limit}).
+\end{prop}
+
+\begin{proof}
+\emph{Step 1 (cross-partial in terms of $V$).} By
+(\ref{eq:slope_expected_update}), $\partial\bar b/\partial\rho=V(\delta,\rho)/[\rho(1-\rho)]$
+with $V=\mathbb{E}_{v_\pi}[b(1-b)]$. Differentiating in $|\delta|$ (the order of
+differentiation may be exchanged since $b$ is smooth and the relevant integrals
+converge uniformly),
+\begin{align}
+\frac{\partial^2\bar b}{\partial|\delta|\,\partial\rho}
+=\frac{1}{\rho(1-\rho)}\,\frac{\partial V}{\partial|\delta|},\qquad
+\frac{\partial V}{\partial|\delta|}=\frac{2|\delta|}{\sigma^2}\,\frac{\partial V}{\partial a},
+\end{align}
+where the last equality uses $a=|\delta|^2/\sigma^2$. As the prefactor
+$2|\delta|/[\sigma^2\rho(1-\rho)]$ is strictly positive, the sign of the
+cross-partial equals the sign of $\partial V/\partial a$.
+
+\emph{Step 2 (the identity \eqref{eq:dVda_identity}).} As in Step~2 of
+Proposition~\ref{prop:expected_gain_rho}, write $b=\sigma_{\mathrm{l}}(x)$ with
+$\sigma_{\mathrm{l}}(x)=e^{x}/(1+e^{x})$, $x=\lambda+s$,
+$\lambda=\ln[\rho/(1-\rho)]$, and $s=\ln\Lambda\sim N(a/2,a)$; hence $b(1-b)=\psi(x)$
+with $\psi=\sigma_{\mathrm{l}}(1-\sigma_{\mathrm{l}})$, and $V$ depends on
+$(\delta,\sigma)$ only through $a$. Writing $s=a/2+\sqrt a\,z$ with $z\sim N(0,1)$,
+$V(a)=\mathbb{E}_z[\psi(\lambda+a/2+\sqrt a\,z)]$, so
+\begin{align}
+\frac{\partial V}{\partial a}
+=\mathbb{E}_z\!\left[\psi'(x)\Big(\tfrac12+\tfrac{z}{2\sqrt a}\Big)\right]
+=\tfrac12\,\mathbb{E}_z[\psi'(x)+\psi''(x)],
+\end{align}
+where the second equality applies Stein's identity
+$\mathbb{E}_z[z\,\psi'(x)]=\sqrt a\,\mathbb{E}_z[\psi''(x)]$. Differentiating
+$\psi=b(1-b)$ along $x$ (so $\sigma_{\mathrm{l}}'=\psi$) gives
+$\psi'=b(1-b)(1-2b)$ and $\psi''=b(1-b)(1-6b+6b^2)$, whence
+$\psi'+\psi''=2\,b(1-b)^2(1-3b)$. Therefore
+$\partial V/\partial a=\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]$, which is
+\eqref{eq:dVda_identity}.
+
+\emph{Step 3 (sign and the threshold $\rho^{\star}$).} By Steps~1--2, the
+cross-partial is negative iff $\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]<0$. The integrand
+is positive where $b<1/3$ and negative where $b>1/3$; raising $\rho$ raises $x$
+and hence $b$ for every realization $v_\pi$, so the weighted average $1-3b$ is
+decreasing in $\rho$ and crosses zero once. Using the Laplace approximation of
+Step~3 of Proposition~\ref{prop:expected_gain_rho},
+$V\approx(2\pi a)^{-1/2}\exp[-(\lambda+a/2)^2/2a]$; setting $\partial_a\ln V=0$
+gives $\lambda^2=a+a^2/4$, and the root $\lambda<0$ is \eqref{eq:cross_cutoff}.
+This is exactly the limit (\ref{eq:peak_cutoff_limit}) of $\rho^{\dagger}$, as it
+must be: $\Delta V\approx(a_1-a_2)\,\partial_a V$ for nearby signals, so the
+crossing $\Delta V=0$ collapses to $\partial_a V=0$. The closed form
+\eqref{eq:cross_cutoff} tracks the exact root of \eqref{eq:dVda_identity} closely,
+with the gap shrinking as the signal strengthens:
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$|\delta|/\sigma$ & $a=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
+\midrule
+$1$ & $1$ & $0.216$  & $0.246$\\
+$2$ & $4$ & $0.0532$ & $0.0558$\\
+$3$ & $9$ & $0.00438$ & $0.00446$\\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{proof}
+
+
 
 \subsection{Long-term inflation forecasts}
 We now explore the implications of the reputation-sensitive policy difference for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
