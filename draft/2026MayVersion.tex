@@ -613,7 +613,7 @@ The inner loop fixed point problem in Proposition \ref{prop:W2} is not only oper
 Among the three channels, the impact of current reputation $\rho$ on the policy gap $\delta$ stems solely from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
 
 \begin{prop}\label{prop:naive_delta}%
-In the naive model, the optimal policy difference is invariant to reputation and the cost-push shock: $\delta^N(\varsigma,\rho,\mu)=\delta^N(\mu)$, so $\partial\delta^N/\partial\rho=0$ and $\partial\delta^N/\partial\varsigma=0$.
+When the committed policymaker treats next-period reputation as exogenous to current policies, the equilibrium policy difference is invariant to reputation: $\delta^N(\varsigma,\rho,\mu)=\delta^N(\mu)$.
 \end{prop}
 
 \begin{proof}
@@ -624,6 +624,7 @@ Consider the optimization in Proposition \ref{prop:W2}. When next-period reputat
 Because the opportunistic policy $\alpha$ is chosen to maximize the same momentary objective as the committed policymaker, $\partial \uline{u}(\alpha,e,\varsigma)/\partial \alpha=0$. Hence the optimal $\delta^N=-\mu(1-q)/(1+\vartheta_x/\kappa^2)$ that is independent of $\rho$ or $\varsigma$.
 \end{proof}
 
+The Bayesian learning channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, a larger policy gap $\delta$ increases expected next-period reputation, which reduces current inflation expectations $e(\cdot)$ and implies higher continuation value $\Omega(\cdot)$. A lower inflation expectation not only improves the current inflation-output tradeoff (via the Phillips curve) but also reduces the cost of honoring the promised committed policy (via the composite promise term).
 Formally, the strength of this reputation channel is governed by how the
 Bayesian update responds to the policy difference.  Focus on the update term
 $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}).  
