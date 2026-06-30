@@ -610,7 +610,7 @@ In this section, we first show that strategic reputation management creates \tex
 \subsection{Reputation-sensitive policy difference}
 The inner loop fixed point problem in Proposition \ref{prop:W2} is not only operational but also informative about three channels through which the policy gap $\delta$ affects the committed policymaker's policy objectives. First, it enters via the Bayesian learning rule $b(\cdot)$ that matters for both inflation expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. Second, it enters the momentary objective function $\uuline{u}(\cdot)$ because it determines current inflation policy. Third, it enters the composite promise term $-\mu\uuline{\omega}(\cdot)$ that captures the cost of honoring the promised committed policy.
 
-Among the three channels, the dependence of the policy gap $\delta$ on the reputation $\rho$ only stems from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
+Among the three channels, the impact of current reputation $\rho$ on the policy gap $\delta$ stems solely from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
 
 \begin{prop}\label{prop:naive_delta}%
 In the naive model, the optimal policy difference is invariant to reputation and the cost-push shock: $\delta^N(\varsigma,\rho,\mu)=\delta^N(\mu)$, so $\partial\delta^N/\partial\rho=0$ and $\partial\delta^N/\partial\varsigma=0$.
@@ -626,351 +626,96 @@ Because the opportunistic policy $\alpha$ is chosen to maximize the same momenta
 
 Formally, the strength of this reputation channel is governed by how the
 Bayesian update responds to the policy difference.  Focus on the update term
-$b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}).  Because $g$ is a normal density
-with mean zero and standard deviation $\sigma_{v,\pi}$,
-\begin{align}
-\frac{\partial b(v_\pi,v_\pi+\delta,\rho)}{\partial \delta}
-&= b(v_\pi,v_\pi+\delta,\rho)
-\left[1-b(v_\pi,v_\pi+\delta,\rho)\right]
-\frac{v_\pi+\delta}{\sigma_{v,\pi}^2}. \label{eq:dbddelta}
-\end{align}
-Hence, for fixed $(v_\pi,\delta,\sigma_{v,\pi})$, the magnitude of the effect
-of $\delta$ on reputation is
-\begin{align}
-\left|\frac{\partial b(v_\pi,v_\pi+\delta,\rho)}{\partial \delta}\right|
-&=
-\frac{|v_\pi+\delta|}{\sigma_{v,\pi}^2}
-b(v_\pi,v_\pi+\delta,\rho)
-\left[1-b(v_\pi,v_\pi+\delta,\rho)\right]. \label{eq:dbddelta_abs}
-\end{align}
-
-\begin{prop}\label{prop:b_marginal_sensitivity}%
-Fix $(v_\pi,\delta)$ with $v_\pi+\delta\neq0$ and define
-\begin{align}
-M(v_\pi,\delta,\rho)
-&\equiv
-\left|
-\frac{\partial b(v_\pi,v_\pi+\delta,\rho)}{\partial \delta}
-\right|.
-\end{align}
-Then $M(v_\pi,\delta,\rho)$ is increasing in $\rho$ for
-$\rho<\rho^*(v_\pi,\delta)$ and decreasing in $\rho$ for
-$\rho>\rho^*(v_\pi,\delta)$, where
-\begin{align}
-\rho^*(v_\pi,\delta)
-&\equiv
-\frac{g(v_\pi+\delta)}
-{g(v_\pi)+g(v_\pi+\delta)}
-=
-\frac{1}{
-1+\exp\left(
-\frac{(v_\pi+\delta)^2-v_\pi^2}{2\sigma_{v,\pi}^2}
-\right)}. \label{eq:rho_star_delta}
-\end{align}
-Thus, above this cutoff, a local decrease in reputation strengthens the
-marginal effect of the policy difference on the Bayesian update.
-\end{prop}
-
-\begin{proof}
-By (\ref{eq:dbddelta_abs}), the dependence of
-$M(v_\pi,\delta,\rho)$ on $\rho$ comes only through
-$b(v_\pi,v_\pi+\delta,\rho)[1-b(v_\pi,v_\pi+\delta,\rho)]$.  Hence
-\begin{align}
-\frac{\partial}{\partial \rho}\left\{b(1-b)\right\}
-&=
-(1-2b)\frac{\partial b}{\partial \rho}. \label{eq:brho_product}
-\end{align}
-For the Bayesian update,
-\begin{align}
-\frac{\partial b}{\partial \rho}
-&=
-\frac{b(1-b)}{\rho(1-\rho)}
->0. \label{eq:brho}
-\end{align}
-Therefore the sign of $\partial M/\partial \rho$ is the sign of $1-2b$.
-Thus $M$ is increasing in $\rho$ when $b<1/2$ and decreasing in $\rho$
-when $b>1/2$.  Finally,
-\begin{align}
-b(v_\pi,v_\pi+\delta,\rho)>\frac{1}{2}
-&\quad\Longleftrightarrow\quad
-\rho g(v_\pi)>(1-\rho)g(v_\pi+\delta) \notag \\
-&\quad\Longleftrightarrow\quad
-\rho>\frac{g(v_\pi+\delta)}
-{g(v_\pi)+g(v_\pi+\delta)}
-=\rho^*(v_\pi,\delta).
-\end{align}
-This proves the result.
-\end{proof}
-
-% The cutoff $\rho^*(v_\pi,\delta)$ is realization-specific.  Averaging it over
-% the true distribution of the implementation error, $v_\pi\sim g=N(0,\sigma_{v,\pi}^2)$,
-% gives the average cutoff $\mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]$.
-
-% \begin{prop}\label{prop:rho_star_mean}%
-% The average cutoff satisfies the exact identity
-% \begin{align}
-% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-% &=
-% \frac{1}{2}-\frac{1}{4}\,\Delta(\delta),
-% \qquad
-% \Delta(\delta)
-% \equiv
-% \int \frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi
-% \ \ge 0,
-% \label{eq:rho_star_identity}
-% \end{align}
-% $\mathbb{E}_{v_\pi}[\rho^*]$ is strictly decreasing
-% in $|\delta|$: it equals $1/2$ at $\delta=0$ and falls toward $0$ as
-% $|\delta|\to\infty$.
-% \end{prop}
-
-% \begin{proof}
-% By the definition of the cutoff in (\ref{eq:rho_star_delta}),
-% \begin{align}
-% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-% &=
-% \int \frac{g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,g(v_\pi)\,dv_\pi
-% =
-% \int \frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}\,dv_\pi,
-% \label{eq:rho_star_mean}
-% \end{align}
-% that is, one half of the harmonic mean of $g(v_\pi)$ and $g(v_\pi+\delta)$.  The
-% integrand measures the overlap between the two densities: it is large only where
-% both densities are large.  Using the algebraic identity
-% \begin{align}
-% \frac{g(v_\pi)\,g(v_\pi+\delta)}{g(v_\pi)+g(v_\pi+\delta)}
-% &=
-% \frac{g(v_\pi)+g(v_\pi+\delta)}{4}
-% -\frac{\bigl[g(v_\pi)-g(v_\pi+\delta)\bigr]^2}{4\bigl[g(v_\pi)+g(v_\pi+\delta)\bigr]},
-% \label{eq:triangular}
-% \end{align}
-% together with the normalizations $\int g(v_\pi)\,dv_\pi=\int g(v_\pi+\delta)\,dv_\pi=1$,
-% integrating (\ref{eq:triangular}) yields (\ref{eq:rho_star_identity}).  Since
-% $\Delta(\delta)\ge0$ with equality only at $\delta=0$, we have
-% $\mathbb{E}_{v_\pi}[\rho^*]<1/2$ for $\delta\neq0$.
-
-% For monotonicity, center the two density arguments around their midpoint by setting
-% $m\equiv v_\pi+\delta/2$.  Using the symmetry of $g$,
-% \begin{align}
-% \mathbb{E}_{v_\pi}\!\left[\rho^*(v_\pi,\delta)\right]
-% &=
-% \int
-% \frac{g(m-\delta/2)g(m+\delta/2)}
-% {g(m-\delta/2)+g(m+\delta/2)}\,dm \notag \\
-% &=
-% \exp\left(-\frac{\delta^2}{8\sigma_{v,\pi}^2}\right)
-% \int
-% \frac{g(m)}
-% {\exp\left(\frac{m\delta}{2\sigma_{v,\pi}^2}\right)
-% +\exp\left(-\frac{m\delta}{2\sigma_{v,\pi}^2}\right)}\,dm.
-% \label{eq:rho_star_closed}
-% \end{align}
-% The prefactor decreases in $|\delta|$, and for each $m\neq0$ the denominator in
-% the integral increases in $|\delta|$, so the integrand decreases pointwise.
-% Therefore $\mathbb{E}_{v_\pi}[\rho^*]$ falls strictly from $1/2$ at $\delta=0$
-% toward zero as $|\delta|$ grows.
-% \end{proof}
-
-% For reputation levels above this average cutoff, the magnitude of
-% the learning effect of $\delta$ is decreasing in $\rho$.
-
-The preceding cutoff is a marginal statement. The same force operates for a
-discrete, rather than marginal, change in the policy difference.
-
-\begin{prop}\label{prop:expected_gain_rho}
-Under the committed type, consider two policy differences $\delta_1<\delta_2<0$,
-and let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$
-denote the expected updated reputation. The expected reputation gain from the
-more negative difference,
-\[
-D(\rho)\equiv \bar b(\delta_1,\rho)-\bar b(\delta_2,\rho),
-\]
-is strictly positive, and there exists a cutoff
-$\rho^{\dagger}(\delta_1,\delta_2)\in(0,\tfrac12)$ such that $D(\rho)$ is strictly
-decreasing in $\rho$ for $\rho>\rho^{\dagger}$. Hence, above the cutoff, the
-expected effect of a more negative policy difference on reputation is larger at
-lower reputation.  For the leading-order cutoff derived below, if
-$a_i\equiv\delta_i^2/\sigma_{v,\pi}^2$ and $a_1\to a_2=a$, then
-\begin{align}
-\rho^{\dagger}
-&\to
-\frac{1}{1+\exp\left(\sqrt{a+a^2/4}\right)}.
-\label{eq:peak_cutoff_limit_statement}
-\end{align}
-Thus the cutoff approaches zero when the common signal strength $a$ becomes
-large, not when the two policy differences become close.
-\end{prop}
-
-This is the discrete, expectation-based counterpart of Proposition
-\ref{prop:b_marginal_sensitivity}: in both, the responsiveness of Bayesian
-updating to the policy difference is governed by the posterior variance
-$b(1-b)$, which declines with $\rho$ once $\rho$ is sufficiently high.
-
-\begin{proof}
-Write $\sigma\equiv\sigma_{v,\pi}$ and condition on the committed type, so
-$\pi=a+v_\pi$ with $v_\pi\sim g=N(0,\sigma^2)$.
-
-\emph{Step 1 (slope of the expected update).} Bayes' rule in odds gives
-$o'=o\,\Lambda$, with $o=\rho/(1-\rho)$ and $\Lambda=g(v_\pi)/g(v_\pi+\delta)$
-independent of $\rho$. Since $\partial_\rho\ln o'=1/[\rho(1-\rho)]$ and
-$\partial b/\partial\ln o'=b(1-b)$,
-\begin{align}
-\frac{\partial \bar b(\delta,\rho)}{\partial \rho}
-=\frac{V(\delta,\rho)}{\rho(1-\rho)},\qquad
-V(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(1-b)],
-\label{eq:slope_expected_update}
-\end{align}
-so $D'(\rho)=[V(\delta_1,\rho)-V(\delta_2,\rho)]/[\rho(1-\rho)]$ and any interior
-critical point of $D$ satisfies $V(\delta_1,\rho)=V(\delta_2,\rho)$.
-
-\emph{Step 2 (single crossing and existence of the cutoff).} Let
-$s\equiv\ln\Lambda=[(v_\pi+\delta)^2-v_\pi^2]/2\sigma^2$. As an affine function of
-$v_\pi$, $s\sim N(a/2,a)$ with $a\equiv\delta^2/\sigma^2$ and density $f_a$. With
-$\lambda\equiv\ln[\rho/(1-\rho)]$ and $\psi(x)\equiv e^x/(1+e^x)^2$, we have
-$b(1-b)=\psi(\lambda+s)$, so, with $a_i=\delta_i^2/\sigma^2$ and $a_1>a_2$,
-\begin{align}
-V(\delta,\rho)=\int \psi(\lambda+s)\,f_a(s)\,ds,\qquad
-\Delta V(\rho)\equiv V(\delta_1,\rho)-V(\delta_2,\rho)
-=\int \psi(\lambda+s)\,[f_{a_1}(s)-f_{a_2}(s)]\,ds.
-\end{align}
-The function $\psi$ is the standard logistic density; its moment generating
-function $\pi t/\sin(\pi t)$ has reciprocal $\prod_{k\ge1}(1-t^2/k^2)$, so by
-Schoenberg's theorem $\psi$ is a P\'olya frequency function and the kernel
-$\psi(\lambda+s)$ is totally positive. Convolution against it is
-variation-diminishing, so the number of sign changes obeys
-$S^-(\Delta V)\le S^-(f_{a_1}-f_{a_2})$. Since $\ln f_{a_1}-\ln f_{a_2}$ is
-quadratic in $s$, $f_{a_1}-f_{a_2}$ has at most two sign changes, hence
-$S^-(\Delta V)\le 2$. Moreover, as $\rho\to0$,
-$b(1-b)\sim b\sim\rho\,g(v_\pi)/g(v_\pi+\delta)$ gives $V(\delta,\rho)\sim\rho\,e^{a}$,
-so $\Delta V\sim\rho(e^{a_1}-e^{a_2})>0$; as $\rho\to1$, expanding in
-$\epsilon=1-\rho$ gives $V(\delta,\rho)=\epsilon+\epsilon^2(1-2e^{a})+O(\epsilon^3)$,
-so $\Delta V\sim 2\epsilon^2(e^{a_2}-e^{a_1})<0$. The number of sign changes is thus
-odd and at most two, hence exactly one: there is a unique $\rho^{\dagger}\in(0,1)$
-with $\Delta V>0$ for $\rho<\rho^{\dagger}$ and $\Delta V<0$ for $\rho>\rho^{\dagger}$.
-By Step 1, $D$ is strictly increasing then strictly decreasing, so $D>0$ on
-$(0,1)$ and is single-peaked at $\rho^{\dagger}$.
-
-\emph{Step 3 (location of the cutoff).} Equivalently, after the change of
-variables $x=\lambda+s$,
-\begin{align}
-V(\delta,\rho)
-&=
-\int \psi(x)\,n\!\left(x;\lambda+\tfrac a2,a\right)dx,
-\end{align}
-where $n(\cdot;m,a)$ is the $N(m,a)$ density.  Since $\psi$ is a probability
-density centered at zero with fixed variance $\pi^2/3$, while
-$n(\cdot;\lambda+a/2,a)$ has variance $a$, the normal density varies slowly over
-the region where $\psi$ has most of its mass when $a$ is large.  Laplace's
-approximation gives, to leading order in the signal-to-noise ratio,
-$V(\delta,\rho)\approx(2\pi a)^{-1/2}\exp[-(\lambda+a/2)^2/2a]$. Equating across
-$\delta_1,\delta_2$ ($a_i=\delta_i^2/\sigma^2$) and using
-$(\lambda+a/2)^2/a=\lambda^2/a+\lambda+a/4$, the linear term in $\lambda$
-cancels, yielding
-\begin{align}
-\ln\frac{\rho^{\dagger}}{1-\rho^{\dagger}}
-=-\sqrt{\frac{a_1 a_2}{a_1-a_2}
-\left(\ln\frac{a_1}{a_2}+\frac{a_1-a_2}{4}\right)}<0 .
-\label{eq:peak_cutoff}
-\end{align}
-The limit as the two signal-to-noise ratios become close is finite.  Set
-$a_1=a+h$ and $a_2=a$, with $h\downarrow0$.  Then
-\begin{align}
-\frac{a_1a_2}{a_1-a_2}
-\left(\ln\frac{a_1}{a_2}+\frac{a_1-a_2}{4}\right)
-&=
-\frac{(a+h)a}{h}
-\left[\ln\left(1+\frac{h}{a}\right)+\frac{h}{4}\right] \notag \\
-&\to
-a\left(1+\frac{a}{4}\right)
-=a+\frac{a^2}{4}.
-\label{eq:peak_cutoff_limit}
-\end{align}
-Therefore (\ref{eq:peak_cutoff}) implies
-\begin{align}
-\rho^{\dagger}
-&\to
-\frac{1}{1+\exp\left(\sqrt{a+a^2/4}\right)}.
-\end{align}
-This limit is strictly positive for finite $a$ and converges to zero only as
-$a\to\infty$.
-\end{proof}
+$b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}).  
 
 \begin{prop}[Reputation dependence of the signal-strength effect]
 \label{prop:cross_partial}
 Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b]$ denote the expected posterior,
-with $v_\pi\sim g=N(0,\sigma^2)$, $\delta<0$, and $a\equiv\delta^2/\sigma^2$. A
-sharper signal raises the expected posterior, $\partial\bar b/\partial|\delta|>0$,
-and this marginal effect is \textit{larger at lower $\rho$}---equivalently, the
-cross-partial $\partial^2\bar b/(\partial|\delta|\,\partial\rho)$ is
-negative---if and only if
+with $v_\pi\sim g=N(0,\sigma^2)$, $\delta<0$, and
+$\mathrm{snr}\equiv\delta^2/\sigma^2$. A sharper signal raises the expected
+posterior, $\partial\bar b/\partial|\delta|>0$, and this marginal effect is
+\textit{larger at lower $\rho$}---equivalently, the cross-partial
+$\partial^2\bar b/(\partial|\delta|\,\partial\rho)$ is negative---if and only if
 \begin{align}
-\frac{\partial V}{\partial a}=\mathbb{E}_{v_\pi}\!\left[b(1-b)^2(1-3b)\right]<0,
-\label{eq:dVda_identity}
+\frac{\partial V}{\partial \mathrm{snr}}
+=\mathbb{E}_{v_\pi}\!\left[b(1-b)^2(1-3b)\right]<0,
+\label{eq:dVdsnr_identity}
 \end{align}
 which holds if and only if $\rho>\rho^{\star}$, where, to leading order in the
 signal-to-noise ratio,
 \begin{align}
-\ln\frac{\rho^{\star}}{1-\rho^{\star}}=-\sqrt{a+\tfrac{a^2}{4}},\qquad
-\rho^{\star}=\frac{1}{1+\exp\!\sqrt{a+a^2/4}}\;<\tfrac12 .
+\rho^{\star}
+=\frac{1}{1+\exp\!\sqrt{\mathrm{snr}+\mathrm{snr}^2/4}}\;<\tfrac12 .
 \label{eq:cross_cutoff}
 \end{align}
-For $\rho<\rho^{\star}$ the effect is instead larger at higher $\rho$. The
-threshold $\rho^{\star}$ coincides with the confluent limit $\delta_1\to\delta_2$
-of the peak $\rho^{\dagger}$ in (\ref{eq:peak_cutoff_limit}).
+For $\rho<\rho^{\star}$ the effect is instead larger at higher $\rho$.
 \end{prop}
 
 \begin{proof}
-\emph{Step 1 (cross-partial in terms of $V$).} By
-(\ref{eq:slope_expected_update}), $\partial\bar b/\partial\rho=V(\delta,\rho)/[\rho(1-\rho)]$
-with $V=\mathbb{E}_{v_\pi}[b(1-b)]$. Differentiating in $|\delta|$ (the order of
-differentiation may be exchanged since $b$ is smooth and the relevant integrals
-converge uniformly),
+\emph{Step 1 (cross-partial in terms of $V$).} Let posterior odds be
+$o'=o\,\Lambda$, where $o=\rho/(1-\rho)$ and
+$\Lambda=g(v_\pi)/g(v_\pi+\delta)$. Then $b=o'/(1+o')$, so
+$\partial b/\partial\ln o'=b(1-b)$ and
+$\partial\ln o'/\partial\rho=1/[\rho(1-\rho)]$. Hence
+\[
+\frac{\partial\bar b(\delta,\rho)}{\partial\rho}
+=\frac{V(\delta,\rho)}{\rho(1-\rho)},
+\qquad
+V(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(1-b)].
+\]
+Differentiating in $|\delta|$ (the order of differentiation may be exchanged
+since $b$ is smooth and the relevant integrals converge uniformly),
 \begin{align}
 \frac{\partial^2\bar b}{\partial|\delta|\,\partial\rho}
 =\frac{1}{\rho(1-\rho)}\,\frac{\partial V}{\partial|\delta|},\qquad
-\frac{\partial V}{\partial|\delta|}=\frac{2|\delta|}{\sigma^2}\,\frac{\partial V}{\partial a},
+\frac{\partial V}{\partial|\delta|}
+=\frac{2|\delta|}{\sigma^2}\,\frac{\partial V}{\partial \mathrm{snr}},
 \end{align}
-where the last equality uses $a=|\delta|^2/\sigma^2$. As the prefactor
+where the last equality uses $\mathrm{snr}=|\delta|^2/\sigma^2$. As the prefactor
 $2|\delta|/[\sigma^2\rho(1-\rho)]$ is strictly positive, the sign of the
-cross-partial equals the sign of $\partial V/\partial a$.
+cross-partial equals the sign of $\partial V/\partial \mathrm{snr}$.
 
-\emph{Step 2 (the identity \eqref{eq:dVda_identity}).} As in Step~2 of
-Proposition~\ref{prop:expected_gain_rho}, write $b=\sigma_{\mathrm{l}}(x)$ with
+\emph{Step 2 (the identity \eqref{eq:dVdsnr_identity}).} Write
+$b=\sigma_{\mathrm{l}}(x)$ with
 $\sigma_{\mathrm{l}}(x)=e^{x}/(1+e^{x})$, $x=\lambda+s$,
-$\lambda=\ln[\rho/(1-\rho)]$, and $s=\ln\Lambda\sim N(a/2,a)$; hence $b(1-b)=\psi(x)$
-with $\psi=\sigma_{\mathrm{l}}(1-\sigma_{\mathrm{l}})$, and $V$ depends on
-$(\delta,\sigma)$ only through $a$. Writing $s=a/2+\sqrt a\,z$ with $z\sim N(0,1)$,
-$V(a)=\mathbb{E}_z[\psi(\lambda+a/2+\sqrt a\,z)]$, so
+$\lambda=\ln[\rho/(1-\rho)]$, and
+$s=\ln\Lambda=[(v_\pi+\delta)^2-v_\pi^2]/(2\sigma^2)\sim N(\mathrm{snr}/2,\mathrm{snr})$;
+hence $b(1-b)=\psi(x)$ with $\psi=\sigma_{\mathrm{l}}(1-\sigma_{\mathrm{l}})$,
+and $V$ depends on $(\delta,\sigma)$ only through $\mathrm{snr}$. Writing
+$s=\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z$ with $z\sim N(0,1)$,
+$V(\mathrm{snr})=\mathbb{E}_z[\psi(\lambda+\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z)]$, so
 \begin{align}
-\frac{\partial V}{\partial a}
-=\mathbb{E}_z\!\left[\psi'(x)\Big(\tfrac12+\tfrac{z}{2\sqrt a}\Big)\right]
+\frac{\partial V}{\partial \mathrm{snr}}
+=\mathbb{E}_z\!\left[\psi'(x)\Big(\tfrac12+\tfrac{z}{2\sqrt{\mathrm{snr}}}\Big)\right]
 =\tfrac12\,\mathbb{E}_z[\psi'(x)+\psi''(x)],
 \end{align}
 where the second equality applies Stein's identity
-$\mathbb{E}_z[z\,\psi'(x)]=\sqrt a\,\mathbb{E}_z[\psi''(x)]$. Differentiating
-$\psi=b(1-b)$ along $x$ (so $\sigma_{\mathrm{l}}'=\psi$) gives
+$\mathbb{E}_z[z\,\psi'(x)]=\sqrt{\mathrm{snr}}\,\mathbb{E}_z[\psi''(x)]$.
+Differentiating $\psi=b(1-b)$ along $x$ (so $\sigma_{\mathrm{l}}'=\psi$) gives
 $\psi'=b(1-b)(1-2b)$ and $\psi''=b(1-b)(1-6b+6b^2)$, whence
 $\psi'+\psi''=2\,b(1-b)^2(1-3b)$. Therefore
-$\partial V/\partial a=\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]$, which is
-\eqref{eq:dVda_identity}.
+$\partial V/\partial \mathrm{snr}=\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]$,
+which is \eqref{eq:dVdsnr_identity}.
 
 \emph{Step 3 (sign and the threshold $\rho^{\star}$).} By Steps~1--2, the
 cross-partial is negative iff $\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]<0$. The integrand
 is positive where $b<1/3$ and negative where $b>1/3$; raising $\rho$ raises $x$
 and hence $b$ for every realization $v_\pi$, so the weighted average $1-3b$ is
-decreasing in $\rho$ and crosses zero once. Using the Laplace approximation of
-Step~3 of Proposition~\ref{prop:expected_gain_rho},
-$V\approx(2\pi a)^{-1/2}\exp[-(\lambda+a/2)^2/2a]$; setting $\partial_a\ln V=0$
-gives $\lambda^2=a+a^2/4$, and the root $\lambda<0$ is \eqref{eq:cross_cutoff}.
-This is exactly the limit (\ref{eq:peak_cutoff_limit}) of $\rho^{\dagger}$, as it
-must be: $\Delta V\approx(a_1-a_2)\,\partial_a V$ for nearby signals, so the
-crossing $\Delta V=0$ collapses to $\partial_a V=0$. The closed form
-\eqref{eq:cross_cutoff} tracks the exact root of \eqref{eq:dVda_identity} closely,
-with the gap shrinking as the signal strengthens:
+decreasing in $\rho$ and crosses zero once. To approximate the cutoff, use the
+Laplace approximation
+\[
+V\approx(2\pi\,\mathrm{snr})^{-1/2}
+\exp\!\left[-\frac{(\lambda+\mathrm{snr}/2)^2}{2\,\mathrm{snr}}\right].
+\]
+Setting $\partial_{\mathrm{snr}}\ln V=0$ gives
+$\lambda^2=\mathrm{snr}+\mathrm{snr}^2/4$, and the root $\lambda<0$ is
+\eqref{eq:cross_cutoff}. The closed form \eqref{eq:cross_cutoff} tracks the
+exact root of \eqref{eq:dVdsnr_identity} increasingly closely as
+$\mathrm{snr}$ rises, as the table below shows:
 \begin{center}
 \begin{tabular}{cccc}
 \toprule
-$|\delta|/\sigma$ & $a=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
+$|\delta|/\sigma$ & $\mathrm{snr}=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
 \midrule
 $1$ & $1$ & $0.216$  & $0.246$\\
 $2$ & $4$ & $0.0532$ & $0.0558$\\
@@ -2718,3 +2463,5 @@ f_{t+10y|t}^{i} \equiv x_{i,(y, q)} \quad \text{where } t = (y, q).
 
 
 \end{document}
+
+
