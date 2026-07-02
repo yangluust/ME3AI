@@ -603,11 +603,13 @@ private-sector learning, i.e., his reputation,\footnote
 how private agents update their beliefs about the 
 policymaker’s type, but abstract from the 
 strategic actions a policymaker might take to influence 
-those beliefs, following the anticipated utility approach \textit{à la} \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.} Meanwhile, the opportunistic policymaker
+those beliefs, following the anticipated utility approach \textit{à la} \cite{cogley_anticipated_2008} and \cite{jacobs_anticipated_1998}.} while the opportunistic policymaker
 responses optimally to private-sector expectations. 
 In this section, we first show that strategic reputation management creates \textit{an interaction between the policymaker's reputation and the policy gap between the two types.} Current reputation affects the policy gap, which in turn shapes the speed of private-sector learning and, with it, the future evolution of reputation. We then explore the implications of this interaction and show that it is central to understanding the time-varying sensitivity of long-term inflation forecast revisions to inflation surprises.
 
 \subsection{Reputation-sensitive policy difference}
+This section shows that the reputation-sensitive policy difference arises from the committed policymaker's strategic reputation management. We then identify a reputation threshold: above this cutoff, the optimal policy difference decreases as reputation rises, while below it, the policy difference increases with reputation.
+
 The inner loop fixed point problem in Proposition \ref{prop:W2} is not only operational but also informative about three channels through which the policy gap $\delta$ affects the committed policymaker's policy objectives. First, it enters via the Bayesian learning rule $b(\cdot)$ that matters for both inflation expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. Second, it enters the momentary objective function $\uuline{u}(\cdot)$ because it determines current inflation policy. Third, it enters the composite promise term $-\mu\uuline{\omega}(\cdot)$ that captures the cost of honoring the promised committed policy.
 
 Among the three channels, the impact of current reputation $\rho$ on the policy gap $\delta$ stems solely from the Bayesian learning rule $b(\cdot)$. The best way to see it is to shut down only this channel and study a model in which the committed policymaker acts \textit{naively} -- that is, without attempting to shape reputation, treating it instead as an exogenous factor that determines how much influence policy $a$ has over inflation expectations.\footnote{We thank Davide Debortoli for suggesting the analysis of naive policy. Appendix \ref{app:counter} formulates the naive optimization problem without utilizing the simplified recursion as in Proposition \ref{prop:W2}. }
@@ -624,109 +626,23 @@ Consider the optimization in Proposition \ref{prop:W2}. When next-period reputat
 Because the opportunistic policy $\alpha$ is chosen to maximize the same momentary objective as the committed policymaker, $\partial \uline{u}(\alpha,e,\varsigma)/\partial \alpha=0$. Hence the optimal $\delta^N=-\mu(1-q)/(1+\vartheta_x/\kappa^2)$ that is independent of $\rho$ or $\varsigma$.
 \end{proof}
 
-The Bayesian learning channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, a larger policy gap $\delta$ increases expected next-period reputation, which reduces current inflation expectations $e(\cdot)$ and implies higher continuation value $\Omega(\cdot)$. A lower inflation expectation not only improves the current inflation-output tradeoff (via the Phillips curve) but also reduces the cost of honoring the promised committed policy (via the composite promise term).
-Formally, the strength of this reputation channel is governed by how the
-Bayesian update responds to the policy difference.  Focus on the update term
-$b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}).  
+The Bayesian learning channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, next-period reputation is governed by $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}). A larger policy gap $\delta$ increases expected next-period reputation, and the strength of this reputation channel is governed by the following proposition. 
 
-\begin{prop}[Reputation dependence of the signal-strength effect]
-\label{prop:cross_partial}
-Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b]$ denote the expected posterior,
-with $v_\pi\sim g=N(0,\sigma^2)$, $\delta<0$, and
-$\mathrm{snr}\equiv\delta^2/\sigma^2$. A sharper signal raises the expected
-posterior, $\partial\bar b/\partial|\delta|>0$, and this marginal effect is
-\textit{larger at lower $\rho$}---equivalently, the cross-partial
-$\partial^2\bar b/(\partial|\delta|\,\partial\rho)$ is negative---if and only if
-\begin{align}
-\frac{\partial V}{\partial \mathrm{snr}}
-=\mathbb{E}_{v_\pi}\!\left[b(1-b)^2(1-3b)\right]<0,
-\label{eq:dVdsnr_identity}
-\end{align}
-which holds if and only if $\rho>\rho^{\star}$, where, to leading order in the
-signal-to-noise ratio,
-\begin{align}
+\begin{prop}\label{prop:cross_partial}
+Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$ denote the expected posterior. A sharper signal raises the expected
+posterior, $\partial\bar b/\partial|\delta|>0$. This marginal effect is
+\textit{larger at lower $\rho$} if
+$\rho>\rho^{\star}$ and is \textit{larger at higher $\rho$} if $\rho<\rho^{\star}$, where
+\begin{equation}
 \rho^{\star}
-=\frac{1}{1+\exp\!\sqrt{\mathrm{snr}+\mathrm{snr}^2/4}}\;<\tfrac12 .
+\approx\frac{1}{1+\exp\!\sqrt{\mathrm{snr}+\mathrm{snr}^2/4}}\;<\tfrac12, \quad \mathrm{snr}\equiv\delta^2/\sigma_{v,\pi}^2
 \label{eq:cross_cutoff}
-\end{align}
-For $\rho<\rho^{\star}$ the effect is instead larger at higher $\rho$.
+\end{equation}
 \end{prop}
 
-\begin{proof}
-\emph{Step 1 (cross-partial in terms of $V$).} Let posterior odds be
-$o'=o\,\Lambda$, where $o=\rho/(1-\rho)$ and
-$\Lambda=g(v_\pi)/g(v_\pi+\delta)$. Then $b=o'/(1+o')$, so
-$\partial b/\partial\ln o'=b(1-b)$ and
-$\partial\ln o'/\partial\rho=1/[\rho(1-\rho)]$. Hence
-\[
-\frac{\partial\bar b(\delta,\rho)}{\partial\rho}
-=\frac{V(\delta,\rho)}{\rho(1-\rho)},
-\qquad
-V(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(1-b)].
-\]
-Differentiating in $|\delta|$ (the order of differentiation may be exchanged
-since $b$ is smooth and the relevant integrals converge uniformly),
-\begin{align}
-\frac{\partial^2\bar b}{\partial|\delta|\,\partial\rho}
-=\frac{1}{\rho(1-\rho)}\,\frac{\partial V}{\partial|\delta|},\qquad
-\frac{\partial V}{\partial|\delta|}
-=\frac{2|\delta|}{\sigma^2}\,\frac{\partial V}{\partial \mathrm{snr}},
-\end{align}
-where the last equality uses $\mathrm{snr}=|\delta|^2/\sigma^2$. As the prefactor
-$2|\delta|/[\sigma^2\rho(1-\rho)]$ is strictly positive, the sign of the
-cross-partial equals the sign of $\partial V/\partial \mathrm{snr}$.
-
-\emph{Step 2 (the identity \eqref{eq:dVdsnr_identity}).} Write
-$b=\sigma_{\mathrm{l}}(x)$ with
-$\sigma_{\mathrm{l}}(x)=e^{x}/(1+e^{x})$, $x=\lambda+s$,
-$\lambda=\ln[\rho/(1-\rho)]$, and
-$s=\ln\Lambda=[(v_\pi+\delta)^2-v_\pi^2]/(2\sigma^2)\sim N(\mathrm{snr}/2,\mathrm{snr})$;
-hence $b(1-b)=\psi(x)$ with $\psi=\sigma_{\mathrm{l}}(1-\sigma_{\mathrm{l}})$,
-and $V$ depends on $(\delta,\sigma)$ only through $\mathrm{snr}$. Writing
-$s=\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z$ with $z\sim N(0,1)$,
-$V(\mathrm{snr})=\mathbb{E}_z[\psi(\lambda+\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z)]$, so
-\begin{align}
-\frac{\partial V}{\partial \mathrm{snr}}
-=\mathbb{E}_z\!\left[\psi'(x)\Big(\tfrac12+\tfrac{z}{2\sqrt{\mathrm{snr}}}\Big)\right]
-=\tfrac12\,\mathbb{E}_z[\psi'(x)+\psi''(x)],
-\end{align}
-where the second equality applies Stein's identity
-$\mathbb{E}_z[z\,\psi'(x)]=\sqrt{\mathrm{snr}}\,\mathbb{E}_z[\psi''(x)]$.
-Differentiating $\psi=b(1-b)$ along $x$ (so $\sigma_{\mathrm{l}}'=\psi$) gives
-$\psi'=b(1-b)(1-2b)$ and $\psi''=b(1-b)(1-6b+6b^2)$, whence
-$\psi'+\psi''=2\,b(1-b)^2(1-3b)$. Therefore
-$\partial V/\partial \mathrm{snr}=\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]$,
-which is \eqref{eq:dVdsnr_identity}.
-
-\emph{Step 3 (sign and the threshold $\rho^{\star}$).} By Steps~1--2, the
-cross-partial is negative iff $\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]<0$. The integrand
-is positive where $b<1/3$ and negative where $b>1/3$; raising $\rho$ raises $x$
-and hence $b$ for every realization $v_\pi$, so the weighted average $1-3b$ is
-decreasing in $\rho$ and crosses zero once. To approximate the cutoff, use the
-Laplace approximation
-\[
-V\approx(2\pi\,\mathrm{snr})^{-1/2}
-\exp\!\left[-\frac{(\lambda+\mathrm{snr}/2)^2}{2\,\mathrm{snr}}\right].
-\]
-Setting $\partial_{\mathrm{snr}}\ln V=0$ gives
-$\lambda^2=\mathrm{snr}+\mathrm{snr}^2/4$, and the root $\lambda<0$ is
-\eqref{eq:cross_cutoff}. The closed form \eqref{eq:cross_cutoff} tracks the
-exact root of \eqref{eq:dVdsnr_identity} increasingly closely as
-$\mathrm{snr}$ rises, as the table below shows:
-\begin{center}
-\begin{tabular}{cccc}
-\toprule
-$|\delta|/\sigma$ & $\mathrm{snr}=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
-\midrule
-$1$ & $1$ & $0.216$  & $0.246$\\
-$2$ & $4$ & $0.0532$ & $0.0558$\\
-$3$ & $9$ & $0.00438$ & $0.00446$\\
-\bottomrule
-\end{tabular}
-\end{center}
-\end{proof}
 
 
+which reduces current inflation expectations $e(\cdot)$ and implies higher continuation value $\Omega(\cdot)$. A lower inflation expectation not only improves the current inflation-output tradeoff (via the Phillips curve) but also reduces the cost of honoring the promised committed policy (via the composite promise term).
 
 \subsection{Long-term inflation forecasts}
 We now explore the implications of the reputation-sensitive policy difference for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
@@ -1743,7 +1659,85 @@ The optimization is from the perspective of the committed policymaker so that $\
 We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the outer loop has reached a fixed point in $z$.
 
 
-
+\section{Proof of Proposition \ref{prop:cross_partial}}
+\begin{proof}
+  \emph{Step 1 (cross-partial).} Let posterior odds be
+  $o'=o\,\Lambda$, where $o=\rho/(1-\rho)$ and
+  $\Lambda=g(v_\pi)/g(v_\pi+\delta)$. Then $b=o'/(1+o')$, so
+  $\partial b/\partial\ln o'=b(1-b)$ and
+  $\partial\ln o'/\partial\rho=1/[\rho(1-\rho)]$. Therefore
+  \[
+  \frac{\partial^2\bar b}{\partial|\delta|\,\partial\rho}
+  =
+  \frac{2|\delta|}{\sigma^2\rho(1-\rho)}
+  \frac{\partial}{\partial \mathrm{snr}}\mathbb{E}_{v_\pi}[b(1-b)],
+  \]
+  where the chain rule uses $\mathrm{snr}=|\delta|^2/\sigma^2$. Since the prefactor
+  $2|\delta|/[\sigma^2\rho(1-\rho)]$ is strictly positive, the sign of the
+  cross-partial equals the sign of
+  $\partial_{\mathrm{snr}}\mathbb{E}_{v_\pi}[b(1-b)]$.
+  
+  \emph{Step 2 (the identity \eqref{eq:dVdsnr_identity}).} Write
+  $b=\sigma_{\mathrm{l}}(x)$ with
+  $\sigma_{\mathrm{l}}(x)=e^{x}/(1+e^{x})$, $x=\lambda+s$,
+  $\lambda=\ln[\rho/(1-\rho)]$, and
+  $s=\ln\Lambda=[(v_\pi+\delta)^2-v_\pi^2]/(2\sigma^2)\sim N(\mathrm{snr}/2,\mathrm{snr})$;
+  hence $b(1-b)=\psi(x)$ with $\psi=\sigma_{\mathrm{l}}(1-\sigma_{\mathrm{l}})$.
+  Writing $s=\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z$ with $z\sim N(0,1)$,
+  \[
+  \mathbb{E}_{v_\pi}[b(1-b)]
+  =
+  \mathbb{E}_z[\psi(\lambda+\mathrm{snr}/2+\sqrt{\mathrm{snr}}\,z)].
+  \]
+  Differentiating with respect to $\mathrm{snr}$ gives
+  \begin{align}
+  \frac{\partial}{\partial \mathrm{snr}}\mathbb{E}_{v_\pi}[b(1-b)]
+  &=
+  \mathbb{E}_z\!\left[\psi'(x)\Big(\tfrac12+\tfrac{z}{2\sqrt{\mathrm{snr}}}\Big)\right]
+  =
+  \tfrac12\,\mathbb{E}_z[\psi'(x)+\psi''(x)],
+  \end{align}
+  where the second equality applies Stein's identity
+  $\mathbb{E}_z[z\,\psi'(x)]=\sqrt{\mathrm{snr}}\,\mathbb{E}_z[\psi''(x)]$.
+  Differentiating $\psi=b(1-b)$ along $x$ (so $\sigma_{\mathrm{l}}'=\psi$) gives
+  $\psi'=b(1-b)(1-2b)$ and $\psi''=b(1-b)(1-6b+6b^2)$, whence
+  \begin{equation}
+  \frac{\partial}{\partial \mathrm{snr}}\mathbb{E}_{v_\pi}[b(1-b)]
+  =
+  \mathbb{E}_{v_\pi}\!\left[b(1-b)^2(1-3b)\right].
+  \label{eq:dVdsnr_identity}
+  \end{equation}
+  
+  \emph{Step 3 (sign and the threshold $\rho^{\star}$).} By Steps~1--2, the
+  cross-partial is negative iff $\mathbb{E}_{v_\pi}[b(1-b)^2(1-3b)]<0$. The integrand
+  is positive where $b<1/3$ and negative where $b>1/3$; raising $\rho$ raises $x$
+  and hence $b$ for every realization $v_\pi$, so the weighted average $1-3b$ is
+  decreasing in $\rho$ and crosses zero once. To approximate the cutoff, use the
+  Laplace approximation
+  \[
+  \mathbb{E}_{v_\pi}[b(1-b)]
+  \approx
+  (2\pi\,\mathrm{snr})^{-1/2}
+  \exp\!\left[-\frac{(\lambda+\mathrm{snr}/2)^2}{2\,\mathrm{snr}}\right].
+  \]
+  Setting the derivative of the logarithm of the right-hand side with respect to
+  $\mathrm{snr}$ equal to zero gives
+  $\lambda^2=\mathrm{snr}+\mathrm{snr}^2/4$, and the root $\lambda<0$ is
+  \eqref{eq:cross_cutoff}. The closed form \eqref{eq:cross_cutoff} tracks the
+  exact root of \eqref{eq:dVdsnr_identity} increasingly closely as
+  $\mathrm{snr}$ rises, as the table below shows:
+  \begin{center}
+  \begin{tabular}{cccc}
+  \toprule
+  $|\delta|/\sigma$ & $\mathrm{snr}=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
+  \midrule
+  $1$ & $1$ & $0.216$  & $0.246$\\
+  $2$ & $4$ & $0.0532$ & $0.0558$\\
+  $3$ & $9$ & $0.00438$ & $0.00446$\\
+  \bottomrule
+  \end{tabular}
+  \end{center}
+  \end{proof}
 
 
 
