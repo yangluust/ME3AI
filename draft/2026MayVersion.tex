@@ -620,38 +620,49 @@ When the committed policymaker treats next-period reputation as exogenous to cur
 
 \begin{proof}
 Consider the optimization in Proposition \ref{prop:W2}. When next-period reputation is treated as exogenous to current policies, $\rho'$ no longer depends on $\delta$, so $\delta$ drops out of both the expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. The optimal $\delta^N$ therefore maximizes $\uline{u}(\alpha+\delta,e,\varsigma)-\mu(1-q)\delta$. Note that 
-\begin{align}
+\begin{align}\label{eq:foc_delta}
     \frac{\partial \uline{u}(\alpha+\delta,e,\varsigma)}{\partial \delta} = \frac{\partial \uline{u}(\alpha,e,\varsigma)}{\partial \alpha} -\left(1+\frac{\vartheta_x}{\kappa^2}\right)\delta
 \end{align}
 Because the opportunistic policy $\alpha$ is chosen to maximize the same momentary objective as the committed policymaker, $\partial \uline{u}(\alpha,e,\varsigma)/\partial \alpha=0$. Hence the optimal $\delta^N=-\mu(1-q)/(1+\vartheta_x/\kappa^2)$ that is independent of $\rho$ or $\varsigma$.
 \end{proof}
 
-The reputation-management channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, next-period reputation is governed by $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}), so a larger policy gap $\delta$ increases expected next-period reputation. The following proposition characterizes the strength of this reputation channel.
+The reputation channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, next-period reputation is governed by $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}), so a larger policy gap $\delta$ increases expected next-period reputation. The following proposition characterizes the strength of this reputation channel.
 
 \begin{prop}\label{prop:cross_partial}
-Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$ denote the expected posterior. A sharper signal raises the expected
-posterior, $\partial\bar b/\partial|\delta|>0$. This marginal effect is
-\textit{larger at lower $\rho$} if
-$\rho>\rho^{\star}$ and is \textit{larger at higher $\rho$} if $\rho<\rho^{\star}$, where
+Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$ denote the expected next-period reputation. A larger policy gap raises the expected
+next-period reputation, $\partial\bar b/\partial|\delta|>0$. This marginal effect is
+\textit{larger at lower $\rho$} if and only if
+$\rho>\rho^{\star}$, where
 \begin{equation}
 \rho^{\star}
-\approx\frac{1}{1+\exp\!\sqrt{\mathrm{snr}+\mathrm{snr}^2/4}}\;<\tfrac12, \quad \mathrm{snr}\equiv\delta^2/\sigma_{v,\pi}^2
+\approx\frac{1}{1+\exp\!\sqrt{\mathrm{snr}+\mathrm{snr}^2/4}}, \quad \mathrm{snr}\equiv\delta^2/\sigma_{v,\pi}^2
 \label{eq:cross_cutoff}
 \end{equation}
 \end{prop}
 
-Notice that the cutoff in $\rho$ is decreasing in the policy gap, which is an equilibrium object. We now turn to the main trade-off in choosing the policy gap. The benefit of a larger policy gap is more reputation gain, which implies a higher continuation value $\Omega(\cdot)$. The cost of larger policy gap is captured by the loss in momentary objective as the static optimal policy gap is zero. When reputation is not too low, the marginal effect of a larger policy gap on reputation gain is larger at lower reputation, whereas the marginal cost is invariant to the current reputation. 
+Notice that the cutoff $\rho^{\star}$ is decreasing in the policy gap. The closed form \eqref{eq:cross_cutoff} tracks the
+exact cutoff increasingly closely as
+$\mathrm{snr}$ rises, as the table below shows:
+\begin{center}
+\begin{tabular}{cccc}
+\toprule
+$|\delta|/\sigma$ & $\mathrm{snr}=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
+\midrule
+$1$ & $1$ & $0.216$  & $0.246$\\
+$2$ & $4$ & $0.0532$ & $0.0558$\\
+$3$ & $9$ & $0.00438$ & $0.00446$\\
+\bottomrule
+\end{tabular}
+\end{center}
+This creates a reinforcement mechanism. When reputation is above the cutoff, a decline in reputation strengthens the marginal effect of the policy gap on future reputation gains, giving the committed policymaker an incentive to widen the gap.\footnote{Future reputation gains are the benefit of widening the policy gap: they reduce inflation expectations $e(\cdot)$ and increase the continuation value $\Omega(\cdot)$. A lower $e(\cdot)$ improves the momentary inflation-output tradeoff and reduces the cost of honoring the promised committed policy through the composite promise term.} A wider policy gap, in turn, lowers the cutoff, expanding the range of reputation levels over which this marginal effect remains stronger at lower reputation.
 
 
-When $\mu>0$, a larger policy gap also reduces the cost of honoring the promised committed policy via the composite promise term. 
+The cost of widening the policy gap comes from the loss in the momentary objective, since the static optimal policy gap is zero. This marginal cost, given by \eqref{eq:foc_delta}, is invariant to current reputation. Thus, when the reinforcement mechanism is strong enough, \textit{the optimal policy gap is larger at lower reputation, provided reputation is not extremely low.} 
 
-Therefore, when reputation is not too low, the marginal effect of a larger policy gap on reputation gain is larger at lower reputation. This reputation gain increases continuation value $\Omega(\cdot)$. THowever, the marginal cost is invariant to the current reputation. 
+Because the strength of this reinforcement mechanism is determined in equilibrium, we next examine it quantitatively. In the calibrated model, which is fitted to U.S. inflation history, the optimal policy gap is indeed wider at lower reputation, and this pattern is robust to local parameter variation.
 
-In absence of the composite promise term, the monotoni
 
-which reduces current inflation expectations $e(\cdot)$ and implies higher continuation value $\Omega(\cdot)$. A lower inflation expectation not only improves the current inflation-output tradeoff (via the Phillips curve) but also reduces the cost of honoring the promised committed policy (via the composite promise term).
-
-\subsection{Calibration} 
+\subsection{Effect of reputation on policy difference in a calibrated model} 
 Table \ref{tab:calib} reports the calibrated values of important model parameters. One period is a quarter. The long-run inflation target $\pi^*$ is $1.5\%$, which lies in the 1 to 2 percent range frequently cited by central bankers advocating price stability.\footnote{This value matches  \cite{Shapiro2019} estimate based on FOMC transcripts 2000-2011. }
 The private sector and the committed type share a conventional quarterly discount factor based on a 2$\%$ annual real rate. 
 
@@ -697,7 +708,27 @@ The replacement probability of $q=.03$ implies an average regime duration of 8 y
 
 Beginning in the 1970s, many studies of inflation use an observable ``Food and Energy price shock"(FE shock hereafter).\footnote{See \citetalias{Gordon2013} and \cite{watson_inflation_2014}. It is constructed as the difference between the growth rate of the overall personal consumption deflator and its counterpart excluding food and energy.} We use the FE shock's serial correlation and its standard deviation as the cost-push shock's persistence $\xi_\varsigma$ and innovation volatility $\sigma _{v,\varsigma}$. The transition probability matrix $\varphi(\varsigma';\varsigma)$ is calibrated to approximate  $\varsigma'=\xi_{\varsigma}\varsigma + v_{\varsigma}$ where $v_{\varsigma}\sim N(0,\sigma^2_{v,\varsigma})$.\footnote{We use the \cite{rouwenhorst_asset_1995} method.} To calibrate the standard deviation of implementation errors, we combined the FE shock and the SPF one-quarter-ahead inflation forecast in an initial approximation to opportunistic intended inflation $\alpha$, estimating the standard deviation of $(\pi-\alpha)$ over 1964Q4-1979Q2.
 
+Figure \ref{fig:delta_rho_states} reports the equilibrium policy difference $\delta(\varsigma,\rho,\mu)$ computed under the calibrated parameters. Panel (a) varies the cost-push shock $\varsigma$ while holding the pseudo state $\mu$ fixed at its steady-state level under $\rho=1$ and $\varsigma=0$. Panel (b) varies $\mu$ while holding $\varsigma=0$ fixed. In all cases, the equilibrium policy difference becomes more negative as reputation $\rho$ declines. Quantitatively, $\delta$ ranges from 0 to about $-3\sigma_{v,\pi}$.
 
+We also vary several more controversial parameters: the Phillips-curve output slope $\kappa$ is set to $0.025$, the output weight $\vartheta_x$ to $0.025$ and $0.4$, and the standard deviation of implementation errors to $0.6\%$ and $2.5\%$. The same qualitative pattern persists in all cases: the equilibrium policy difference widens at lower levels of reputation $\rho$.\footnote{When equilibrium opportunistic inflation is very low, for example when $\vartheta_x=0.025$ and $\varsigma=-1\%$, the equilibrium policy difference becomes positive but still increases in magnitude as reputation declines.}
+
+\begin{figure}[H]
+\centering
+\caption[Policy difference across reputation states]{Policy difference across reputation states.}
+\begin{subfigure}{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth]{2026JunFig/delta_dr_vs_rho_mu002422_squigs.png}
+\caption{Varying cost-push shocks}
+\end{subfigure}
+\hfill
+\begin{subfigure}{0.48\textwidth}
+\centering
+\includegraphics[width=\linewidth]{2026JunFig/delta_dr_vs_rho_squig0_mus.png}
+\caption{Varying pseudo states}
+\end{subfigure}
+\footnotesize{The vertical axis reports annualized rates in percentage points.}
+\label{fig:delta_rho_states}
+\end{figure}
 
 \subsection{Long-term inflation forecasts}
 We now explore the implications of the reputation-sensitive policy difference for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
@@ -1732,20 +1763,7 @@ We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the out
   Setting the derivative of the logarithm of the right-hand side with respect to
   $\mathrm{snr}$ equal to zero gives
   $\lambda^2=\mathrm{snr}+\mathrm{snr}^2/4$, and the root $\lambda<0$ is
-  \eqref{eq:cross_cutoff}. The closed form \eqref{eq:cross_cutoff} tracks the
-  exact root of \eqref{eq:dVdsnr_identity} increasingly closely as
-  $\mathrm{snr}$ rises, as the table below shows:
-  \begin{center}
-  \begin{tabular}{cccc}
-  \toprule
-  $|\delta|/\sigma$ & $\mathrm{snr}=|\delta|^2/\sigma^2$ & $\rho^{\star}$ (exact) & $\rho^{\star}$ (formula \eqref{eq:cross_cutoff})\\
-  \midrule
-  $1$ & $1$ & $0.216$  & $0.246$\\
-  $2$ & $4$ & $0.0532$ & $0.0558$\\
-  $3$ & $9$ & $0.00438$ & $0.00446$\\
-  \bottomrule
-  \end{tabular}
-  \end{center}
+  \eqref{eq:cross_cutoff}. 
   \end{proof}
 
 
