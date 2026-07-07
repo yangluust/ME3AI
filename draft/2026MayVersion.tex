@@ -188,47 +188,57 @@ game, optimal monetary policy, forward-looking expectations
 \newpage \setcounter{page}{1}
 
 \setcounter{page}{0}
-\begin{nberonly}
+%\begin{nberonly}
 \begin{quote}
-{\color{webbrown} ``In reality, however, the anchoring of inflation
-expectations has been a hard-won achievement of monetary policy over the
-past few decades, and we should not take this stability for granted. [...] a
-policy of achieving ``temporarily" higher inflation over the medium term
-would run the risk of altering inflation expectations beyond the horizon
-that is desirable. Were that to happen, the costs of bringing expectations
-back to their current anchored state might be quite high.''}\newline
-(Donald L. Kohn, ``Monetary Policy Research and the Financial Crisis:
-Strengths and Shortcomings", October 9, 2009)
+{\color{webbrown} ``Zero inflation is optimal with the assumed cost function if commitments are not only made but are also fully believed. In the present context credibility is tempered by the possibility that the policy-maker is type 2 [lacks commitment ability]. In this case the best value to commit to need no longer be zero inflation.''}\newline
+(\cite{barro_reputation_1986}, page 17)
 \end{quote}
-\end{nberonly}
+%\end{nberonly}
 
-\newpage
+%\newpage
 \section{Introduction}
 \setcounter{page}{1}
 
 \baselineskip17pt
 
-``Zero inflation is optimal with the assumed cost function if commitments are not only made but are also fully believed. In the present context credibility is tempered by the possibility that the policy-maker is type 2 [lacks commitment ability]. In this case the best value to commit to need no longer be zero inflation" (\cite{barro_reputation_1986}, page 17).
-
-Since the 1970s, the distinction between macroeconomic policies with and without commitment has become familiar to macroeconomists and policymakers. Optimal policies with commitment achieve superior macroeconomic outcomes due to
-\textit{strategic power} over private agents' expectations. An implicit assumption supporting such strategic power is that private agents believe that policymakers will follow through on the committed policies. 
-
-However, commitment capacity is not observable, so there may be misalignment between private agent perceptions and actual
-policymaker commitment capacity. Such misalignment can only be resolved over time as enough policy outcomes are observed. Acknowledging this aspect of reality raises many questions.
-What is optimal committed policy taking into account private agent skepticism and learning about policy commitment? Will private agent perceptions of policy commitment affect the optimal policy without commitment? Is private agent skepticism and learning relevant for understanding macroeconomic outcomes?
-
-Managing expectations is central to monetary policy decisions, because inflation expectations are important for economic activities (\cite{coibion_how_2018}) and inflation dynamics (\cite{beaudry_dominant_2024}), and are responsive to central bank policy communication (\cite{hansen_first_2016}, \cite{haldane_central_2018}, \cite{blinder_central_2024}).
 
 
-This paper develops a theory of how inflation expectations respond to monetary policy, emphasizing the role of purposeful policymakers who strategically influence private-sector learning and expectation formation. We show how to bring the theory to the data and use it to account for the joint dynamics of U.S. inflation and inflation expectations. Empirically, we validate the model’s prediction about the evolving sensitivity of long-term inflation forecasts to inflation surprises.
+Since the 1970s, a large literature, pioneered by Lucas, Sargent, Kydland, and
+Prescott,\footnote{See \cite{lucas_after_1979} and \cite{kydland_rules_1977}.}
+has emphasized the importance of policymaker commitment capacity in economic
+policy. Commitment gives policymakers \textit{strategic power} over private
+agents' expectations, so its absence can radically change both positive and
+normative outcomes.
 
-We employ a variant of the textbook New Keynesian (NK) model featuring forward-looking inflation dynamics, purposeful policymakers with a dual mandate to stabilize inflation and output, and stochastic regime changes.\footnote{A regime is a time interval during which outcomes are interpreted as the choices of a single policymaker.} The committed policymaker follows an ex-ante optimal, state-contingent inflation plan, while the opportunistic policymaker chooses inflation sequentially to maximize short-term objectives. Private agents do not observe the policymaker's type or chosen inflation directly; instead, they observe noisy realizations of inflation, which they use to update beliefs about the likelihood that the policymaker is committed—this belief constitutes the policymaker’s \textit{reputation}—and to form expectations about future inflation.  
+Subsequent work has increasingly recognized that private-sector learning is central to these issues because policymaker commitment capacity is inherently \textit{unobservable}. A substantial body of literature now integrates private-sector learning into the theory of economic policy.\footnote{See, among many others, \cite{barro_reputation_1986}, \cite{backus_inflation_1985}, \cite{phelan_public_2006}, and \cite{dovis_reputation_2022}.} Yet an important gap remains: little research studies purposeful policies with commitment that actively seek to steer private agents' learning.
 
-A key conceptual result is that high reputation narrows the equilibrium policy gap between the two types, as the opportunistic policymaker is less tempted to deviate. In contrast, low reputation widens the gap, as the committed type has stronger incentives to accelerate private-sector learning. We show that this mechanism is essential for quantitatively matching salient features of U.S. inflation history, e.g., the Volcker disinflation, and for explaining the time-varying response of long-term inflation forecast revisions to inflation surprises.
+This gap raises three related questions. What is the optimal committed policy
+when private agents are skeptical and learn about commitment over time? Do
+private agents' perceptions of commitment affect policy without commitment? Is
+private-agent skepticism and learning important for understanding economic outcomes?
 
-Our modeling approach builds on a mass literature, pioneered by Lucas, Sargent, Kydland and Prescott, that stresses the importance of policymaker commitment capacity in economic policy. \cite{lucas_after_1979} showed that traditional econometric models were inappropriate for analysis of exogenous policy rules when rational expectations is coupled with forward-looking private sector behavior. \cite{kydland_rules_1977} took the next step by incorporating purposeful policymakers into theoretical macroeconomic environments, formulated as dynamic games. They stressed the importance of policymaker commitment capacity, showing how its absence could radically change positive and normative outcomes. In the extensive elaboration of these insights over the ensuing decades, there has been growing recognition that private sector learning is important and, indeed, that policymaker commitment capacity is inherently \textit{unobservable}. A substantial body of literature now integrates private sector learning into the theory of economic policy.\footnote{See for examples: \cite{barro_reputation_1986}, \cite{backus_inflation_1985}, \cite{phelan_public_2006}, \cite{dovis_reputation_2022}.} Yet, an important gap remains as little research features purposeful policymakers who actively seek to steer the learning of private agents.
+This paper answers these questions in a variant of the textbook New Keynesian (NK) model featuring forward-looking inflation dynamics. The model features purposeful policymakers with a dual mandate to stabilize inflation and output, and stochastic regime changes.\footnote{A regime is a time interval during which outcomes are interpreted as the choices of a single policymaker.} The committed policymaker follows an ex-ante optimal, state-contingent inflation plan, while the opportunistic policymaker chooses inflation sequentially to maximize short-term objectives. Private agents do not observe the policymaker's type or intended inflation directly; instead, they observe noisy realizations of inflation, which they use to update beliefs about the likelihood that the policymaker is committed—this belief constitutes the policymaker’s \textit{reputation}—and to form expectations about future inflation.  
 
-This paper shows how to close this gap. We use the insights of modern contract theory (mechanism design) to develop a computable recursive equilibrium for a dynamic game with two types of purposeful policymakers, one which can commit and one which cannot, and private agents who learn policymaker type in a Bayesian manner. Forward-looking behavior of private agents, coupled with both types of policymakers being purposeful, necessitates our novel theoretical approach.
+We choose a NK framework because it is a standard framework for monetary policy
+analysis and because managing inflation expectations is central to monetary
+policy decisions.\footnote{Inflation expectations are important for economic
+activities (\cite{coibion_how_2018}) and inflation dynamics
+(\cite{beaudry_dominant_2024}), and are responsive to central bank policy
+communication (\cite{hansen_first_2016}, \cite{haldane_central_2018},
+\cite{blinder_central_2024}).} Our theory sheds light on how inflation
+expectations respond to monetary policy, emphasizing the role of purposeful policymakers who 
+strategically influence private-sector learning and expectation 
+formation. We
+show how to bring the theory to the data and use it to account for the
+time-varying sensitivity of long-term inflation forecasts to inflation surprises
+and for the joint dynamics of U.S. inflation and inflation expectations.
+
+We use the insights of modern contract theory (mechanism design) to develop a
+computable recursive equilibrium for a dynamic game with two policymaker types,
+one committed and one opportunistic, and private agents who learn the
+policymaker's type in a Bayesian manner. The combination of forward-looking
+private agents and purposeful policymakers necessitates our novel theoretical
+approach.
 
 \paragraph{Why new methodology is necessary} Earlier studies examine the interaction between optimal policy and reputation under intra-temporal expectations, where the expected policy takes place in the same period in which expectations are formed \citep{cukierman_optimal_1991, king_managing_2008, lu_optimal_2013, Dovis_2021}. This timing assumption makes the dynamic game tractable by allowing it to be solved through backward induction, which no longer applies once expectations are forward-looking. Forward-looking expectations create a two-way intertemporal interaction between policies: current policies affect reputation and therefore future strategic policy choices, while future policies affect current expectations and, in turn, the effectiveness of current policy.\footnote{To avoid these intertemporal interactions in a reputation game with forward-looking expectations, the committed policymaker is either assumed to be an automaton \citep{amador_reputation_2021, morelli_information_2023}, or to ignore the effect of policy on its reputation \citep{clayton_internationalizing_2025}.} 
 
