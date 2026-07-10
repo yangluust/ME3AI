@@ -690,10 +690,10 @@ Consider the optimization in Proposition \ref{prop:W2}. When next-period reputat
 Because the opportunistic policy $\alpha$ is chosen to maximize the same momentary objective as the committed policymaker, $\partial \uline{u}(\alpha,e,\varsigma)/\partial \alpha=0$. Hence the optimal $\delta^N=-\mu(1-q)/(1+\vartheta_x/\kappa^2)$ that is independent of $\rho$ or $\varsigma$.
 \end{proof}
 
-The reputation channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, next-period reputation is governed by $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}), so a larger policy gap $\delta$ increases expected next-period reputation. The following proposition characterizes the strength of this reputation channel.
+The reputation channel therefore shapes the effect of current reputation on the policy gap. From the perspective of the committed policymaker, next-period reputation is governed by $b(v_\pi,v_\pi+\delta,\rho)$ in (\ref{eq:W2}), so a wider policy gap $\delta$ raises expected next-period reputation. The following proposition characterizes the strength of this reputation channel.
 
 \begin{prop}\label{prop:cross_partial}
-Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$ denote the expected next-period reputation. A larger policy gap raises the expected
+Let $\bar b(\delta,\rho)\equiv\mathbb{E}_{v_\pi}[b(v_\pi,v_\pi+\delta,\rho)]$ denote the expected next-period reputation. A wider policy gap raises the expected
 next-period reputation, $\partial\bar b/\partial|\delta|>0$. This marginal effect is
 \textit{larger at lower $\rho$} if and only if
 $\rho>\rho^{\star}$, where
@@ -706,7 +706,7 @@ $\rho>\rho^{\star}$, where
 
 Notice that the cutoff $\rho^{\star}$ is decreasing in the policy gap. The closed form \eqref{eq:cross_cutoff} tracks the
 exact cutoff increasingly closely as
-$\mathrm{snr}$ rises, as the table below shows:
+the policy gap widens, shown in the table below:
 \begin{center}
 \begin{tabular}{cccc}
 \toprule
@@ -718,7 +718,7 @@ $3$ & $9$ & $0.00438$ & $0.00446$\\
 \bottomrule
 \end{tabular}
 \end{center}
-This creates a reinforcement mechanism. When reputation is above the cutoff, a decline in reputation strengthens the marginal effect of the policy gap on future reputation gains, giving the committed policymaker an incentive to widen the gap.\footnote{Future reputation gains are the benefit of widening the policy gap: they reduce inflation expectations $e(\cdot)$ and increase the continuation value $\Omega(\cdot)$. A lower $e(\cdot)$ improves the momentary inflation-output tradeoff and reduces the cost of honoring the promised committed policy through the composite promise term.} A wider policy gap, in turn, lowers the cutoff, expanding the range of reputation levels over which this marginal effect remains stronger at lower reputation.
+This creates a \textit{reinforcement mechanism}. When reputation is above the cutoff, a decline in reputation strengthens the marginal effect of the policy gap on future reputation gains, giving the committed policymaker an incentive to widen the gap.\footnote{Future reputation gains are the benefit of widening the policy gap: they reduce inflation expectations $e(\cdot)$ and increase the continuation value $\Omega(\cdot)$. A lower $e(\cdot)$ improves the momentary inflation-output tradeoff and reduces the cost of honoring the promised committed policy through the composite promise term.} A wider policy gap, in turn, lowers the cutoff, expanding the range of reputation levels over which this marginal effect remains stronger at lower reputation.
 
 
 The cost of widening the policy gap comes from the loss in the momentary objective, since the static optimal policy gap is zero. This marginal cost, given by \eqref{eq:foc_delta}, is invariant to current reputation. Thus, when the reinforcement mechanism is strong enough, \textit{the optimal policy gap is wider at lower reputation, provided reputation is not extremely low.} 
@@ -774,7 +774,7 @@ Beginning in the 1970s, many studies of inflation use an observable ``Food and E
 
 Figure \ref{fig:delta_rho_states} reports the equilibrium policy gap $\delta(\varsigma,\rho,\mu)$ computed under the calibrated parameters. Panel (a) varies the cost-push shock $\varsigma$ while holding the pseudo state $\mu$ fixed at its steady-state level under $\rho=1$ and $\varsigma=0$. Panel (b) varies $\mu$ while holding $\varsigma=0$ fixed. In all cases, the equilibrium policy gap becomes more negative as reputation $\rho$ declines. Quantitatively, $\delta$ ranges from 0 to about $-3\sigma_{v,\pi}$.
 
-We also vary several more controversial parameters: the Phillips-curve output slope $\kappa$ is set to $0.025$, the output weight $\vartheta_x$ to $0.025$ and $0.4$, and the standard deviation of implementation errors to $0.6\%$ and $2.5\%$. The same qualitative pattern persists in all cases: the equilibrium policy gap widens at lower levels of reputation $\rho$.\footnote{When equilibrium opportunistic inflation is very low, for example when $\vartheta_x=0.025$ and $\varsigma=-1\%$, the equilibrium policy gap becomes positive but still increases in magnitude as reputation declines.}
+We also vary several more controversial parameters: the Phillips-curve slope $\kappa$ is reduced to $0.025$, the output weight $\vartheta_x$ decreased to $0.025$ and increased to $0.4$, and the standard deviation of implementation errors $\sigma_{v,\pi}$ reduced to $0.6\%$ and enlarged to $2.5\%$. The same qualitative pattern persists in all cases: the equilibrium policy gap widens at lower levels of reputation $\rho$.\footnote{When equilibrium opportunistic inflation is very low, for example when $\vartheta_x=0.025$ and $\varsigma=-1\%$, the equilibrium policy gap becomes positive but still increases in magnitude as reputation declines.}
 
 \begin{figure}[H]
 \centering
@@ -795,7 +795,7 @@ We also vary several more controversial parameters: the Phillips-curve output sl
 \end{figure}
 
 \subsection{Long-term inflation forecasts}
-We now explore the implications of the reputation-sensitive policy gap for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect changes in reputation, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
+We now explore the implications of the reputation-sensitive policy gap for long-term inflation forecast revisions. In our model, long-term inflation forecasts serve as a proxy for policymaker reputation: forecast revisions reflect reputation evolution, and their sensitivity to inflation surprises captures the speed of private-sector learning. We then provide empirical evidence that this sensitivity varies over time in a manner consistent with our model.
 
 \subsubsection{Long-term inflation forecast proportional to reputation}
 Our theory implies that long-term inflation forecasts depend solely on reputation, not on cost-push shocks, because cost-push shocks are stationary and their influence becomes negligible at long horizons. Formally, the period-$t$ long-term inflation forecast is given by:
@@ -813,9 +813,9 @@ Approximating reputation dynamics around the period-$t$ nowcast, $[\rho_t a_t + 
 \rho_{t+1} - \rho_t \approx k \{\underbrace{\rho_t(1 - \rho_t)(a_t - \alpha_t)}_{\text{time-varying sensitivity}}  \}
 \{\underbrace{\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]}_{\text{inflation surprise}} \}
 \end{equation}
-where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation if and only if the policy gap $a_t - \alpha_t$ is negative.
+where $k > 0$ depends inversely on the volatility of implementation errors, and the term $\pi_t - [\rho_t a_t + (1 - \rho_t) \alpha_t]$ represents the inflation surprise. Under this approximation, the expected change in reputation is zero, and a positive inflation surprise reduces reputation if and only if the policy gap $\delta_t = a_t - \alpha_t$ is negative.
 
-Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy gap. Strategic reputation management implies that lower reputation leads to a wider policy gap. Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy gap.
+Notably, the coefficient on the inflation surprise -- the first term in braces -- depends on reputation both directly and indirectly through the policy gap. \textit{Strategic reputation management implies that lower reputation leads to a wider policy gap.} Thus, the overall sensitivity of reputation to inflation surprises increases with $[\rho(1 - \rho)](1 - \rho)$, where the second $(1 - \rho)$ captures the reduced-form effect of reputation on policy gap.
 
 Finally, \eqref{eq:LTF} implies a linear relationship between reputation and long-term inflation forecasts. Consequently, revisions in long-term forecasts inherit the time-varying sensitivity of reputation changes to inflation surprises.
 
@@ -829,7 +829,7 @@ To construct the ``inflation surprise", we utilize the ``backcast" estimate of t
 v_{t}^{i}=f_{t|t+1}^{i}-f_{t|t}^{i}
 \]
 The ``backcast" $f_{t|t+1}^{i}$ is the realized CPI inflation in $t$ as perceived by the forecaster $i$. $f_{t|t}^{i}$ is the same forecaster's ``nowcast" of inflation of the same quarter. 
-For each forecaster, we can also construct the 10-year forecast revision:\footnote{The SPF 10-year CPI forecast is a fixed-event measure (inflation over the 10 years starting from the previous year’s Q4). Hence part of the reported object is already realized by the survey date, we therefore remove the realized portion to obtain a purely forward-looking adjusted 10-year forecast. Appendix \ref{sec:adjustedCPI10} reports the details of such adjustments.}
+For each forecaster, we can also construct the 10-year forecast revision:\footnote{The SPF 10-year CPI forecast is a fixed-event measure (inflation over the 10 years starting from the previous year’s Q4). Hence part of the reported object is already realized by the survey date, we therefore remove the realized portion to obtain a purely forward-looking adjusted 10-year forecast. Appendix \ref{sec:adjustedCPI10} reports the details of such adjustments, following \cite{aruoba_term_2020}.}
 \[
 v_{10y,t}^{i}=f_{t+10y|t+1}^{i}-f_{t+10y|t}^{i}.
 \]
@@ -1762,8 +1762,72 @@ The optimization is from the perspective of the committed policymaker so that $\
 ,\mu )$ and $U(\varsigma,\rho,\eta)$ functions to obtain $e(\delta ,\mu ^{\prime };\varsigma ,\rho )$ and $\Omega(\delta,\mu^{\prime};\varsigma, \rho)$; (ii) optimize over $(\delta ,\mu ^{\prime })$; (iii) construct new $a$ and $\alpha$ functions from optimal $e$ and $\delta$; and (iv) construct a new $U$ function. Within the inner loop, we iterate until the policy functions converge.\footnote{Bayesian learning makes this not a linear-quadratic problem. In view of Proposition \ref{prop:W2}, we use direct maximization as part of a projection method to obtain a global solution. Overall, we employ a variant of the ``dynamic programming with a rational expectations constraint" as sometimes advocated for calculating optimal policy under commitment.}
 We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the outer loop has reached a fixed point in $z$.
 
+\section{Supplementary Materials for Strategic Reputation Management}
 
-\section{Proof of Proposition \ref{prop:cross_partial}}
+\subsection{Optimization of a naive committed policymaker}\label{app:counter}
+The key departure from the benchmark model is that the committed type
+optimizes as if the reputation is a given parameter $\rho $. When the
+reputation is no longer a function of the inflation shock $\pi $ (at least
+in the committed type's optimization), there is no channel for the current $%
+\pi _{t}$ to affect future state variables.\footnote{Recall that the lagrangian
+multiplier $\gamma _{t}$ is chosen before the realization of $\pi _{t}$ and
+it will determine the next-period pseudo state variable.}
+
+This observation helps us to reduce the forwarding expectation constraint
+to:  
+\[
+e_{t}=\beta E_{t}\pi _{t+1}=\beta \left( 1-q\right) \sum_{\varsigma
+_{t+1}}\varphi \left( \varsigma _{t+1};\varsigma _{t}\right) \left[ \rho
+a\left( h_{t+1}\right) +\left( 1-\rho \right) \alpha \left( h_{t+1}\right) %
+\right] +\beta q\sum_{\varsigma _{t+1}}\varphi \left( \varsigma
+_{t+1};\varsigma _{t}\right) z\left( h_{t+1}\right) 
+\]%
+because $a_{t+1}$, $\alpha _{t+1}$, and $z_{t+1}$  are independent of $\pi
+_{t}$. As a result, we avoid carrying the likelihood ratio $\lambda \left(
+h_{t+1}\right) \equiv\frac{g\left( \pi _{t}|\alpha _{t}\right) }{g\left( \pi
+_{t}|a_{t}\right) }$ as a state variable.
+
+The recursive form of the naive optimization of the committed policymaker is%
+\begin{eqnarray*}
+W\left( \varsigma _{t},\eta _{t};\rho \right)  &=&\min_{\gamma }\max_{a,e}%
+\underline{u}(a_{t},e_{t},\varsigma _{t})+\gamma _{t}e_{t}-\left( 1-q\right)
+\eta _{t}\left[ \rho a_{t}+\left( 1-\rho \right) \alpha _{t}\right] -q\eta
+_{t}z\left( \varsigma _{t},\rho \right)  \\
+&&+\beta _{a}\left( 1-q\right) \sum_{\varsigma _{t+1}}\varphi \left(
+\varsigma _{t+1};\varsigma _{t}\right) W\left( \varsigma _{t+1},\eta
+_{t+1};\rho \right) 
+\end{eqnarray*}%
+subject to%
+\[
+\alpha _{t}=Ae_{t}+B\left( \varsigma _{t}\right) 
+\]%
+with%
+\[
+\eta _{t+1}=\frac{\beta }{\beta _{a}\left( 1-q\right) }\gamma _{t}\text{
+with }\gamma _{-1}=0.
+\]
+
+\bigskip 
+
+Given $z\left( \varsigma _{t},\rho \right) $, the optimization yields the
+following policy rules: $a\left( \varsigma _{t},\eta _{t};\rho \right)$, $e\left( \varsigma _{t},\eta _{t};\rho \right)$, and $\gamma\left( \varsigma _{t},\eta _{t};\rho \right)$. The fixed point requires
+\[
+z\left( \varsigma _{t},\rho \right) =\rho a\left( \varsigma _{t},0;\rho
+\right) +\left( 1-\rho \right) \left[ Ae\left( \varsigma _{t},0;\rho \right)
++B\left( \varsigma _{t}\right) \right] 
+\]
+
+
+The policy function under the setup of naive committed policymaker are denoted by
+\begin{align*}
+& a^N(\varsigma,\rho,\mu) \\
+& \alpha^N(\varsigma,\rho,\mu) \\
+& \mu'^N(\varsigma,\rho,\mu)
+\end{align*}
+
+
+
+\subsection{Proof of Proposition \ref{prop:cross_partial}}
 \begin{proof}
   \emph{Step 1 (cross-partial).} Let posterior odds be
   $o'=o\,\Lambda$, where $o=\rho/(1-\rho)$ and
@@ -1831,7 +1895,43 @@ We then calculate a new $z(\varsigma,\rho)$ and repeat the process until the out
   \end{proof}
 
 
-
+  \subsection{Adjusting long-term inflation expectation}\label{sec:adjustedCPI10}
+  The SPF 10-year CPI forecast is a \emph{fixed-event} forecast: in each survey quarter, it refers to inflation over the 10-year period beginning with the previous year's Q4. For the first-quarter survey, there is no realized inflation included within this 10-year window. However, as the survey moves to later quarters in the year, the raw CPI10 measure mechanically includes progressively more realized inflation. As a result, part of the reported value reflects inflation that is already known by the time of the survey and must be removed to obtain a measure that is genuinely forward-looking.
+  
+  We index each survey by its year $y$ and quarter $q \in \{1,2,3,4\}$, so $(y,1)$ denotes the first quarter of year $y$, $(y,2)$ the second, and so on.
+  Let $\pi_{a \to b}$ denote annualized quarterly inflation between quarters $a$ and $b$, and use the continuous-compounding approximation. The corresponding forward-looking measurements for each forecaster $i$ are
+  \begin{align}
+  x_{i,(y,1)} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
+   + \varepsilon_{i,(y,1)}, \\
+  x_{i,(y,2)} &= \frac{1}{39}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
+   + \varepsilon_{i,(y,2)}, \\
+  x_{i,(y,3)} &= \frac{1}{38}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
+   + \varepsilon_{i,(y,3)}, \\
+  x_{i,(y,4)} &= \frac{1}{37}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
+   + \varepsilon_{i,(y,4)}.
+  \end{align}
+  Under this quarterly representation, each realized inflation term enters the raw 10-year forecast with weight $1/40$, but the adjusted object re-averages only over the remaining forward-looking quarters. Thus Q2 rescales by $39$, Q3 rescales by $38$, and Q4 rescales by $37$. 
+  
+  To make this adjustment, we use \texttt{CPI1} as the realized inflation term. \texttt{CPI1} represents each individual's reported inflation for the quarter preceding the survey date, providing a direct measure of information available to the forecaster. The adjusted long-term inflation expectation is then constructed as follows:
+  \begin{align}
+  x_{i,(y,1)} &\equiv \text{CPI10}_{i,(y,1)}, \\
+  x_{i,(y,2)} &\equiv
+   \frac{40\cdot\text{CPI10}_{i,(y,2)} - \text{CPI1}_{i,(y,2)}}{39}, \\
+  x_{i,(y,3)} &\equiv
+   \frac{40\cdot\text{CPI10}_{i,(y,3)}
+   - \left(\text{CPI1}_{i,(y,2)} + \text{CPI1}_{i,(y,3)}\right)}{38}, \\
+  x_{i,(y,4)} &\equiv
+   \frac{40\cdot\text{CPI10}_{i,(y,4)}
+   - \left(\text{CPI1}_{i,(y,2)} + \text{CPI1}_{i,(y,3)}
+   + \text{CPI1}_{i,(y,4)}\right)}{37}.
+  \end{align}
+  
+  The main text uses $f_{t+10y|t}^{i}$ to denote the fixed-event 10-year CPI expectation made by forecaster $i$ at survey date $t$. $x_{i,(y, q)}$ here represents the same individual expectation for the corresponding survey. That is,
+  \[
+  f_{t+10y|t}^{i} \equiv x_{i,(y, q)} \quad \text{where } t = (y, q).
+  \]
+  
+  
 
 
 
@@ -2389,68 +2489,7 @@ Section \ref{sec:inflfit} demonstrates that the smoothed estimates of inflation 
 \end{figure}
 
 
-\section{Counterfactual with Naive Committed Policy}\label{app:counter}
-\subsection{Optimization of a naive committed policymaker}
-The key departure from the benchmark model is that the committed type
-optimizes as if the reputation is a given parameter $\rho $. When the
-reputation is no longer a function of the inflation shock $\pi $ (at least
-in the committed type's optimization), there is no channel for the current $%
-\pi _{t}$ to affect future state variables.\footnote{Recall that the lagrangian
-multiplier $\gamma _{t}$ is chosen before the realization of $\pi _{t}$ and
-it will determine the next-period pseudo state variable.}
-
-This observation helps us to reduce the forwarding expectation constraint
-to:  
-\[
-e_{t}=\beta E_{t}\pi _{t+1}=\beta \left( 1-q\right) \sum_{\varsigma
-_{t+1}}\varphi \left( \varsigma _{t+1};\varsigma _{t}\right) \left[ \rho
-a\left( h_{t+1}\right) +\left( 1-\rho \right) \alpha \left( h_{t+1}\right) %
-\right] +\beta q\sum_{\varsigma _{t+1}}\varphi \left( \varsigma
-_{t+1};\varsigma _{t}\right) z\left( h_{t+1}\right) 
-\]%
-because $a_{t+1}$, $\alpha _{t+1}$, and $z_{t+1}$  are independent of $\pi
-_{t}$. As a result, we avoid carrying the likelihood ratio $\lambda \left(
-h_{t+1}\right) \equiv\frac{g\left( \pi _{t}|\alpha _{t}\right) }{g\left( \pi
-_{t}|a_{t}\right) }$ as a state variable.
-
-The recursive form of the naive optimization of the committed policymaker is%
-\begin{eqnarray*}
-W\left( \varsigma _{t},\eta _{t};\rho \right)  &=&\min_{\gamma }\max_{a,e}%
-\underline{u}(a_{t},e_{t},\varsigma _{t})+\gamma _{t}e_{t}-\left( 1-q\right)
-\eta _{t}\left[ \rho a_{t}+\left( 1-\rho \right) \alpha _{t}\right] -q\eta
-_{t}z\left( \varsigma _{t},\rho \right)  \\
-&&+\beta _{a}\left( 1-q\right) \sum_{\varsigma _{t+1}}\varphi \left(
-\varsigma _{t+1};\varsigma _{t}\right) W\left( \varsigma _{t+1},\eta
-_{t+1};\rho \right) 
-\end{eqnarray*}%
-subject to%
-\[
-\alpha _{t}=Ae_{t}+B\left( \varsigma _{t}\right) 
-\]%
-with%
-\[
-\eta _{t+1}=\frac{\beta }{\beta _{a}\left( 1-q\right) }\gamma _{t}\text{
-with }\gamma _{-1}=0.
-\]
-
-\bigskip 
-
-Given $z\left( \varsigma _{t},\rho \right) $, the optimization yields the
-following policy rules: $a\left( \varsigma _{t},\eta _{t};\rho \right)$, $e\left( \varsigma _{t},\eta _{t};\rho \right)$, and $\gamma\left( \varsigma _{t},\eta _{t};\rho \right)$. The fixed point requires
-\[
-z\left( \varsigma _{t},\rho \right) =\rho a\left( \varsigma _{t},0;\rho
-\right) +\left( 1-\rho \right) \left[ Ae\left( \varsigma _{t},0;\rho \right)
-+B\left( \varsigma _{t}\right) \right] 
-\]
-
-
-The policy function under the setup of naive committed policymaker are denoted by
-\begin{align*}
-& a^N(\varsigma,\rho,\mu) \\
-& \alpha^N(\varsigma,\rho,\mu) \\
-& \mu'^N(\varsigma,\rho,\mu)
-\end{align*}
-
+\section{Counterfactual with Naive Committed Policy}
 
 \subsection{Constructing counterfactual time series}
 Initialization step for $t=1$: $\rho_1^{N,j}=\hat{\rho}_1^j$ and $\mu_1^{N,j}=\hat{\mu}_1^j$ for $\Theta_1=j$. $\{\hat{\varsigma}^j_t\}_{t=1}^T$, $\{\hat{v}_{\pi,t}^j\}_{t=1}^T$, and $\{Pr(\Theta_t=j|Y^T)\}_{t=1}^T$ are smoothed estimates of cost-push shocks, implementation errors, and smoothed probabilities of $\Theta_t=j$ obtained from the benchmark model. 
@@ -2495,42 +2534,6 @@ a^N_{t} &= \sum_{j=1}^6 a^{N,j}_{t}Pr(\Theta_{t}=j|Y^T)\\
 
 
 
-
-\section{Adjusting long-term inflation expectation}\label{sec:adjustedCPI10}
-The SPF 10-year CPI forecast is a \emph{fixed-event} forecast: in each survey quarter, it refers to inflation over the 10-year period beginning with the previous year's Q4. For the first-quarter survey, there is no realized inflation included within this 10-year window. However, as the survey moves to later quarters in the year, the raw CPI10 measure mechanically includes progressively more realized inflation. As a result, part of the reported value reflects inflation that is already known by the time of the survey and must be removed to obtain a measure that is genuinely forward-looking.
-
-We index each survey by its year $y$ and quarter $q \in \{1,2,3,4\}$, so $(y,1)$ denotes the first quarter of year $y$, $(y,2)$ the second, and so on.
-Let $\pi_{a \to b}$ denote annualized quarterly inflation between quarters $a$ and $b$, and use the continuous-compounding approximation. The corresponding forward-looking measurements for each forecaster $i$ are
-\begin{align}
-x_{i,(y,1)} &= \frac{1}{40}\sum_{j=0}^{39} \pi_{t-1+j \to t+j}
- + \varepsilon_{i,(y,1)}, \\
-x_{i,(y,2)} &= \frac{1}{39}\sum_{j=0}^{38} \pi_{t-1+j \to t+j}
- + \varepsilon_{i,(y,2)}, \\
-x_{i,(y,3)} &= \frac{1}{38}\sum_{j=0}^{37} \pi_{t-1+j \to t+j}
- + \varepsilon_{i,(y,3)}, \\
-x_{i,(y,4)} &= \frac{1}{37}\sum_{j=0}^{36} \pi_{t-1+j \to t+j}
- + \varepsilon_{i,(y,4)}.
-\end{align}
-Under this quarterly representation, each realized inflation term enters the raw 10-year forecast with weight $1/40$, but the adjusted object re-averages only over the remaining forward-looking quarters. Thus Q2 rescales by $39$, Q3 rescales by $38$, and Q4 rescales by $37$. 
-
-To make this adjustment, we use \texttt{CPI1} as the realized inflation term. \texttt{CPI1} represents each individual's reported inflation for the quarter preceding the survey date, providing a direct measure of information available to the forecaster. The adjusted long-term inflation expectation is then constructed as follows:
-\begin{align}
-x_{i,(y,1)} &\equiv \text{CPI10}_{i,(y,1)}, \\
-x_{i,(y,2)} &\equiv
- \frac{40\cdot\text{CPI10}_{i,(y,2)} - \text{CPI1}_{i,(y,2)}}{39}, \\
-x_{i,(y,3)} &\equiv
- \frac{40\cdot\text{CPI10}_{i,(y,3)}
- - \left(\text{CPI1}_{i,(y,2)} + \text{CPI1}_{i,(y,3)}\right)}{38}, \\
-x_{i,(y,4)} &\equiv
- \frac{40\cdot\text{CPI10}_{i,(y,4)}
- - \left(\text{CPI1}_{i,(y,2)} + \text{CPI1}_{i,(y,3)}
- + \text{CPI1}_{i,(y,4)}\right)}{37}.
-\end{align}
-
-The main text uses $f_{t+10y|t}^{i}$ to denote the fixed-event 10-year CPI expectation made by forecaster $i$ at survey date $t$. $x_{i,(y, q)}$ here represents the same individual expectation for the corresponding survey. That is,
-\[
-f_{t+10y|t}^{i} \equiv x_{i,(y, q)} \quad \text{where } t = (y, q).
-\]
 
 
 
