@@ -671,7 +671,7 @@ those beliefs, following the anticipated utility approach \textit{à la} \cite{c
 responses optimally to private-sector expectations. 
 In this section, we first show that strategic reputation management creates \textit{an interaction between the policymaker's reputation and the policy gap between the two types.} Current reputation affects the policy gap, which in turn shapes the speed of private-sector learning and, with it, the future evolution of reputation. We then explore the implications of this interaction and show that it is central to understanding the time-varying sensitivity of long-term inflation forecast revisions to inflation surprises.
 
-\subsection{Reputation-sensitive policy gap}
+\subsection{Reputation-sensitive policy gap}\label{sec:policygap}
 This section demonstrates that the policy gap becomes sensitive to reputation as a consequence of the committed policymaker's strategic reputation management. The equilibrium policy gap widens at lower levels of reputation, provided reputation is not extremely low.
 
 The inner loop fixed point problem in Proposition \ref{prop:W2} is not only operational but also informative about three channels through which the policy gap $\delta$ affects the committed policymaker's policy objectives. First, it enters via the Bayesian learning rule $b(\cdot)$ that matters for both inflation expectation function $e(\cdot)$ and the continuation value term $\Omega(\cdot)$. Second, it enters the momentary objective function $\uuline{u}(\cdot)$ because it determines current inflation policy. Third, it enters the composite promise term $-\mu\uuline{\omega}(\cdot)$ that captures the cost of honoring the promised committed policy.
@@ -887,27 +887,14 @@ This juncture marks a shift in how we use $t$: up to this point, it has served a
 
 At the start of the next period, a new cost-push shock $\varsigma'$ is drawn from the distribution $\varphi(\varsigma'; \varsigma)$. The evolution of the reputation state $\rho'$ and the pseudo-state $\mu'$ depends on two sources of randomness. If no policymaker replacement occurs ($\theta' = 0$), reputation updates via Bayes’ rule: $\rho' = b(\pi-a(s), \pi-\alpha(s), \rho)$. Since $a$ and $\alpha$ are equilibrium functions of $s$, we write $\rho' = b(s, \pi)$ for notational convenience. The pseudo-state evolves deterministically as $\mu' = m(s)$. If a replacement occurs ($\theta' = 1$), the pseudo-state resets to $\mu' = 0$, and reputation evolves according to $\rho' = \phi' b(s, \pi) + (1 - \phi') v'_\rho$, with $\phi' \sim \text{Bernoulli}(\zeta_\rho)$ and $v_{\rho}' \sim \text{Beta}(\overline{\rho},\sigma_{\rho})$. That is, reputation inheritance is complete with probability $\zeta_\rho$, and otherwise $\rho'$ is drawn from a Beta distribution with mean $\overline{\rho}$ and standard deviation $\sigma_\rho$. 
 
-
-Thus, we can construct an augmented state vector $S = [s, \pi]$ that evolves recursively over time, conditional on the realizations of $\theta$, $\phi$, and $\tau$. Private agents observe the outcomes of the replacement events -- $\theta$, $\phi$, and $v_{\rho}$ -- but do not observe the policymaker type $\tau$.
-
-
-
-
-
-\subsection{State extraction strategy}
-The model features three structural shocks: to the cost-push process ($v_\varsigma$), to inflation ($v_\pi$), and to reputation in the event of policymaker replacement ($v_\rho$). It also includes three binary states: policymaker replacement ($\theta$), reputation inheritance ($\phi$), and policymaker type ($\tau$). These are supplemented by three continuous state variables in the Public PBE: the highly persistent reputation $\rho$, the transitory cost-push shock $\varsigma$, and the predetermined pseudo-state $\mu$. Although unobserved by an outside observer (econometrician), these states and shocks are linked to observable macroeconomic variables through the model’s equilibrium functions.
-
-
-The state extraction strategy uses the term structure of SPF inflation forecasts to identify the latent states. The model implies that longer-term forecasts depend more on the persistent reputation variable $\rho_t$, while shorter-term forecasts are more responsive to the transitory cost-push shock $\varsigma_t$. Figure \ref{fig:SPF} plots the SPF’s three-quarter-ahead forecast (SPF3Q) alongside the one-quarter-ahead forecast (SPF1Q), illustrating the smoother behavior of SPF3Q.\footnote{Elmar Mertens pointed us to the use of SPF term structure, as in \cite{mertens_inflation_2020}. We do not use SPF4Q due to missing observations, particularly in 1975.} Drawing from the term structure literature in interest rates, we construct an SPF spread as SPF1Q minus SPF3Q (plotted as a dashed black line). The spread rises notably during the two major oil price shocks of the 1970s (1974–75 and 1978–80), as well as during the recent COVID-19 shock (2021-22).
-
-
-Given a set of calibrated parameters, the model delivers a function $f(s, j)$ representing private agents’ expectations at each horizon $j$.\footnote{Appendix \ref{app:forecast} provides derivations.} Let $f_{t+j|t}$ denote the SPF forecast at horizon $j$, assumed to differ from the model-implied expectation by a Gaussian observation error: $f_{t+j|t}=f(s_t,j)+\varepsilon_{jt}$.\footnote{If the timing of policymaker replacements were known and model and data expectations were assumed to match exactly, the state variables $\varsigma_t$ and $\rho_t$ could be recovered by inverting the theoretical relationships, since $\mu_t$ evolves deterministically. An earlier version of this research, \cite{king_evolving_2022}, used this approach, which \cite{kollmann_tractable_2017} refers to as an “inversion filter” (see also \cite{drautzburg_filtering_2022}).}
-
-Following the Markov switching literature (\cite{hamilton_new_1989}, \cite{kim_dynamic_1994}), the model is cast into a state-space form using the time-series recursion of $S = [s, \pi]$, while the three binary state variables $(\theta, \phi, \tau)$ are treated as the outcomes of an unobserved discrete-state Markov process $\Theta$. Six discrete states are defined for $\Theta$: states $\{1, 3, 5\}$ represent a continuing committed policymaker ($\theta = 0, \tau = 1$), a newly appointed committed policymaker with complete reputation inheritance ($\theta = 1, \phi = 1, \tau = 1$), and a new committed policymaker with randomly drawn reputation $v_\rho$ ($\theta = 1, \phi = 0, \tau = 1$); states $\{2, 4, 6\}$ represent the corresponding cases for an opportunistic policymaker. The transition probability matrix for these six states is restricted to reflect the structure of the model -- for example, the policymaker type $\tau$ can change only when a replacement event occurs. The matrix is presented in Appendix \ref{app:extractstate}.
-
 \subsection{The state space model with Markov-switching}\label{sec:stateextraction}
+
+We can then construct an augmented state vector $S = [s, \pi]$ that evolves recursively over time as a result of three structural shocks: to the cost-push process ($v_\varsigma$), to inflation ($v_\pi$), and to reputation in the event of policymaker replacement ($v_\rho$). This time-series recursion is conditional on the realizations of three binary states: policymaker replacement ($\theta$), reputation inheritance ($\phi$), and policymaker type ($\tau$). 
+
+Following the Markov switching literature (\cite{hamilton_new_1989}, \cite{kim_dynamic_1994}), we model $(\theta, \phi, \tau)$ as the outcomes of an unobserved discrete-state Markov process $\Theta$ with six discrete states: ($\theta = 0, \tau = 1$) represents a continuing committed policymaker, ($\theta = 1, \phi = 1, \tau = 1$) a newly appointed committed policymaker with complete reputation inheritance, and ($\theta = 1, \phi = 0, \tau = 1$) a new committed policymaker with randomly drawn reputation $v_\rho$; the other three states represent the corresponding cases for an opportunistic policymaker. The transition probability matrix $T_{i,j}:=\Pr(\Theta_t=j|\Theta_{t-1}=i)$ for these six states is determined by the structure of the model -- for example, the policymaker type $\tau$ can change only when a replacement event occurs. The matrix is presented in Appendix \ref{app:extractstate}.
+
 We now detail the evolution of continuous state variables $S_{t}=[\varsigma_{t}, \rho_{t},\mu_{t}, \pi_{t}]$ resulting from $v_t =[v_{\varsigma,t}, v_{\rho,t}, v_{\pi,t}]$, taking as given the discrete state $\Theta_t \in \{1,2,...,6\}$ defined above. 
-\begin{align*}
+\begin{align}\label{eq:state-evolution}
 S_{t}  &  =\left[
 \begin{array}
 [c]{c}%
@@ -918,13 +905,33 @@ S_{t}  &  =\left[
 \tau_{t}a(s_t)+(1-\tau_{t})\alpha(s_t)+v_{\pi,t}%
 \end{array}
 \right] =F(S_{t-1},v_{t}|\Theta_{t})
-\end{align*}
+\end{align}
 The first entry specifies the process for the cost push shock $\varsigma$. The second entry specifies that $\rho_{t}$ is determined by the Bayes' rule $b(s_{t-1},\pi_{t-1})$, if there is no replacement ($\theta=0$) or if there is reputation inheritance ($\theta=1$ and $\phi=1$), while otherwise $\rho_{t}$ is a random shock $v_{\rho,t}$ with support $[0,1]$. The third entry indicates that the pseudo state variable evolves according to $\mu_{t+1}=m(s_{t})$, except if there is replacement ($\theta=1$) in which case it is set to zero. The final entry captures that inflation $\pi_{t}$ depends on the type of policymaker in place.\footnote{The final entry uses $s_t=[\varsigma_t,\rho_t,\mu_t]$ that are shown to be a function of $S_{t-1}$ by the first three entries.}
 
 
+\begin{ST}
+  \begin{figure}[H]
+  \begin{center}
+  \caption[Caption for LOF]{Targeted SPFs, SPF spread, and estimated state variables}
+  
+  \includegraphics[height=3in,width=5.5in]{2025JanFig/SpreadState_slides.jpg} 
+  \label{fig:SPF}
+  \begin{flushleft}
+  \footnotesize{This figure plots selected inputs and outputs of our nonlinear filter. The inputs are the one-quarter-ahead and three-quarter-ahead SPF inflation forecasts from 1968Q4 to 2024Q3. Appendix \ref{appsec:SPFdata} provides details on our SPF constructions. The SPF spread (black dashed line) is the difference between SPF1Q and SPF3Q. The outputs are smoothed estimates of reputation (cyan and measured on the right axis) and cost-push shocks (red). }
+  \end{flushleft}
+  \end{center}
+  \end{figure}
+\end{ST}
 
-The one-quarter-ahead and three-quarter-ahead SPF forecasts are taken to be the model inflation forecasts corrupted by Gaussian observation errors $\varepsilon_1$ and $\varepsilon_3$.\footnote{$\varepsilon_1$ and $\varepsilon_3$ are i.i.d. normal random variables with mean zero and standard deviation $0.5\%$ (annualized).} That is, our observation equations are:
-\begin{align*}
+\subsection{State extraction strategy}
+Although unobserved by an outside observer (econometrician), these states and shocks are linked to observable macroeconomic variables through the model’s equilibrium functions. 
+
+The state extraction strategy uses the term structure of SPF inflation forecasts to identify the latent states and shocks.\footnote{Appendix \ref{appsec:SPFdata} reports the construction of SPF inflation forecasts.} The model implies that longer-term forecasts depend more on the persistent reputation variable $\rho_t$, while shorter-term forecasts are more responsive to the transitory cost-push shock $\varsigma_t$. Figure \ref{fig:SPF} plots the SPF’s three-quarter-ahead forecast (SPF3Q) alongside the one-quarter-ahead forecast (SPF1Q), illustrating the smoother behavior of SPF3Q.\footnote{Elmar Mertens pointed us to the use of SPF term structure, as in \cite{mertens_inflation_2020}. We do not use SPF4Q due to missing observations, particularly in 1975.} Drawing from the term structure literature in interest rates, we construct an SPF spread as SPF1Q minus SPF3Q (plotted as a dashed black line). The spread rises notably during the two major oil price shocks of the 1970s (1974–75 and 1978–80), as well as during the recent COVID-19 shock (2021-22).
+
+
+
+In particular, let $f(s, j)$ represent the model-implied private agents’ expectations at each horizon $j$.\footnote{Appendix \ref{app:forecast} provides derivations.} Let $f_{t+j|t}$ denote the SPF forecast at horizon $j$, assumed to differ from the model-implied expectation by a Gaussian observation error: $f_{t+j|t}=f(s_t,j)+\varepsilon_{jt}$.\footnote{$\varepsilon_{j}$ are i.i.d. normal random variables with mean zero and standard deviation $0.5\%$ (annualized). If model and data expectations were assumed to match exactly and the timing of policymaker replacements were known, the state variables $\varsigma_t$ and $\rho_t$ could be recovered by inverting the theoretical relationships, since $\mu_t$ evolves deterministically. An earlier version of this research, \cite{king_evolving_2022}, used this approach, which \cite{kollmann_tractable_2017} refers to as an “inversion filter” (see also \cite{drautzburg_filtering_2022}).} Using the one-quarter-ahead and three-quarter-ahead SPF forecasts, our observation equations are:
+\begin{align}\label{eq:observe_eq}
 Y_{t}&=\left[
 \begin{array}
 [c]{c}%
@@ -944,9 +951,9 @@ f(\varsigma_{t},\rho_{t},\mu_{t},3)\\
 \varepsilon_{3t}\\
 \end{array}
 \right] =H(S_{t}) + \varepsilon_{t}
-\end{align*}
+\end{align}
 
-As our model is not linear, we cannot use the standard Kalman filter. We adopt an efficient  unscented Kalman filter -- that has been shown to work well in nonlinear regime-switching models. Appendix \ref{app:extractstate} provides details on the algorithm, which also employs the collapsing approach of \cite{kim_dynamic_1994} and \cite{kim_state-space_2017}. 
+Equations (\ref{eq:state-evolution}) and (\ref{eq:observe_eq}) form a state space model with Markov-switching. This model is highly non-linear and we adopt an efficient unscented Kalman filter -- that has been shown to work well in nonlinear regime-switching models. Appendix \ref{appsec:UKF} provides details on the algorithm, which also employs the collapsing approach of \cite{kim_dynamic_1994} and \cite{kim_state-space_2017}. 
 For each element of $S_{t}$ and $\Theta_{t}$, our approach produces filtered estimates (based on $Y^{t}=[Y_{1},Y_{2},...Y_{t}]$) and smoothed estimates (based on $Y^T$).
 
 
@@ -960,20 +967,8 @@ We now report the performance of the model-based non-linear Kalman method, in te
 \subsubsection{Inflation expectations} 
 Our extraction method produces a nearly perfect match for SPF1Q and SPF3Q. Using the extracted states, we can also compute model-implied inflation forecasts at horizons 2 and 4. Appendix \ref{app:stateresult} Figure \ref{fig:multiSPF} shows that these additional forecasts lie almost entirely on top of the untargeted SPF2Q and SPF4Q, providing support for our state extraction approach. 
 
-\begin{ST}
-\begin{figure}[H]
-\begin{center}
-\caption[Caption for LOF]{Targeted SPFs, SPF spread, and estimated state variables}
 
-\includegraphics[height=3in,width=5.5in]{2025JanFig/SpreadState_slides.jpg} 
-\label{fig:SPF}
-\begin{flushleft}
-\footnotesize{This figure plots selected inputs and outputs of our nonlinear filter. The inputs are the one-quarter-ahead and three-quarter-ahead SPF inflation forecasts from 1968Q4 to 2024Q3. Appendix \ref{appsec:SPF} provides details on our SPF constructions. The SPF spread (black dashed line) is the difference between SPF1Q and SPF3Q. It rises during the first (1974-75) and the second (1978-80) inflation surges (black solid line). The outputs are smoothed estimates of reputation (cyan and measured on the right axis) and cost-push shocks (red). Consistent with our strategy of exploiting greater sensitivity of near-term forecasts to transitory shocks, the estimated cost-push shock covaries positively with the SPF spread.}
-\end{flushleft}
-\end{center}
 
-\end{figure}
-\end{ST}
 \subsubsection{Observed and estimated inflation}\label{sec:inflfit}
 The state-space model treats inflation as a latent variable and produces both filtered and smoothed estimates of $\pi_t$. Since the state extraction relies solely on SPF data, comparing the smoothed estimates $\widehat{\pi}_t$ with observed inflation provides a natural form of model validation. To assess the quality of our estimates, we benchmark them against the SPF's one-quarter-ahead forecast (SPF1Q).\footnote{Because our extraction procedure uses SPF1Q and SPF3Q data, one might argue that it is unsurprising the estimates perform well, given the SPF itself tracks observed inflation. Using SPF1Q as the performance benchmark directly addresses this concern.}
 
@@ -995,7 +990,7 @@ These results suggest that our quantitative model captures U.S. inflation dynami
 \includegraphics[height=3.4in,width=5.5in]{2025AprFig/ErrorPlot_smooth_slides.jpg}
 \label{fig:Error}
 \begin{flushleft}
-\footnotesize{This figure shows that the smoothed inflation estimates (red) produced by our nonlinear filter closely track U.S. inflation data (blue), despite relying solely on SPF data. For comparison, we also plot the one-quarter-ahead SPF forecasts made in the same quarter (SPF1Q, black). The model’s fitting error (dashed red) and the SPF1Q error (dashed black) are shown as the respective gaps from observed inflation. The comparison reveals that our smoothed estimates outperform SPF1Q on two fronts: they exhibit a lower mean squared error and less persistent fitting errors.} 
+\footnotesize{This figure shows that the smoothed inflation estimates (red) produced by our nonlinear filter closely track U.S. inflation data (blue), despite relying solely on SPF data. For comparison, we also plot the one-quarter-ahead SPF forecasts made in the same quarter (SPF1Q, black). The model’s fitting error (dashed red) and the SPF1Q error (dashed black) are shown as the respective gaps from observed inflation. } 
 \end{flushleft}
 \end{center}
 \end{figure}
@@ -1004,10 +999,10 @@ These results suggest that our quantitative model captures U.S. inflation dynami
 
 
 \subsection{Volcker disinflation} 
-We now use the time period between 1979Q3 and 1987Q4 to illustrate how strategic reputation management makes a difference in time series. Our quantitative results show that it is a period when a committed policy regime is more plausible but reputation starts at a low level. We construct the counterfactual dynamics of reputation, inflation, and intended inflation policies under a naive committed policymaker, using the same cost-push shocks, implementation errors, and probabilities of states as estimated in our benchmark model.\footnote{The initial values for $\rho$ and $\mu$ at 1979Q3 are set at the same level as in the benchmark model.} Figure \ref{fig:counterfactual} plot them against the benchmark case.
+We now use the time period between 1979Q3 and 1987Q4 to illustrate how strategic reputation management makes a difference in time series. Our quantitative results show that it is a period when a committed policy regime is more plausible but reputation starts at a low level. We construct the counterfactual dynamics of reputation, inflation, and intended inflation policies under a naive committed policymaker defined in Section \ref{sec:policygap}, using the same cost-push shocks, implementation errors, and probabilities of states as estimated in our benchmark model.\footnote{The initial values for $\rho$ and $\mu$ at 1979Q3 are set at the same level as in the benchmark model. More details can be found in Appendix \ref{app:counterfactual}.} Figure \ref{fig:counterfactual} plot them against the benchmark case.
 
 
-\begin{figure}[htbp]
+\begin{figure}[H]
 \caption[Caption for LOF]{Counterfactual under Volcker}
   \centering
 
@@ -1030,7 +1025,7 @@ We now use the time period between 1979Q3 and 1987Q4 to illustrate how strategic
   \end{minipage}
 \label{fig:counterfactual}
 \begin{flushleft}
-\footnotesize{This figure plots the time series of reputation $\rho$ (upper left panel), inflation $\pi$ (upper right panel), committed policy $a$ (lower left panel), and opportunistic policy $\alpha$ (lower right panel) from 1979Q2 to 1987Q4 when Paul Volcker was the Fed chairman. The solid lines are produced by the benchmark model and the lines with star markers are produced by the naive policy model, using the same cost-push shocks, implementation errors and probabilities of states as estimated in our benchmark model. In the benchmark model, the committed policy after 1981 is much lower than the opportunistic policy, resulting in a rapid increase in reputation. By contrast, in the naive model where the incentives to manage reputation are missing, it takes much longer for the committed policymaker to disinflate the economy after 1981, and reputation remains low for the entire period under Volcker.}
+\footnotesize{This figure plots the time series of reputation $\rho$ (upper left panel), inflation $\pi$ (upper right panel), committed policy $a$ (lower left panel), and opportunistic policy $\alpha$ (lower right panel) from 1979Q2 to 1987Q4 when Paul Volcker was the Fed chairman. The solid lines are produced by the benchmark model and the lines with star markers are produced by the naive policy model, using the same cost-push shocks, implementation errors and probabilities of states as estimated in our benchmark model. }
 \end{flushleft}
 \end{figure}
 
@@ -1048,9 +1043,9 @@ In contrast, under the naive model, reputation gains little during the 1982–83
 We characterize the recursive equilibrium of a dynamic game that features two types of purposeful policymakers, a committed type which can commit and an opportunistic type which cannot, and private agents who are Bayesian learners about policymaker type and form forward-looking expectations of future policies. In the game, the committed policymaker strategically uses his policy plan to influence private agents' learning and inflation expectations, understanding that (i) private agents inflation expectations include future policy of an opportunistic type; and (ii) an opportunistic type’s optimal policy depends on private agents' inflation expectations. 
 
 Harnessing the insights of modern contract theory, we develop a computable recursive equilibrium, where the equilibrium policies of both policymaker types and the rational expectations of private agents are shown to be functions of only three state variables, including an important reputation state that captures the evolution of private agents' beliefs about the commitment capacity of current policymaker. 
-Using SPF short-term inflation forecasts data as observables, we extract latent states of the model via a nonlinear filter based on our theoretical model's dynamic system. The model-implied inflation tracks US inflation’s rise, fall, and stabilization to a surprising high degree, even though the observed inflation is not used by the nonlinear filter. 
+ 
 
-Our results reveal that evolving reputation is central to understanding the interplay between inflation expectation and policy. In particular, without the incentives of rebuilding reputation, a switch to committed policy regime in 1981 cannot account for the observed post-1981 Volcker disinflation. Moreover, long-term inflation forecasts depend on reputation that evolves through Bayesian updating of inflation forecast errors. Our model implies a nonlinear relation between reputation and the sensitivity of long-term inflation forecast to forecast errors, which is supported by empirical evidence from regressions of SPF long-term forecast revision on nowcast forecast errors. 
+Our results reveal that evolving reputation is central to understanding the interplay between inflation expectation and policy. The long-term inflation forecasts depend on reputation that evolves through Bayesian updating of inflation forecast errors. Our model implies a nonlinear relation between reputation and the sensitivity of long-term inflation forecast to forecast errors, which is supported by empirical evidence from regressions of SPF long-term forecast revision on nowcast forecast errors. Moreover, using SPF short-term inflation forecasts data as observables, we extract latent states of the model via a nonlinear filter based on our theoretical model's dynamic system. The model-implied inflation tracks US inflation’s rise, fall, and stabilization to a surprising high degree, even though the observed inflation is not used by the nonlinear filter.
 
 Our model is deliberately stark. But it yields results that have surprised us and others. We believe its success in matching U.S. experience of inflation and inflation expectations indicates great promise to further research on leveraging this theory framework to guide how to manage expectations in optimal policy.
 
@@ -1942,7 +1937,7 @@ The policy function under the setup of naive committed policymaker are denoted b
 \renewcommand{\theequation}{C\arabic{equation}}
 
 
-\subsection{SPF Data}
+\subsection{SPF Data}\label{appsec:SPFdata}
 We construct the SPF inflation data from ``individual responses" file for the \textit{level} of the GDP deflator available at https://www.philadelphiafed.org/surveys-and-data/pgdp. The sample starts from the fourth quarter of 1968.
 
 In the middle of each quarter, each survey participant submits a forecast for the price level in that quarter and the next four. We first calculate inflation forecasts for each individual forecaster j, using the continuously compounded growth rate: $400\times\ln(P^j_{t+k|t}/P^j_{t+k-1|t})$. We then take the median of these inflation forecasts.
@@ -2107,7 +2102,7 @@ T=
 \end{bmatrix}
 \end{equation}
 
-\subsection{Unscented Kalman filter with Markov-switching}
+\subsection{Unscented Kalman filter with Markov-switching}\label{appsec:UKF}
 This subsection describes the detailed algorithm we employ to obtain filtered and smoothed estimates of latent states in the state space model (\ref{appS}) and (\ref{appY}). Relative to a standard nonlinear system with additive Gaussian errors, our model has three complications.
 
 First, the shocks $v_\varsigma$ and $v_\rho$ enter the evolution equation of $\pi$ nonlinearly because the policy function $a(\cdot)$ and $\alpha(\cdot)$ are nonlinear functions of $\varsigma$ and $\rho$. Moreover, the shock $v_\rho$ follows a Beta distribution instead of a Gaussian one. Following \cite{sarkka_bayesian_2023}, this complication can be dealt with by: 1) approximating the Beta random variable $v_\rho$ using a nonlinear transformation of a Gaussian random variable $\tilde{v}_\rho$: \[ v_\rho = R(\tilde{v}_\rho)=\frac{exp(\tilde{v}_\rho)}{1+exp(\tilde{v}_\rho)}\]
@@ -2488,10 +2483,7 @@ Section \ref{sec:inflfit} demonstrates that the smoothed estimates of inflation 
 \end{center}
 \end{figure}
 
-
-\section{Counterfactual with Naive Committed Policy}
-
-\subsection{Constructing counterfactual time series}
+\subsection{Constructing counterfactual time series}\label{app:counterfactual}
 Initialization step for $t=1$: $\rho_1^{N,j}=\hat{\rho}_1^j$ and $\mu_1^{N,j}=\hat{\mu}_1^j$ for $\Theta_1=j$. $\{\hat{\varsigma}^j_t\}_{t=1}^T$, $\{\hat{v}_{\pi,t}^j\}_{t=1}^T$, and $\{Pr(\Theta_t=j|Y^T)\}_{t=1}^T$ are smoothed estimates of cost-push shocks, implementation errors, and smoothed probabilities of $\Theta_t=j$ obtained from the benchmark model. 
 
 Conditional on $\Theta_t=j$ and $\Theta_{t+1}=k$, we obtain
