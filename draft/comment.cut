@@ -1,10 +1,17 @@
-\begin{figure}[h]
+\begin{figure}[H]
 \begin{center}
-\caption[Caption for LOF]{Model-implied and SPF forecasts of inflation}
-\includegraphics[height=4in,width=6in]{2025JanFig/SPF_combined_slides.jpg}
-\label{fig:multiSPF}
+\caption[Caption for LOF]{Inflation history and model-implied inflation}
+%  reduce from 4 by 10 to 4*5.5/10 by 5.5$
+% reduce from 3 by 8 to 3*5.5/8 by 5.5
+%\includegraphics[height=2.2in,width=5.5in]{CalibSPFmulti/AverageErrorYLNew.jpg}
+
+% reduce from 4 high by 6 wide to
+% 4*(5.5/6) by 5.5
+
+\includegraphics[height=3.4in,width=5.5in]{2025AprFig/ErrorPlot_smooth_slides.jpg}
+\label{fig:Error}
 \begin{flushleft}
-\footnotesize{This figure compares the smoothed estimates of model inflation forecast produced by our nonlinear filter with the SPF inflation forecast of the same forecasting horizon. SPF1Q and SPF3Q are targeted by our nonlinear filter; SPF2Q and SPF4Q are not targeted. }
+\footnotesize{This figure shows that the smoothed inflation estimates (red) produced by our nonlinear filter closely track U.S. inflation data (blue), despite relying solely on SPF data. For comparison, we also plot the one-quarter-ahead SPF forecasts made in the same quarter (SPF1Q, black). The model’s fitting error (dashed red) and the SPF1Q error (dashed black) are shown as the respective gaps from observed inflation. }
 \end{flushleft}
 \end{center}
 \end{figure}
